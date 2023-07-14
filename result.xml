@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="BlueAdmin" tests="24" time="0.245">
+  <testsuite name="Login Tests / Login Get Tokens Grant Type Authorization Code" id="1533a99d-c781-4903-abad-fde293f0b3c1" timestamp="2023-07-14T08:21:27.877Z" tests="1" failures="0" errors="0" time="0.048">
+    <testcase name="Status Code 202" time="0.048" classname="BlueAdmin"/>
+  </testsuite>
+  <testsuite name="Login Tests / Get Index Page" id="af3e3f24-26ed-470f-917e-75e56a90fea5" timestamp="2023-07-14T08:21:27.877Z" tests="1" failures="0" errors="0" time="0.008">
+    <testcase name="Status Code 202" time="0.008" classname="BlueAdmin"/>
+  </testsuite>
+  <testsuite name="Login Tests / Login Get Tokens Grant Type Refresh Token" id="85f2a85c-90a3-4d39-aaf2-6dd183f72be5" timestamp="2023-07-14T08:21:27.877Z" tests="1" failures="0" errors="0" time="0.006">
+    <testcase name="Status Code 202" time="0.006" classname="BlueAdmin"/>
+  </testsuite>
+  <testsuite name="Login Tests / Login Get Tokens Grant Type Token Decode" id="d5bc225b-3568-45af-bba5-20c4ff869999" timestamp="2023-07-14T08:21:27.877Z" tests="1" failures="0" errors="0" time="0.008">
+    <testcase name="Status Code 202" time="0.008" classname="BlueAdmin"/>
+  </testsuite>
+  <testsuite name="Roles Tests / Get Available Roles" id="2e401bbe-3194-49ef-b331-6116827df412" timestamp="2023-07-14T08:21:27.877Z" tests="1" failures="0" errors="0" time="0.008">
+    <testcase name="Status Code 200" time="0.008" classname="BlueAdmin"/>
+  </testsuite>
+  <testsuite name="Roles Tests / Get Roles By Id" id="2d1cb3de-2d54-434d-afea-6810396cbcce" timestamp="2023-07-14T08:21:27.877Z" tests="1" failures="0" errors="0" time="0.007">
+    <testcase name="Status Code 202" time="0.007" classname="BlueAdmin"/>
+  </testsuite>
+  <testsuite name="User Tests / Get Users" id="7c4add0e-0e40-46e8-9b53-676110d29cf9" timestamp="2023-07-14T08:21:27.877Z" tests="1" failures="0" errors="0" time="0.009">
+    <testcase name="Status Code 202" time="0.009" classname="BlueAdmin"/>
+  </testsuite>
+  <testsuite name="User Tests / Get User By ID" id="3fe319ec-4fc9-4160-aa46-4016743dd5ba" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.008"/>
+  <testsuite name="User Tests / Get User Roles By ID" id="f14abc53-c5ad-44ad-9d57-7e588bf74a3d" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.009"/>
+  <testsuite name="User Tests / Add Role To User" id="e3e27a28-4317-4934-a0c9-ea585eaa32d3" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.008"/>
+  <testsuite name="User Tests / Remove Role From User" id="e86c38a3-4bbe-4c8b-9f40-268299385a6f" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.012"/>
+  <testsuite name="Page Tests / Get Pages" id="0bbb3034-5dfa-47a5-ab19-a5f32a372fb6" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.008"/>
+  <testsuite name="Page Tests / Add Routes To Page" id="48f10d41-e24e-4701-bcc8-8fcf37e53b4a" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.009"/>
+  <testsuite name="Page Tests / Get Pages By ID" id="fac5b30a-8eb1-4524-ae87-465d7a779974" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.011"/>
+  <testsuite name="Page Tests / Get Routes By Page ID" id="ed12db0d-37e8-4d7f-be99-60e56839adc9" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.010"/>
+  <testsuite name="Page Tests / Get Page Routes" id="f5c68337-032c-4c28-8677-b6d6ae727a18" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.006"/>
+  <testsuite name="Page Tests / Add New Page" id="c5dab2d4-dc86-4e6e-9a15-c5d819a17e3f" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.013"/>
+  <testsuite name="Page Tests / Remove Route From Page" id="a7ce8fd8-6882-459c-bb0b-2a356d6ed2d2" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.005"/>
+  <testsuite name="Route Tests / Get Routes" id="42f368e7-7771-4a65-b17c-73457f2c8bf1" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.010"/>
+  <testsuite name="Route Tests / Get Routes By ID" id="089e391f-e222-4439-b14a-0054529febb3" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.008"/>
+  <testsuite name="Route Tests / Add Role To Route" id="3e566a6e-5950-4bfd-82cb-ce0fd250da31" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.006"/>
+  <testsuite name="Route Tests / Get Route By Roles By ID" id="96daf5e0-86b2-4bc4-8c87-56e52d998a26" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.008"/>
+  <testsuite name="Route Tests / Remove Role From Route" id="9517f344-42f9-401b-b8d4-ab7aaafdbaf9" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.006"/>
+  <testsuite name="Route Tests / Add New Route" id="86f043b6-a8cc-4385-b2c1-985b18576b3c" timestamp="2023-07-14T08:21:27.877Z" tests="0" failures="0" errors="0" time="0.014"/>
+</testsuites>

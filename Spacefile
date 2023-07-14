@@ -1,0 +1,23 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: goblue-back
+    src: .
+    engine: custom
+    primary: true
+    presets:
+      env:
+        - name: SQLITE_URI
+          description: Secret message only available to this Micro
+          default: "goBlue.db"
+        - name: SECRETE_SALT
+          description: Secret message only available to this Micro
+          default: "e6fe35fb49994fc7f529e55396296b0a"
+        - name: TOKEN_SALT
+          description: Secret message only available to this Micro
+          default: "dd0e2ce449ea5fa38fca66fc0e45674a"
+    commands:
+      - chmod +x server
+      - apt install -y libc6 libc-bin
+    run: ./server run
+    dev: ./server run

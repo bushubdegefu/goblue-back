@@ -1,0 +1,848 @@
+{
+	"info": {
+		"_postman_id": "d412a42b-4592-477c-9b85-a204f0cd616d",
+		"name": "BlueAdmin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27855066"
+	},
+	"item": [
+		{
+			"name": "Login Tests",
+			"item": [
+				{
+					"name": "Login Get Tokens Grant Type Authorization Code",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// console.log(pm.response.json().itmes.refresh_token)",
+									"",
+									"pm.environment.set(\"token\", pm.response.json().itmes.access_token);",
+									"pm.environment.set(\"refresh_token\",pm.response.json().itmes.refresh_token);",
+									"pm.test('Status Code 202', ()=>{",
+									"pm.expect(pm.response.code).equals(202)",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"authorization_code\",\n  \"password\": \"default@123\",\n  \"token\": \"something\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Index Page",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test('Status Code 202', ()=>{",
+									"pm.expect(pm.response.code).equals(202)",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Get Tokens Grant Type Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// console.log(pm.response.json().itmes.refresh_token)",
+									"pm.collectionVariables.set(\"token\", pm.response.json().itmes.access_token);",
+									"pm.collectionVariables.set(\"refresh_token\",pm.response.json().itmes.refresh_token);",
+									"pm.test('Status Code 202', ()=>{",
+									"pm.expect(pm.response.code).equals(202)",
+									"",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"refresh_token\",\n  \"password\": \"default@123\",\n  \"token\": \"{{refresh_token}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Get Tokens Grant Type Token Decode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// console.log(pm.response.json().itmes.refresh_token)",
+									"",
+									"",
+									"",
+									"pm.test('Status Code 202', ()=>{",
+									"pm.expect(pm.response.code).equals(202)",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"token_decode\",\n  \"password\": \"default@123\",\n  \"token\": \"{{token}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles Tests",
+			"item": [
+				{
+					"name": "Get Available Roles",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// console.log(pm.response.json().itmes.refresh_token)",
+									"",
+									"",
+									"pm.test('Status Code 200', ()=>{",
+									"pm.expect(pm.response.code).equals(200)",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-RFRESH-TOKEN",
+								"value": "{{refresh_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"refresh_token\",\n  \"password\": \"default@123\",\n  \"token\": \"sometoken\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/roles?page=1&size=10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"roles"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Roles By Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// console.log(pm.response.json().itmes.refresh_token)",
+									"",
+									"pm.test('Status Code 202', ()=>{",
+									"pm.expect(pm.response.code).equals(200)",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-RFRESH-TOKEN",
+								"value": "{{refresh_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"refresh_token\",\n  \"password\": \"default@123\",\n  \"token\": \"sometoken\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/roles/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"roles",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Tests",
+			"item": [
+				{
+					"name": "Get Users",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test('Status Code 202', ()=>{",
+									"pm.expect(pm.response.code).equals(200)",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-RFRESH-TOKEN",
+								"value": "{{refresh_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"refresh_token\",\n  \"password\": \"default@123\",\n  \"token\": \"sometoken\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users?page=1&size=10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Roles By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/userrole/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"userrole",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Role To User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/userrole/2/3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"userrole",
+								"2",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Role From User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/userrole/2/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"userrole",
+								"2",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Page Tests",
+			"item": [
+				{
+					"name": "Get Pages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/pages?page=1&size=10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pages"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Routes To Page",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pageroute/1/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pageroute",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pages By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/pages/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pages",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Routes By Page ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/pageroute/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pageroute",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Page Routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/pageroute/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pageroute",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Page",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"Admin\",\r\n  \"description\": \"User Login Page\",\r\n  \"name\": \"Login\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pages",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Route From Page",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/pagepage/1/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pagepage",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Route Tests",
+			"item": [
+				{
+					"name": "Get Routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/routes?page=1&size=10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"routes"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Routes By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/routes/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"routes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Role To Route",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/routes/1/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"routes",
+								"1",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Route By Roles By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/routeroles/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"routeroles",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Role From Route",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/routes/1/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"routes",
+								"1",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Route",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"description\": \"login user request\",\r\n  \"name\": \"login route\",\r\n  \"route_path\": \"/login\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/routes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"routes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "X-APP-TOKEN",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "refresh_token",
+			"value": ""
+		}
+	]
+}
