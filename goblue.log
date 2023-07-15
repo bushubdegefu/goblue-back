@@ -11067,3 +11067,175 @@
   "name": "login route",
   "route_path": "/login"
 }]
+[96m-[16:47:11]-[127.0.0.1] -[97m60074 [91m202 [94m[POST] [97m-/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[16:47:11]-[127.0.0.1] -[97m60074 [91m202 [94m[GET] [97m-/
+ []
+[96m-[16:47:11]-[127.0.0.1] -[97m60074 [91m202 [94m[POST] [97m-/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJCbHVlIEFkbWluIiwic3ViIjoiVUkgQXV0aGVudGljYXRpb24gVG9rZW4iLCJleHAiOjE2ODkzNDYzMzEsImVtYWlsIjoiYmVpbWRlZ2VmdUBnbWFpbC5jb20iLCJyb2xlcyI6WyJzdXBlcnVzZXIiLCJIUiBBZG1pbiIsIlN0YW5kYXJkIl0sInV1aWQiOiJlNDBmMGZkMi1mYTNhLTRiZjEtYmYxOS1lNWI5MjUwZjM3MzgifQ.N4HgO72UZLbFf0bbhArC89guHqutanZp1gb-QM2ZV0EKT2IPUFoJ9FCQWqnuJxPzG1sCvy-HSa4y37J_oU8dEw"
+}]
+[96m-[16:47:11]-[127.0.0.1] -[97m60074 [91m202 [94m[POST] [97m-/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "token_decode",
+  "password": "default@123",
+  "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJCbHVlIEFkbWluIiwic3ViIjoiVUkgQXV0aGVudGljYXRpb24gVG9rZW4iLCJleHAiOjE2ODkzNDYwMzEsImVtYWlsIjoiYmVpbWRlZ2VmdUBnbWFpbC5jb20iLCJyb2xlcyI6WyJzdXBlcnVzZXIiLCJIUiBBZG1pbiIsIlN0YW5kYXJkIl0sInV1aWQiOiJlNDBmMGZkMi1mYTNhLTRiZjEtYmYxOS1lNWI5MjUwZjM3MzgifQ.dj3Adp194HlnCXGHNvg_TxVnoZv57CgyqWiIpt5uSAhe0OOqhDiy4F4GM6aQDgSz_OASHCHilYhxwuyFYIXonw"
+}]
+[96m-[16:47:11]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[16:47:11]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/roles/1
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[16:47:11]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/users
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[16:47:11]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/users/2
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/userrole/1
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m404 [94m[POST] [97m-/userrole/2/3
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[DELETE] [97m-/userrole/2/2
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/pages
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m404 [94m[POST] [97m-/pageroute/1/1
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/pages/1
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/pageroute/1
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/pageroute/1
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[POST] [97m-/pages
+ [{
+  "app": "Admin",
+  "description": "User Login Page",
+  "name": "Login"
+}]
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m404 [94m[DELETE] [97m-/pagepage/1/1
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/routes
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/routes/1
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m404 [94m[POST] [97m-/routes/1/2
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/routeroles/1
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m404 [94m[DELETE] [97m-/routes/1/2
+ []
+[96m-[16:47:12]-[127.0.0.1] -[97m60074 [91m200 [94m[POST] [97m-/routes
+ [{
+  "description": "login user request",
+  "name": "login route",
+  "route_path": "/login"
+}]
+[96m-[16:50:22]-[127.0.0.1] -[97m60074 [91m202 [94m[POST] [97m-/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[16:50:22]-[127.0.0.1] -[97m60074 [91m202 [94m[GET] [97m-/
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m202 [94m[POST] [97m-/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJCbHVlIEFkbWluIiwic3ViIjoiVUkgQXV0aGVudGljYXRpb24gVG9rZW4iLCJleHAiOjE2ODkzNDY1MjMsImVtYWlsIjoiYmVpbWRlZ2VmdUBnbWFpbC5jb20iLCJyb2xlcyI6WyJzdXBlcnVzZXIiLCJIUiBBZG1pbiIsIlN0YW5kYXJkIl0sInV1aWQiOiJlNDBmMGZkMi1mYTNhLTRiZjEtYmYxOS1lNWI5MjUwZjM3MzgifQ.cQuavgLM4ZG_B22gcRzL7lEOskVvAmFzw8PO0JxdXiH8dGHkkP97DcnqSydCXfjLd4clD3nRTY84ZHrHwrbmBg"
+}]
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m202 [94m[POST] [97m-/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "token_decode",
+  "password": "default@123",
+  "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJCbHVlIEFkbWluIiwic3ViIjoiVUkgQXV0aGVudGljYXRpb24gVG9rZW4iLCJleHAiOjE2ODkzNDYyMjMsImVtYWlsIjoiYmVpbWRlZ2VmdUBnbWFpbC5jb20iLCJyb2xlcyI6WyJzdXBlcnVzZXIiLCJIUiBBZG1pbiIsIlN0YW5kYXJkIl0sInV1aWQiOiJlNDBmMGZkMi1mYTNhLTRiZjEtYmYxOS1lNWI5MjUwZjM3MzgifQ.JkCdIP92f_OUgXZ6lzAe6_mroatgWuo04XBq4Ty7-yuC-8Vfm3pFDtyxohHQ6GUitQrKKckgsamzNMZGqxGhvQ"
+}]
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/roles/1
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/users
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/users/2
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/userrole/1
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m404 [94m[POST] [97m-/userrole/2/3
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[DELETE] [97m-/userrole/2/2
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/pages
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m404 [94m[POST] [97m-/pageroute/1/1
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/pages/1
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/pageroute/1
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/pageroute/1
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[POST] [97m-/pages
+ [{
+  "app": "Admin",
+  "description": "User Login Page",
+  "name": "Login"
+}]
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m404 [94m[DELETE] [97m-/pagepage/1/1
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/routes
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/routes/1
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m404 [94m[POST] [97m-/routes/1/2
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[GET] [97m-/routeroles/1
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m404 [94m[DELETE] [97m-/routes/1/2
+ []
+[96m-[16:50:23]-[127.0.0.1] -[97m60074 [91m200 [94m[POST] [97m-/routes
+ [{
+  "description": "login user request",
+  "name": "login route",
+  "route_path": "/login"
+}]

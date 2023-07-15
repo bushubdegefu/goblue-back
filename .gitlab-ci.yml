@@ -52,8 +52,6 @@ goblue-test:       # This job runs in the test stage, which runs first.
     paths:
       - $CI_PROJECT_DIR/junitreport/*.xml
       - $CI_PROJECT_DIR/htmlreport/*.html
-    reports:
-      junit: $CI_PROJECT_DIR/juinitreport/*.xml
     expire_in: 20 minutes
 
 goblue-build :       # This job runs in the build stage, which runs first.

@@ -4,6 +4,8 @@ micros:
   - name: goblue-back
     src: .
     engine: custom
+    public_routes:
+      - "/*"
     primary: true
     presets:
       env:
