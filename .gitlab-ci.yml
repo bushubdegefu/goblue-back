@@ -31,8 +31,8 @@ goblue-compile:       # This job runs in the build stage, which runs first.
 
 goblue-test:       # This job runs in the test stage, which runs first.
   stage: test
-  # needs:
-  #   - goblue-compile
+  needs:
+    - goblue-compile
   script:
     - apk add git
     - apk add go
@@ -47,6 +47,8 @@ goblue-test:       # This job runs in the test stage, which runs first.
     - echo "Running unit tests... This will take about few minutes"
     - newman run blue_test.json -e test_env.json --env-var url=$HOSTNAME:5500 -r htmlextra --reporter-htmlextra-export  htmlreport/result.html
     - newman run blue_test.json -e test_env.json --env-var url=$HOSTNAME:5500 -r junit --reporter-junit-export junitreport/result.xml
+    - rm -r htmlreport
+    - rm -r junitreport
   artifacts:
     when: always
     paths:
@@ -61,8 +63,6 @@ goblue-build :       # This job runs in the build stage, which runs first.
   needs:
     - goblue-compile
     - goblue-test
-  before_script:
-    - apk add git
   dependencies:
     - goblue-compile
   script:
@@ -74,6 +74,7 @@ deploy-job:      # This job runs in the deploy stage.
   environment: development
   script:
     - echo "Deploying application..."
+    - apk add curl
     - curl -fsSL https://deta.space/assets/space-cli.sh | sh
     - space login -t $SPACE_TOKEN
     - space push 
