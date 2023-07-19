@@ -1,7 +1,7 @@
 # Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
 v: 0
 micros:
-  - name: goblue-back
+  - name: goblueback
     src: .
     engine: custom
     public_routes:
@@ -19,7 +19,10 @@ micros:
           description: Secret message only available to this Micro
           default: "dd0e2ce449ea5fa38fca66fc0e45674a"
     commands:
-      - chmod +x server
-      - apt install -y libc6 libc-bin
+      - apt-get update && apt-get install -y build-essential curl git libfreetype6-dev libzmq3-dev pkg-config python-dev software-properties-common swig
+      - apt-get install libc6
+      - apt-get -y install glibc-source
+      - go install
+      - go build -o server main.go
     run: ./server run
-    dev: ./server run
+    dev: ./main run

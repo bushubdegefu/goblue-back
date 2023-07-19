@@ -17,7 +17,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/login": {
+        "/api/login": {
             "post": {
                 "description": "Login",
                 "consumes": [
@@ -75,7 +75,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/pageroute/{page_id}": {
+        "/api/pageroute/{page_id}": {
             "get": {
                 "security": [
                     {
@@ -136,7 +136,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/pageroute/{page_id}/{route_id}": {
+        "/api/pageroute/{page_id}/{route_id}": {
             "post": {
                 "description": "Add Page Route",
                 "consumes": [
@@ -260,7 +260,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/pages": {
+        "/api/pages": {
             "get": {
                 "security": [
                     {
@@ -395,7 +395,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/pages/{id}": {
+        "/api/pages/{id}": {
             "get": {
                 "security": [
                     {
@@ -571,7 +571,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/roles": {
+        "/api/roles": {
             "get": {
                 "security": [
                     {
@@ -706,7 +706,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/roles/{id}": {
+        "/api/roles/{id}": {
             "get": {
                 "security": [
                     {
@@ -882,14 +882,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/roles/{user_id}/{role_id}": {
-            "post": {
+        "/api/routerole/{route_id}": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Add User Role",
+                "description": "Get route by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -897,21 +897,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "UserRole Operations"
+                    "Routes"
                 ],
-                "summary": "Add Role to User",
+                "summary": "Get Route Roles by ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Role ID",
-                        "name": "role_id",
+                        "description": "RouteResponse ID",
+                        "name": "route_id",
                         "in": "path",
                         "required": true
                     }
@@ -928,87 +921,21 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/responses.RolePost"
+                                            "$ref": "#/definitions/responses.RouteGet"
                                         }
                                     }
                                 }
                             ]
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete User Role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UserRole Operations"
-                ],
-                "summary": "Add Role",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Role ID",
-                        "name": "role_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RolePost"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -1016,7 +943,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/routerole/{route_id}/{role_id}": {
+        "/api/routerole/{route_id}/{role_id}": {
             "post": {
                 "security": [
                     {
@@ -1150,68 +1077,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/routeroles/{route_id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get route by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Routes"
-                ],
-                "summary": "Get Route Roles by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "RouteResponse ID",
-                        "name": "route_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RouteGet"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            }
-        },
-        "/routes": {
+        "/api/routes": {
             "get": {
                 "security": [
                     {
@@ -1349,7 +1215,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/routes/{id}": {
+        "/api/routes/{id}": {
             "get": {
                 "security": [
                     {
@@ -1525,7 +1391,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/userrole/{user_id}": {
+        "/api/userrole/{user_id}": {
             "get": {
                 "security": [
                     {
@@ -1589,7 +1455,141 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/api/userrole/{user_id}/{role_id}": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add User Role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserRole Operations"
+                ],
+                "summary": "Add Role to User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "role_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.RolePost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete User Role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserRole Operations"
+                ],
+                "summary": "Add Role",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "role_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.RolePost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
             "get": {
                 "description": "Get Users",
                 "consumes": [
@@ -1716,7 +1716,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/api/users/{id}": {
             "get": {
                 "security": [
                     {

@@ -3,3 +3,4 @@ ssl.cert
 .env
 .space/
 server
+main

@@ -43,7 +43,7 @@ type RoutePost struct {
 // @Success 200 {object} common.ResponsePagination{data=[]RouteGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /routes [get]
+// @Router /api/routes [get]
 func GetRouteResponse(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	Page, _ := strconv.Atoi(contx.Query("page"))
@@ -79,7 +79,7 @@ func GetRouteResponse(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RouteGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /routes/{id} [get]
+// @Router /api/routes/{id} [get]
 func GetRoutesID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	id, err := strconv.Atoi(contx.Params("id"))
@@ -117,7 +117,7 @@ func GetRoutesID(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RouteGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /routeroles/{route_id} [get]
+// @Router /api/routerole/{route_id} [get]
 func GetRouteRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	route_id, err := strconv.Atoi(contx.Params("route_id"))
@@ -157,7 +157,7 @@ func GetRouteRoles(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RoutePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /routes [post]
+// @Router /api/routes [post]
 func PostRoute(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -218,7 +218,7 @@ func PostRoute(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RoutePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /routes/{id} [patch]
+// @Router /api/routes/{id} [patch]
 func PatchRoute(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -281,7 +281,7 @@ func PatchRoute(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /routes/{id} [delete]
+// @Router /api/routes/{id} [delete]
 func DeleteRoute(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var route models.RouteResponse

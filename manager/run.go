@@ -3,6 +3,7 @@ package manager
 // export PATH=$PATH:$(go env GOPATH)/bin
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,13 +21,14 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/spf13/cobra"
+	"gorm.io/gorm/clause"
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/admin/responses"
 	"semay.com/common"
+	"semay.com/config"
 	_ "semay.com/docs"
 	"semay.com/utils"
-	"semay.com/config"
 )
 
 var (
@@ -39,22 +41,35 @@ var (
 		},
 	}
 	protectedURLs = []*regexp.Regexp{
-		regexp.MustCompile("^/login"),
+		regexp.MustCompile("^/api/login"),
 		regexp.MustCompile("^/lmetrics"),
 		regexp.MustCompile("^/bluedocs"),
 		regexp.MustCompile("^/docs"),
 		regexp.MustCompile("^/metrics$"),
 	}
+	stop_flag = 0
 )
 
+// API validation Key function to be run on middleware
+// checks if token roles have required privilge to access the requested route
 func validateAPIKey(contx *fiber.Ctx, key string) (bool, error) {
-	originalURL := strings.ToLower(contx.OriginalURL())
+	// Getting database session for app
 	db := database.ReturnSession()
+
+	// getting the name of the next function
+	contx.Next()
+	route_name := contx.Route().Name
+	fmt.Println(route_name + " == 1")
+
+	if stop_flag == 0 {
+		stop_flag++
+		contx.RestartRouting()
+	}
 	//  Getting list of roles required for the path
-	// roles := make([]string, 0, 20)
+	roles := make([]string, 0, 20)
 	var roles_fetch []models.Role
 	var route models.RouteResponse
-	if res := db.Model(&models.RouteResponse{}).Where("route_paths = ?", originalURL).Find(&route); res.Error != nil {
+	if res := db.Model(&models.RouteResponse{}).Where("Name = ?", route_name).Find(&route); res.Error != nil {
 		return false, contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: "Token role fetching: " + res.Error.Error(),
@@ -63,21 +78,38 @@ func validateAPIKey(contx *fiber.Ctx, key string) (bool, error) {
 	}
 	db.Model(&route).Association("Roles").Find(&roles_fetch)
 
-	// for _, value := range roles_fetch {
+	for _, value := range roles_fetch {
 
-	// 	roles = append(roles, string(value.Name))
-	// }
-
-	// parsing token
-	_, err := utils.ParseJWTToken(key)
-
-	// validating if value exists in available roles
-	if err != nil {
-		return false, err
+		roles = append(roles, string(value.Name))
 	}
-	return true, nil
+	// parsing token
+	token_roles, err := utils.ParseJWTToken(key)
+
+	// validating token role against route
+	tok_roles, _ := json.Marshal(token_roles)
+	var tok_rol utils.UserClaim
+	json.Unmarshal(tok_roles, &tok_rol)
+
+	flag := false
+	for _, route_priv := range roles {
+
+		for _, tok_value := range tok_rol.Roles {
+			if route_priv == tok_value {
+				flag = true
+				goto Exit // breaking out of loop if condition meet the requirement
+			}
+		}
+	}
+	// validating if value exists in available roles
+Exit:
+	if err != nil {
+		return flag, err
+	}
+
+	return flag, nil
 }
 
+// this is path filter which wavies token requirement for provided paths
 func authFilter(c *fiber.Ctx) bool {
 	originalURL := strings.ToLower(c.OriginalURL())
 
@@ -91,24 +123,42 @@ func authFilter(c *fiber.Ctx) bool {
 }
 
 func run() {
+	// initalaizing the app
 	app := fiber.New(fiber.Config{
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			// Status code defaults to 500
+			code := fiber.StatusInternalServerError
+
+			// Retrieve the custom status code if it's a *fiber.Error
+			var e *fiber.Error
+			if errors.As(err, &e) {
+				code = e.Code
+			}
+
+			// Send custom error page
+			err = ctx.Status(code).SendFile(fmt.Sprintf("./%d.html", code))
+			if err != nil {
+				// In case the SendFile fails
+				return ctx.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
+			}
+
+			// Return from handler
+			return nil
+		},
 	})
 
-	app.Use(keyauth.New(keyauth.Config{
-		Next:      authFilter,
-		KeyLookup: "header:X-APP-TOKEN",
-		Validator: validateAPIKey,
-	}))
-
-	// prometheus middleware concrete instanse
+	// prometheus middleware concrete instance
 	prometheus := fiberprometheus.New("gobluefiber")
 	prometheus.RegisterAt(app, "/metrics")
+
 	// prometheus monitoring middleware
 	app.Use(prometheus.Middleware)
+
 	// recover from panic attacks middlerware
 	app.Use(recover.New())
+
 	// allow cross origin request
 	app.Use(cors.New())
 
@@ -139,45 +189,61 @@ func run() {
 	app.Get("/lmetrics", monitor.New(monitor.Config{Title: "goBlue Metrics Page"})).Name("custom_metrics_route")
 
 	// setting up applications from other moduels
-	setupRoutes(app)
 
 	app.Get("/", func(contx *fiber.Ctx) error {
-		// fmt.Println(contx.App().GetRoutes())
-		for value := range contx.App().GetRoutes() {
 
-			fmt.Println(contx.App().GetRoutes()[value].Name)
-		}
-
-		return contx.Status(http.StatusAccepted).JSON(common.ResponseHTTP{
+		return contx.JSON(common.ResponseHTTP{
 			Success: true,
 			Message: "Hello World!",
+			Data:    nil,
 		})
+
 	}).Name("index_route")
-	// // tls certification
-	// // Certificate manager
-	// certs, _ := tls.LoadX509KeyPair("ssl.cert", "ssl.key")
 
-	// // registering routes
+	// adding group with authenthication middleware
+	admin_app := app.Group("/api/", keyauth.New(keyauth.Config{
+		Next:      authFilter,
+		KeyLookup: "header:X-APP-TOKEN",
+		Validator: validateAPIKey,
+	}))
+	setupRoutes(admin_app.(*fiber.Group))
 
-	// // register(app)
-	// //custm tls listener
-	// ln, _ := net.Listen("tcp", "0.0.0.0:5500")
-	// lr := tls.NewListener(
-	// 	ln,
-	// 	&tls.Config{
-	// 		Certificates: []tls.Certificate{
-	// 			certs,
-	// 		},
-	// 	},
-	// )
-	// // #####
-	// log.Fatal(app.Listener(lr))
+	// updating response function route names to database
+	// first parsing route names from app
+	response_names := make([]models.RouteResponse, 0)
+
+	for _, routes := range app.Stack() {
+		for _, route := range routes {
+			if route.Name != "" {
+				response_meta := models.RouteResponse{Name: route.Name}
+				response_names = append(response_names, response_meta)
+
+			}
+		}
+	}
+	// building superuser list for routeroles for routes above
+	super_route_roles := make([]models.RouteRoles, 0)
+	for i := range response_names {
+		route_id := i + 1
+		super_route_roles = append(super_route_roles, models.RouteRoles{RoleID: 1, RouteResponseID: uint(route_id)})
+	}
+
+	// getting database session to update
+	db := database.ReturnSession()
+	tx := db.Begin()
+	db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(super_route_roles, len(super_route_roles))
+	db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(response_names, len(response_names))
+
+	tx.Commit()
+
+	// recording available route name ends here
 	port := config.Config("PORT")
-	log.Fatal(app.Listen("0.0.0.0:"+port))
+	log.Fatal(app.Listen("0.0.0.0:" + port))
 }
 
-func setupRoutes(app *fiber.App) {
+func setupRoutes(app *fiber.Group) {
 
+	// adding middleware
 	app.Post("/login", responses.PostLogin).Name("login_route")
 
 	app.Get("/roles", responses.GetRoles).Name("get_roles")
@@ -206,7 +272,7 @@ func setupRoutes(app *fiber.App) {
 
 	app.Get("/routes", responses.GetRouteResponse).Name("get_routes")
 	app.Get("/routes/:id", responses.GetRoutesID).Name("get_one_route")
-	app.Get("/routeroles/:route_id", responses.GetRouteRoles).Name("get_route_roles")
+	app.Get("/routerole/:route_id", responses.GetRouteRoles).Name("get_route_roles")
 	app.Post("/routes", responses.PostRoute).Name("add_route")
 	app.Patch("/routes/:id", responses.PatchRoute).Name("patch_route")
 	app.Delete("/routes/:id", responses.DeleteRoute).Name("delete_route")

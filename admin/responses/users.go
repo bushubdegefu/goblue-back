@@ -40,7 +40,7 @@ type UserPost struct {
 // @Success 200 {object} common.ResponsePagination{data=[]UserGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /users [get]
+// @Router /api/users [get]
 func GetUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var Users []UserGet
@@ -79,7 +79,7 @@ func GetUsers(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=UserGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /users/{id} [get]
+// @Router /api/users/{id} [get]
 func GetUsersID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	id, err := strconv.Atoi(contx.Params("id"))
@@ -117,7 +117,7 @@ func GetUsersID(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=[]RoleGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /userrole/{user_id} [get]
+// @Router /api/userrole/{user_id} [get]
 func GetUsersRolesByID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	//validate user id
@@ -159,7 +159,7 @@ func GetUsersRolesByID(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=UserPost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /users [post]
+// @Router /api/users [post]
 func PostUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -220,7 +220,7 @@ func PostUsers(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=UserPost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /users/{id} [patch]
+// @Router /api/users/{id} [patch]
 func PatchUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -284,7 +284,7 @@ func PatchUsers(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /users/{id} [delete]
+// @Router /api/users/{id} [delete]
 func DeleteUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var User models.User

@@ -44,7 +44,7 @@ type PagePost struct {
 // @Success 200 {object} common.ResponsePagination{data=[]PageGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /pages [get]
+// @Router /api/pages [get]
 func GetPages(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	Page, _ := strconv.Atoi(contx.Query("page"))
@@ -80,7 +80,7 @@ func GetPages(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=PageGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /pages/{id} [get]
+// @Router /api/pages/{id} [get]
 func GetPageID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	id, err := strconv.Atoi(contx.Params("id"))
@@ -118,7 +118,7 @@ func GetPageID(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=PageGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /pageroute/{page_id} [get]
+// @Router /api/pageroute/{page_id} [get]
 func GetPageRoutes(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	page_id, err := strconv.Atoi(contx.Params("page_id"))
@@ -158,7 +158,7 @@ func GetPageRoutes(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=PagePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /pages [post]
+// @Router /api/pages [post]
 func PostPage(contx *fiber.Ctx) error {
 
 	db := database.ReturnSession()
@@ -221,7 +221,7 @@ func PostPage(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=PagePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /pages/{id} [patch]
+// @Router /api/pages/{id} [patch]
 func PatchPage(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -284,7 +284,7 @@ func PatchPage(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /pages/{id} [delete]
+// @Router /api/pages/{id} [delete]
 func DeletePage(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var page models.Page

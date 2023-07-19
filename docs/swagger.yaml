@@ -233,7 +233,7 @@ info:
   title: Swagger Blue API
   version: "0.1"
 paths:
-  /login:
+  /api/login:
     post:
       consumes:
       - application/json
@@ -268,7 +268,7 @@ paths:
       summary: Auth
       tags:
       - Authentication
-  /pageroute/{page_id}:
+  /api/pageroute/{page_id}:
     get:
       consumes:
       - application/json
@@ -304,7 +304,7 @@ paths:
       summary: Get Page Routes by ID
       tags:
       - Page
-  /pageroute/{page_id}/{route_id}:
+  /api/pageroute/{page_id}/{route_id}:
     delete:
       consumes:
       - application/json
@@ -381,7 +381,7 @@ paths:
       summary: Add Route to Page
       tags:
       - PageRoute Operations
-  /pages:
+  /api/pages:
     get:
       consumes:
       - application/json
@@ -461,7 +461,7 @@ paths:
       summary: Add a new Page
       tags:
       - Page
-  /pages/{id}:
+  /api/pages/{id}:
     delete:
       consumes:
       - application/json
@@ -568,7 +568,7 @@ paths:
       summary: Patch Page
       tags:
       - Page
-  /roles:
+  /api/roles:
     get:
       consumes:
       - application/json
@@ -648,7 +648,7 @@ paths:
       summary: Add a new Role
       tags:
       - Role
-  /roles/{id}:
+  /api/roles/{id}:
     delete:
       consumes:
       - application/json
@@ -755,20 +755,15 @@ paths:
       summary: Patch Role
       tags:
       - Role
-  /roles/{user_id}/{role_id}:
-    delete:
+  /api/routerole/{route_id}:
+    get:
       consumes:
       - application/json
-      description: Delete User Role
+      description: Get route by ID
       parameters:
-      - description: User ID
+      - description: RouteResponse ID
         in: path
-        name: user_id
-        required: true
-        type: integer
-      - description: Role ID
-        in: path
-        name: role_id
+        name: route_id
         required: true
         type: integer
       produces:
@@ -781,62 +776,22 @@ paths:
             - $ref: '#/definitions/common.ResponseHTTP'
             - properties:
                 data:
-                  $ref: '#/definitions/responses.RolePost'
+                  $ref: '#/definitions/responses.RouteGet'
               type: object
-        "400":
-          description: Bad Request
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
+        "503":
+          description: Service Unavailable
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
-      summary: Add Role
+      summary: Get Route Roles by ID
       tags:
-      - UserRole Operations
-    post:
-      consumes:
-      - application/json
-      description: Add User Role
-      parameters:
-      - description: User ID
-        in: path
-        name: user_id
-        required: true
-        type: integer
-      - description: Role ID
-        in: path
-        name: role_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RolePost'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      summary: Add Role to User
-      tags:
-      - UserRole Operations
-  /routerole/{route_id}/{role_id}:
+      - Routes
+  /api/routerole/{route_id}/{role_id}:
     delete:
       consumes:
       - application/json
@@ -917,43 +872,7 @@ paths:
       summary: Add Role to Route
       tags:
       - RouteRole Operations
-  /routeroles/{route_id}:
-    get:
-      consumes:
-      - application/json
-      description: Get route by ID
-      parameters:
-      - description: RouteResponse ID
-        in: path
-        name: route_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RouteGet'
-              type: object
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      summary: Get Route Roles by ID
-      tags:
-      - Routes
-  /routes:
+  /api/routes:
     get:
       consumes:
       - application/json
@@ -1034,7 +953,7 @@ paths:
       summary: Add a new Route
       tags:
       - Routes
-  /routes/{id}:
+  /api/routes/{id}:
     delete:
       consumes:
       - application/json
@@ -1141,7 +1060,7 @@ paths:
       summary: Patch Route
       tags:
       - Routes
-  /userrole/{user_id}:
+  /api/userrole/{user_id}:
     get:
       consumes:
       - application/json
@@ -1179,7 +1098,88 @@ paths:
       summary: Get User Roles by ID
       tags:
       - Users
-  /users:
+  /api/userrole/{user_id}/{role_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete User Role
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: Role ID
+        in: path
+        name: role_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.RolePost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Add Role
+      tags:
+      - UserRole Operations
+    post:
+      consumes:
+      - application/json
+      description: Add User Role
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: Role ID
+        in: path
+        name: role_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.RolePost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Add Role to User
+      tags:
+      - UserRole Operations
+  /api/users:
     get:
       consumes:
       - application/json
@@ -1256,7 +1256,7 @@ paths:
       summary: Add a new Users
       tags:
       - Users
-  /users/{id}:
+  /api/users/{id}:
     delete:
       consumes:
       - application/json

@@ -22,7 +22,7 @@ import (
 // @Success 200 {object} common.ResponseHTTP{data=RolePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /routerole/{route_id}/{role_id} [post]
+// @Router /api/routerole/{route_id}/{role_id} [post]
 func AddRouteRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 
@@ -91,7 +91,7 @@ func AddRouteRoles(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RolePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /routerole/{route_id}/{role_id} [delete]
+// @Router /api/routerole/{route_id}/{role_id} [delete]
 func DeleteRouteRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	// validate path params

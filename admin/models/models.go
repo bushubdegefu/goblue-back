@@ -23,7 +23,7 @@ type Role struct {
 
 type RouteResponse struct {
 	ID          uint   `gorm:"primaryKey;autoIncrement:true"`
-	Name        string `gorm:"type:string;" json:"name,omitempty"`
+	Name        string `gorm:"type:string; unique;" json:"name,omitempty"`
 	RoutePaths  string `gorm:"type:string;" json:"route_path,omitempty"`
 	Description string `gorm:"type:string;" json:"description,omitempty"`
 	Pages       []Page `gorm:"many2many:page_routes" json:"pages,omitempty"`

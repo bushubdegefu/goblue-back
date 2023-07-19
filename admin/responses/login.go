@@ -37,7 +37,7 @@ type TokenResponse struct {
 // @Success 200 {object} common.ResponseHTTP{data=TokenResponse{}}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /login [post]
+// @Router /api/login [post]
 func PostLogin(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()

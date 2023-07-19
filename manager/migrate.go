@@ -7,9 +7,9 @@ import (
 
 var (
 	migrateCmd = &cobra.Command{
-		Use:   "migrate",
-		Short: "Migrate Updated Models to the Database",
-		Long:  `Migrate Updated Models to the Database. The database URI is to be provided within the migrate function or as .env variable`,
+		Use:   "updateroutes",
+		Short: "update availble app routes to the Database",
+		Long:  `update route names Models to the Database. The database URI is to be provided within the migrate function or as .env variable`,
 		Run: func(cmd *cobra.Command, args []string) {
 			migrate()
 		},

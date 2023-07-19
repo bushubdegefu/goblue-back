@@ -21,7 +21,7 @@ import (
 // @Success 200 {object} common.ResponseHTTP{data=RoutePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /pageroute/{page_id}/{route_id} [post]
+// @Router /api/pageroute/{page_id}/{route_id} [post]
 func AddPageRoutes(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 
@@ -89,7 +89,7 @@ func AddPageRoutes(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RoutePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /pageroute/{page_id}/{route_id} [delete]
+// @Router /api/pageroute/{page_id}/{route_id} [delete]
 func DeletePageRoutes(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	// validate path params

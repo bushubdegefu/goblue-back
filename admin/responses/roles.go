@@ -39,7 +39,7 @@ type RolePost struct {
 // @Success 200 {object} common.ResponsePagination{data=[]RoleGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /roles [get]
+// @Router /api/roles [get]
 func GetRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	Page, _ := strconv.Atoi(contx.Query("page"))
@@ -75,7 +75,7 @@ func GetRoles(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RoleGet}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /roles/{id} [get]
+// @Router /api/roles/{id} [get]
 func GetRolesID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	id, err := strconv.Atoi(contx.Params("id"))
@@ -113,7 +113,7 @@ func GetRolesID(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RolePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /roles [post]
+// @Router /api/roles [post]
 func PostRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -174,7 +174,7 @@ func PostRoles(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RolePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /roles/{id} [patch]
+// @Router /api/roles/{id} [patch]
 func PatchRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -237,7 +237,7 @@ func PatchRoles(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /roles/{id} [delete]
+// @Router /api/roles/{id} [delete]
 func DeleteRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var role models.Role
