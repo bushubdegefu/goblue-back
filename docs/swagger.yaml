@@ -95,6 +95,21 @@ definitions:
       uuid:
         type: string
     type: object
+  responses.EmailMessage:
+    properties:
+      emails:
+        items:
+          type: string
+        type: array
+      message:
+        type: string
+      subject:
+        type: string
+    required:
+    - emails
+    - message
+    - subject
+    type: object
   responses.LoginPost:
     properties:
       email:
@@ -233,6 +248,41 @@ info:
   title: Swagger Blue API
   version: "0.1"
 paths:
+  /api/email:
+    post:
+      consumes:
+      - application/json
+      description: Sending Email
+      parameters:
+      - description: messages
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/responses.EmailMessage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.EmailMessage'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      summary: Send Email to
+      tags:
+      - Utilities
   /api/login:
     post:
       consumes:

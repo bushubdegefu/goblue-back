@@ -18110,3 +18110,757 @@
  []
 [96m-[16:40:42]-[127.0.0.1] -[97m97595 [91m404 [94m[GET] [97m-/api/routes
  []
+[96m-[08:10:04]-[127.0.0.1] -[97m8524 [91m202 [94m[POST] [97m-/api/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[08:10:09]-[127.0.0.1] -[97m8524 [91m404 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:10:09]-[127.0.0.1] -[97m8524 [91m404 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:10:16]-[127.0.0.1] -[97m8524 [91m404 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:12:34]-[127.0.0.1] -[97m9406 [91m401 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:12:34]-[127.0.0.1] -[97m9406 [91m401 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:12:58]-[127.0.0.1] -[97m9597 [91m401 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:12:58]-[127.0.0.1] -[97m9597 [91m401 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:13:03]-[127.0.0.1] -[97m9597 [91m401 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:13:04]-[127.0.0.1] -[97m9597 [91m401 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:13:05]-[127.0.0.1] -[97m9597 [91m401 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:13:41]-[127.0.0.1] -[97m10083 [91m401 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:13:41]-[127.0.0.1] -[97m10083 [91m401 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:13:45]-[127.0.0.1] -[97m10083 [91m401 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:14:25]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:14:25]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:14:26]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:14:27]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:14:27]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:14:28]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/routes
+ []
+[96m-[08:14:33]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:14:34]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:14:35]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:14:35]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:14:36]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[08:14:37]-[127.0.0.1] -[97m10583 [91m404 [94m[GET] [97m-/api/roles
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "refresh_token",
+  "password": "default@123",
+  "token": "sometoken"
+}]
+[96m-[12:32:59]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-/
+ []
+[96m-[12:32:59]-[127.0.0.1] -[97m69928 [91m404 [94m[GET] [97m-/favicon.ico
+ []
+[96m-[12:33:13]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-index.html
+ []
+[96m-[12:33:13]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-swagger-ui.css
+ []
+[96m-[12:33:13]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-swagger-ui-bundle.js
+ []
+[96m-[12:33:13]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-swagger-ui-standalone-preset.js
+ []
+[96m-[12:33:13]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-swagger-ui-standalone-preset.js
+ []
+[96m-[12:33:13]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-swagger-ui-bundle.js
+ []
+[96m-[12:33:13]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-favicon-32x32.png
+ []
+[96m-[12:33:13]-[127.0.0.1] -[97m69928 [91m200 [94m[GET] [97m-doc.json
+ []
+[96m-[12:33:20]-[127.0.0.1] -[97m69928 [91m202 [94m[POST] [97m-/api/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[12:34:03]-[127.0.0.1] -[97m69928 [91m404 [94m[GET] [97m-/api/roles
+ []
+[96m-[12:34:03]-[127.0.0.1] -[97m69928 [91m404 [94m[GET] [97m-/api/roles
+ []
+[96m-[12:35:41]-[127.0.0.1] -[97m69928 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[12:37:17]-[127.0.0.1] -[97m69928 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[12:37:21]-[127.0.0.1] -[97m69928 [91m202 [94m[POST] [97m-/api/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[12:37:48]-[127.0.0.1] -[97m69928 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[12:39:50]-[127.0.0.1] -[97m70749 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[12:39:50]-[127.0.0.1] -[97m70749 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[12:40:06]-[127.0.0.1] -[97m70749 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[12:40:18]-[127.0.0.1] -[97m70749 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[12:42:06]-[127.0.0.1] -[97m71815 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[12:42:06]-[127.0.0.1] -[97m71815 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:08:18]-[127.0.0.1] -[97m89567 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:08:18]-[127.0.0.1] -[97m89567 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:08:23]-[127.0.0.1] -[97m89567 [91m202 [94m[POST] [97m-/api/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[14:08:27]-[127.0.0.1] -[97m89567 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:08:41]-[127.0.0.1] -[97m89567 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:09:05]-[127.0.0.1] -[97m89567 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:10:28]-[127.0.0.1] -[97m89567 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:28:08]-[127.0.0.1] -[97m105483 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:28:08]-[127.0.0.1] -[97m105483 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:28:50]-[127.0.0.1] -[97m106284 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[14:28:50]-[127.0.0.1] -[97m106284 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:05:26]-[127.0.0.1] -[97m124667 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:05:26]-[127.0.0.1] -[97m124667 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:05:30]-[127.0.0.1] -[97m124667 [91m202 [94m[POST] [97m-/api/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[16:06:10]-[127.0.0.1] -[97m124667 [91m202 [94m[POST] [97m-/api/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[16:06:15]-[127.0.0.1] -[97m124667 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:06:16]-[127.0.0.1] -[97m124667 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:06:17]-[127.0.0.1] -[97m124667 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:22:03]-[127.0.0.1] -[97m130257 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:22:03]-[127.0.0.1] -[97m130257 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:22:04]-[127.0.0.1] -[97m130257 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:23:14]-[127.0.0.1] -[97m130957 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:23:14]-[127.0.0.1] -[97m130957 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:34:41]-[127.0.0.1] -[97m135686 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:34:41]-[127.0.0.1] -[97m135686 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:35:35]-[127.0.0.1] -[97m135686 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:36:13]-[127.0.0.1] -[97m135686 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:36:16]-[127.0.0.1] -[97m135686 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:36:36]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:36:36]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:37:21]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:37:43]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:39:25]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:39:55]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:40:24]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:41:23]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:42:16]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:43:05]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:44:25]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:45:03]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:47:06]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:48:49]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:49:34]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:50:03]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:52:27]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:53:01]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:54:45]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:07]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:08]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:09]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:10]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:10]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:11]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:12]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:13]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:14]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[16:57:15]-[127.0.0.1] -[97m137318 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:04:01]-[127.0.0.1] -[97m162798 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:04:01]-[127.0.0.1] -[97m162798 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:40:34]-[127.0.0.1] -[97m179331 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:40:34]-[127.0.0.1] -[97m179331 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:40:38]-[127.0.0.1] -[97m179331 [91m202 [94m[POST] [97m-/api/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[17:40:43]-[127.0.0.1] -[97m179331 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:40:44]-[127.0.0.1] -[97m179331 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:40:45]-[127.0.0.1] -[97m179331 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:46:55]-[127.0.0.1] -[97m179331 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:46:56]-[127.0.0.1] -[97m179331 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons",
+  "message": "This is sending test data through app producer"
+}]
+[96m-[17:47:34]-[127.0.0.1] -[97m179331 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons Two",
+  "message": "This is sending test data through app producer \n Again"
+}]
+[96m-[17:47:36]-[127.0.0.1] -[97m179331 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons Two",
+  "message": "This is sending test data through app producer \n Again"
+}]
+[96m-[21:40:26]-[127.0.0.1] -[97m182792 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons Two",
+  "message": "This is sending test data through app producer \n Again"
+}]
+[96m-[21:40:26]-[127.0.0.1] -[97m182792 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons Two",
+  "message": "This is sending test data through app producer \n Again"
+}]
+[96m-[21:40:27]-[127.0.0.1] -[97m182792 [91m401 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons Two",
+  "message": "This is sending test data through app producer \n Again"
+}]
+[96m-[21:40:31]-[127.0.0.1] -[97m182792 [91m202 [94m[POST] [97m-/api/login
+ [{
+  "email": "beimdegefu@gmail.com",
+  "grant_type": "authorization_code",
+  "password": "default@123",
+  "token": "something"
+}]
+[96m-[21:40:37]-[127.0.0.1] -[97m182792 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons Two",
+  "message": "This is sending test data through app producer \n Again"
+}]
+[96m-[21:40:38]-[127.0.0.1] -[97m182792 [91m404 [94m[POST] [97m-/api/email
+ [{
+  "emails": [
+    "beimdegefu@gmail.com", "gersum.asfaw@partner.safaricom.et"
+  ],
+  "subject" : "BlueAdmin Testing Email Notificaitons Two",
+  "message": "This is sending test data through app producer \n Again"
+}]

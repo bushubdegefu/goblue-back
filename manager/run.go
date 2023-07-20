@@ -57,10 +57,9 @@ func validateAPIKey(contx *fiber.Ctx, key string) (bool, error) {
 	db := database.ReturnSession()
 
 	// getting the name of the next function
+
 	contx.Next()
 	route_name := contx.Route().Name
-	fmt.Println(route_name + " == 1")
-
 	if stop_flag == 0 {
 		stop_flag++
 		contx.RestartRouting()
@@ -278,6 +277,8 @@ func setupRoutes(app *fiber.Group) {
 	app.Delete("/routes/:id", responses.DeleteRoute).Name("delete_route")
 	app.Post("/routerole/:route_id/:role_id", responses.AddRouteRoles).Name("add_route_role")
 	app.Delete("/routerole/:route_id/:role_id", responses.DeleteRouteRoles).Name("delete_route_role")
+
+	app.Post("/email", responses.SendEmail).Name("send_email")
 }
 
 func init() {
