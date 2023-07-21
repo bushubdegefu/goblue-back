@@ -25,7 +25,7 @@ func SendEmailConsumer(msg string, sub string, emails []string) {
 
 	password := config.Config("MAIL_PASSWORD")
 
-	body_msg := fmt.Sprintf("<p>An old <b>%s</b> in the sky.</p>", msg)
+	body_msg := fmt.Sprintf("<p><b>%s</b></p>", msg)
 	request := Mail{
 		Sender:  sender_email,
 		To:      emails,
@@ -34,10 +34,9 @@ func SendEmailConsumer(msg string, sub string, emails []string) {
 	}
 	my_msg := BuildMessage(request)
 
-	msg_body := []byte(my_msg)
 	// We can't send strings directly in mail,
 	// strings need to be converted into slice bytes
-	// body := []byte(msg)
+	msg_body := []byte(my_msg)
 
 	// PlainAuth uses the given username and password to
 	// authenticate to host and act as identity.
