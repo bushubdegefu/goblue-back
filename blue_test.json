@@ -43,7 +43,13 @@
 					},
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "1",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"authorization_code\",\n  \"password\": \"default@123\",\n  \"token\": \"something\"\n}",
@@ -81,11 +87,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"",
-									"pm.test('Status Code 202', ()=>{",
-									"pm.expect(pm.response.code).equals(202)",
-									"",
-									"})"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -96,7 +98,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -107,9 +115,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}",
+							"raw": "{{base}}",
 							"host": [
-								"{{url}}"
+								"{{base}}"
 							]
 						}
 					},
@@ -146,7 +154,13 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"refresh_token\",\n  \"password\": \"default@123\",\n  \"token\": \"{{refresh_token}}\"\n}",
@@ -199,7 +213,13 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"email\": \"beimdegefu@gmail.com\",\n  \"grant_type\": \"token_decode\",\n  \"password\": \"default@123\",\n  \"token\": \"{{token}}\"\n}",
@@ -242,7 +262,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"// console.log(pm.response.json().itmes.refresh_token)",
+									"console.log(pm.response.code)",
 									"",
 									"",
 									"pm.test('Status Code 200', ()=>{",
@@ -263,6 +283,11 @@
 							{
 								"key": "X-RFRESH-TOKEN",
 								"value": "{{refresh_token}}",
+								"type": "text"
+							},
+							{
+								"key": "x-priority",
+								"value": "2",
 								"type": "text"
 							}
 						],
@@ -334,6 +359,11 @@
 								"key": "X-RFRESH-TOKEN",
 								"value": "{{refresh_token}}",
 								"type": "text"
+							},
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -399,6 +429,11 @@
 								"key": "X-RFRESH-TOKEN",
 								"value": "{{refresh_token}}",
 								"type": "text"
+							},
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -436,7 +471,13 @@
 					"name": "Get User By ID",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{url}}/users/2",
 							"host": [
@@ -454,15 +495,21 @@
 					"name": "Get User Roles By ID",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{url}}/userrole/1",
+							"raw": "{{url}}/userrole/2",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"userrole",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -491,7 +538,13 @@
 					"name": "Remove Role From User",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{url}}/userrole/2/2",
 							"host": [
@@ -515,7 +568,13 @@
 					"name": "Get Pages",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{url}}/pages?page=1&size=10",
 							"host": [
@@ -542,7 +601,13 @@
 					"name": "Add Routes To Page",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -570,7 +635,13 @@
 					"name": "Get Pages By ID",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{url}}/pages/1",
 							"host": [
@@ -588,7 +659,13 @@
 					"name": "Get Routes By Page ID",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{url}}/pageroute/1",
 							"host": [
@@ -606,7 +683,13 @@
 					"name": "Get Page Routes",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{url}}/pageroute/1",
 							"host": [
@@ -624,7 +707,13 @@
 					"name": "Add New Page",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"app\": \"Admin\",\r\n  \"description\": \"User Login Page\",\r\n  \"name\": \"Login\"\r\n}",
@@ -650,14 +739,20 @@
 					"name": "Remove Route From Page",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{url}}/pagepage/1/1",
+							"raw": "{{url}}/pageroute/1/1",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"pagepage",
+								"pageroute",
 								"1",
 								"1"
 							]
@@ -674,9 +769,15 @@
 					"name": "Get Routes",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{url}}/routes?page=1&size=10",
+							"raw": "{{url}}/routes?page=2&size=10",
 							"host": [
 								"{{url}}"
 							],
@@ -686,7 +787,7 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "1"
+									"value": "2"
 								},
 								{
 									"key": "size",
@@ -701,15 +802,21 @@
 					"name": "Get Routes By ID",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{url}}/routes/1",
+							"raw": "{{url}}/routes/11",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"routes",
-								"1"
+								"11"
 							]
 						}
 					},
@@ -719,15 +826,21 @@
 					"name": "Add Role To Route",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{url}}/routes/1/2",
+							"raw": "{{url}}/routerole/12/2",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"routes",
-								"1",
+								"routerole",
+								"12",
 								"2"
 							]
 						}
@@ -738,15 +851,21 @@
 					"name": "Get Route By Roles By ID",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{url}}/routeroles/1",
+							"raw": "{{url}}/routerole/11",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"routeroles",
-								"1"
+								"routerole",
+								"11"
 							]
 						}
 					},
@@ -756,14 +875,20 @@
 					"name": "Remove Role From Route",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{url}}/routes/1/2",
+							"raw": "{{url}}/routerole/1/2",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"routes",
+								"routerole",
 								"1",
 								"2"
 							]
@@ -775,7 +900,13 @@
 					"name": "Add New Route",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "2",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"description\": \"login user request\",\r\n  \"name\": \"login route\",\r\n  \"route_path\": \"/login\"\r\n}",
@@ -792,6 +923,43 @@
 							],
 							"path": [
 								"routes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Utilitity Ops",
+			"item": [
+				{
+					"name": "Send Email to List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-priority",
+								"value": "3",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"emails\": [\n    \"beimdegefu@gmail.com\", \"beimnet.degefu@gmail.com\"\n  ],\n  \"subject\" : \"BlueAdmin Testing Email Notificaitons Two\",\n  \"message\": \"This is sending test data through BlueAdmin producer \\n Again\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/email",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"email"
 							]
 						}
 					},

@@ -47,7 +47,8 @@ var (
 		regexp.MustCompile("^/docs"),
 		regexp.MustCompile("^/metrics$"),
 	}
-	stop_flag = 0
+	stop_flag  = 0
+	route_name string
 )
 
 // API validation Key function to be run on middleware
@@ -57,13 +58,16 @@ func validateAPIKey(contx *fiber.Ctx, key string) (bool, error) {
 	db := database.ReturnSession()
 
 	// getting the name of the next function
-
-	contx.Next()
-	route_name := contx.Route().Name
+	fmt.Println(route_name + "===1")
 	if stop_flag == 0 {
 		stop_flag++
+		contx.Next()
+		route_name = contx.Route().Name
 		contx.RestartRouting()
+
 	}
+
+	// fmt.Println(route_name + "===2")
 	//  Getting list of roles required for the path
 	roles := make([]string, 0, 20)
 	var roles_fetch []models.Role

@@ -19,6 +19,12 @@
 			"value": "localhost:5500",
 			"type": "default",
 			"enabled": true
+		},
+		{
+			"key": "base",
+			"value": "localhost:5500",
+			"type": "default",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",

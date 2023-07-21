@@ -54,7 +54,7 @@ func GetRoles(contx *fiber.Ctx) error {
 
 	result, err := common.PaginationPureModel(db, models.Role{}, []RoleGet{}, uint(Page), uint(Limit))
 	if err != nil {
-		return contx.JSON(common.ResponseHTTP{
+		return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 			Success: true,
 			Message: "Success get all roles.",
 			Data:    "something",
