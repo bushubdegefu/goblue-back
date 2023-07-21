@@ -40,6 +40,7 @@ func BlueConsumer() {
 	}
 
 	// process received messages based on their types
+	// for update
 	forever := make(chan bool)
 	go func() {
 		for msg := range msgs {
