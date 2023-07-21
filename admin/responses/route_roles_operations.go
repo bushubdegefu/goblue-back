@@ -72,7 +72,7 @@ func AddRouteRoles(contx *fiber.Ctx) error {
 	}
 
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Creating a role Route.",
 		Data:    role,

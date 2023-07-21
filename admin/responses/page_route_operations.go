@@ -71,7 +71,7 @@ func AddPageRoutes(contx *fiber.Ctx) error {
 	}
 
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Creating a Route to Page.",
 		Data:    route,
@@ -133,7 +133,7 @@ func DeletePageRoutes(contx *fiber.Ctx) error {
 		})
 	}
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Removing a route from page.",
 		Data:    route,

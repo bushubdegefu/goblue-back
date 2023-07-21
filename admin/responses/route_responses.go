@@ -64,7 +64,7 @@ func GetRouteResponse(contx *fiber.Ctx) error {
 			Data:    "something",
 		})
 	}
-	return contx.JSON(result)
+	return contx.Status(http.StatusOK).JSON(result)
 
 }
 
@@ -99,7 +99,7 @@ func GetRoutesID(contx *fiber.Ctx) error {
 		})
 	}
 
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one route.",
 		Data:    &routes,
@@ -139,7 +139,7 @@ func GetRouteRoles(contx *fiber.Ctx) error {
 	}
 	db.Model(&route).Association("Roles").Find(&roles)
 
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one route.",
 		Data:    &roles,
@@ -199,7 +199,7 @@ func PostRoute(contx *fiber.Ctx) error {
 	tx.Commit()
 
 	// return data if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success register a route.",
 		Data:    route,

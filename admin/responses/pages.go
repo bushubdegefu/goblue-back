@@ -59,7 +59,7 @@ func GetPages(contx *fiber.Ctx) error {
 
 	result, err := common.PaginationPureModel(db, models.Page{}, []PageGet{}, uint(Page), uint(Limit))
 	if err != nil {
-		return contx.JSON(common.ResponseHTTP{
+		return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 			Success: true,
 			Message: "Success get all pages.",
 			Data:    "something",
@@ -100,7 +100,7 @@ func GetPageID(contx *fiber.Ctx) error {
 		})
 	}
 
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one page.",
 		Data:    &pages,
@@ -140,7 +140,7 @@ func GetPageRoutes(contx *fiber.Ctx) error {
 	}
 	db.Model(&page).Association("Routes").Find(&routes)
 
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one route.",
 		Data:    &routes,
@@ -202,7 +202,7 @@ func PostPage(contx *fiber.Ctx) error {
 	tx.Commit()
 
 	// return data if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success register a page.",
 		Data:    page,
@@ -266,7 +266,7 @@ func PatchPage(contx *fiber.Ctx) error {
 	tx.Commit()
 
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Updating a page.",
 		Data:    page,
@@ -310,7 +310,7 @@ func DeletePage(contx *fiber.Ctx) error {
 	db.Delete(&page)
 	tx.Commit()
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Delete a page.",
 		Data:    page,

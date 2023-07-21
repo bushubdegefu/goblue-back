@@ -60,7 +60,7 @@ func GetRoles(contx *fiber.Ctx) error {
 			Data:    "something",
 		})
 	}
-	return contx.JSON(result)
+	return contx.Status(http.StatusOK).JSON(result)
 
 }
 
@@ -95,7 +95,7 @@ func GetRolesID(contx *fiber.Ctx) error {
 		})
 	}
 
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one role.",
 		Data:    &roles,
@@ -155,7 +155,7 @@ func PostRoles(contx *fiber.Ctx) error {
 	tx.Commit()
 
 	// return data if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success register a role.",
 		Data:    role,
@@ -219,7 +219,7 @@ func PatchRoles(contx *fiber.Ctx) error {
 	tx.Commit()
 
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Updating a role.",
 		Data:    role,
@@ -263,7 +263,7 @@ func DeleteRoles(contx *fiber.Ctx) error {
 	db.Delete(&role)
 	tx.Commit()
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Delete a role.",
 		Data:    role,

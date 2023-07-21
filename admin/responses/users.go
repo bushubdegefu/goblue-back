@@ -64,7 +64,7 @@ func GetUsers(contx *fiber.Ctx) error {
 			Data:    "something",
 		})
 	}
-	return contx.JSON(result)
+	return contx.Status(http.StatusOK).JSON(result)
 
 }
 
@@ -99,7 +99,7 @@ func GetUsersID(contx *fiber.Ctx) error {
 		})
 	}
 
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one User.",
 		Data:    &users,
@@ -141,7 +141,7 @@ func GetUsersRolesByID(contx *fiber.Ctx) error {
 	}
 	db.Model(&user).Association("Roles").Find(&roles)
 
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one route.",
 		Data:    &roles,
@@ -201,7 +201,7 @@ func PostUsers(contx *fiber.Ctx) error {
 	tx.Commit()
 
 	// return data if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success register a User.",
 		Data:    User,
@@ -266,7 +266,7 @@ func PatchUsers(contx *fiber.Ctx) error {
 	tx.Commit()
 
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Updating a User.",
 		Data:    User,
@@ -310,7 +310,7 @@ func DeleteUsers(contx *fiber.Ctx) error {
 	db.Delete(&User)
 	tx.Commit()
 	// return value if transaction is sucessfull
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Delete a User.",
 		Data:    User,

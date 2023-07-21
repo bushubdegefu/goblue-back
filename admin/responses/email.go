@@ -82,7 +82,7 @@ func SendEmail(contx *fiber.Ctx) error {
 	}
 	// close connection and channel of the rabbitmq server
 
-	return contx.JSON(common.ResponseHTTP{
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success get all Users.",
 		Data:    posted_message,

@@ -58,7 +58,6 @@ func validateAPIKey(contx *fiber.Ctx, key string) (bool, error) {
 	db := database.ReturnSession()
 
 	// getting the name of the next function
-	fmt.Println(route_name + "===1")
 	if stop_flag == 0 {
 		stop_flag++
 		contx.Next()
@@ -67,7 +66,6 @@ func validateAPIKey(contx *fiber.Ctx, key string) (bool, error) {
 
 	}
 
-	// fmt.Println(route_name + "===2")
 	//  Getting list of roles required for the path
 	roles := make([]string, 0, 20)
 	var roles_fetch []models.Role
