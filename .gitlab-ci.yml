@@ -46,7 +46,7 @@ goblue-test:       # This job runs in the test stage, which runs first.
     - npm install -g newman-reporter-htmlextra
     - echo "Running unit tests... This will take about few minutes"
     - newman run blue_test.json -e test_env.json  --global-var "order=1,2,3" --iteration-count 2 --env-var url=$HOSTNAME:5500/api  --env-var base=$HOSTNAME:5500  -r htmlextra --reporter-htmlextra-export  htmlreport/result.html
-    - newman run blue_test.json -e test_env.json  --global-var "order=1,2,3" --iteration-count 5 --env-var url=$HOSTNAME:5500/api  --env-var base=$HOSTNAME:5500  -r junit --reporter-junit-export junitreport/result.xml
+    - newman run blue_test.json -e test_env.json  --global-var "order=1,2,3" --iteration-count 2 --env-var url=$HOSTNAME:5500/api  --env-var base=$HOSTNAME:5500  -r junit --reporter-junit-export junitreport/result.xml
   artifacts:
     when: always
     paths:

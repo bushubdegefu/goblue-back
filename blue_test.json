@@ -262,8 +262,6 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"console.log(pm.response.code)",
-									"",
 									"",
 									"pm.test('Status Code 200', ()=>{",
 									"pm.expect(pm.response.code).equals(200)",
