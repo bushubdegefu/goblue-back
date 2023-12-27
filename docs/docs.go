@@ -17,7 +17,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/email": {
+        "/api/v1/email": {
             "post": {
                 "description": "Sending Email",
                 "consumes": [
@@ -75,7 +75,1331 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/login": {
+        "/apps": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Refresh": []
+                    }
+                ],
+                "description": "Get Apps",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "App"
+                ],
+                "summary": "Get Apps",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponsePagination"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.AppGet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add App",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "App"
+                ],
+                "summary": "Add a new App",
+                "parameters": [
+                    {
+                        "description": "Add App",
+                        "name": "app",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.AppPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.AppPost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get app by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "App"
+                ],
+                "summary": "Get App by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "App ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.AppGet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Remove app by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "App"
+                ],
+                "summary": "Remove App by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "App ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Patch App",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "App"
+                ],
+                "summary": "Patch App",
+                "parameters": [
+                    {
+                        "description": "Patch App",
+                        "name": "app",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.AppPost"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "App ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.AppPost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/checklogin": {
+            "get": {
+                "description": "CheckLogin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Auth",
+                "parameters": [
+                    {
+                        "description": "Login",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.LoginPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.TokenResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/droproles": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get RoleDropDown",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Get RoleDropDown",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.RoleDropDown"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/endpointdrop": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get EndPointDropDown",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EndPoint"
+                ],
+                "summary": "Get EndPointDropDown",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.EndPointDropDown"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/endpoints": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Refresh": []
+                    }
+                ],
+                "description": "Get Endpoints",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EndPoints"
+                ],
+                "summary": "Get Endpoints",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponsePagination"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.EndPointGet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add EndPoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EndPoints"
+                ],
+                "summary": "Add a new EndPoint",
+                "parameters": [
+                    {
+                        "description": "Add EndPoint",
+                        "name": "route",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.EndPointPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.EndPointPost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/endpoints/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get route by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EndPoints"
+                ],
+                "summary": "Get EndPoint by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "EndPoint ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.EndPointGet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Remove route by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EndPoints"
+                ],
+                "summary": "Remove EndPoint by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "EndPoint ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Patch EndPoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EndPoints"
+                ],
+                "summary": "Patch EndPoint",
+                "parameters": [
+                    {
+                        "description": "Patch EndPoint",
+                        "name": "route",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.EndPointPost"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "EndPoint ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.EndPointPost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/feature_endpoint/{endpoint_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete Feature Endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EndPoints"
+                ],
+                "summary": "Delete Feature Endpoint",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feature ID",
+                        "name": "endpoint_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Endpoint ID",
+                        "name": "feature_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add Feature to Endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EndPoints"
+                ],
+                "summary": "Add Feature to Endpoint",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feature ID",
+                        "name": "endpoint_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Endpoint ID",
+                        "name": "feature_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/featuredrop": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get FeatureDropDown",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Get FeatureDropDown",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.FeatureDropDown"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/features": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Refresh": []
+                    }
+                ],
+                "description": "Get Features",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Get Features",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponsePagination"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.FeatureGet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add Feature",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Add a new Feature",
+                "parameters": [
+                    {
+                        "description": "Add Feature",
+                        "name": "feature",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.FeaturePost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.FeaturePost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/{feature_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Activate/Deactivate Feature",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Activate/Deactivate Feature",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feature ID",
+                        "name": "feature_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Active",
+                        "name": "active",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.FeaturePost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get feature by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Get Feature by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feature ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.FeatureGet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Remove feature by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Remove Feature by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feature ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Patch Feature",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Patch Feature",
+                "parameters": [
+                    {
+                        "description": "Patch Feature",
+                        "name": "feature",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.FeaturePost"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Feature ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.FeaturePost"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/featuresrole/{feature_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete Feature Role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Delete Feature Role",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feature ID",
+                        "name": "feature_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "role_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add Feature Role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feature"
+                ],
+                "summary": "Add Feature Role",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Feature ID",
+                        "name": "feature_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "role_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
             "post": {
                 "description": "Login",
                 "consumes": [
@@ -133,14 +1457,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pageroute/{page_id}": {
-            "get": {
+        "/pagerole/{page_id}/{role_id}": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get page by ID",
+                "description": "Add Page Role",
                 "consumes": [
                     "application/json"
                 ],
@@ -150,63 +1474,7 @@ const docTemplate = `{
                 "tags": [
                     "Page"
                 ],
-                "summary": "Get Page Routes by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Page ID",
-                        "name": "page_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.PageGet"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/pageroute/{page_id}/{route_id}": {
-            "post": {
-                "description": "Add Page Route",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "PageRoute Operations"
-                ],
-                "summary": "Add Route to Page",
+                "summary": "Add Role to Page",
                 "parameters": [
                     {
                         "type": "integer",
@@ -217,39 +1485,15 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "Route ID",
-                        "name": "route_id",
+                        "description": "Role ID",
+                        "name": "role_id",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RoutePost"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -257,7 +1501,12 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete Page Route",
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete Page Role",
                 "consumes": [
                     "application/json"
                 ],
@@ -265,9 +1514,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "PageRoute Operations"
+                    "Page"
                 ],
-                "summary": "Add Route",
+                "summary": "Add Role",
                 "parameters": [
                     {
                         "type": "integer",
@@ -278,8 +1527,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "Route ID",
-                        "name": "route_id",
+                        "description": "Role ID",
+                        "name": "role_id",
                         "in": "path",
                         "required": true
                     }
@@ -296,7 +1545,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/responses.RoutePost"
+                                            "$ref": "#/definitions/responses.RolePost"
                                         }
                                     }
                                 }
@@ -318,7 +1567,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pages": {
+        "/pages": {
             "get": {
                 "security": [
                     {
@@ -382,12 +1631,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
                     }
                 }
             },
@@ -443,17 +1686,11 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
                     }
                 }
             }
         },
-        "/api/pages/{id}": {
+        "/pages/{id}": {
             "get": {
                 "security": [
                     {
@@ -504,12 +1741,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
                     }
                 }
             },
@@ -548,12 +1779,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -619,9 +1844,58 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
+                    }
+                }
+            }
+        },
+        "/pagesroles/{page_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Roles by page by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Get Page Roles by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page ID",
+                        "name": "page_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.PageGet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -629,7 +1903,65 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/roles": {
+        "/role_endpoints": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get role EndPoints by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Get EndPoints Role by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "role_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.EndPointGet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/roles": {
             "get": {
                 "security": [
                     {
@@ -690,12 +2022,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -764,7 +2090,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/roles/{id}": {
+        "/roles/{id}": {
             "get": {
                 "security": [
                     {
@@ -812,12 +2138,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -940,14 +2260,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/routerole/{route_id}": {
-            "get": {
+        "/roles/{role_id}": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get route by ID",
+                "description": "Activate/Deactivate",
                 "consumes": [
                     "application/json"
                 ],
@@ -955,83 +2275,22 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Routes"
+                    "Role"
                 ],
-                "summary": "Get Route Roles by ID",
+                "summary": "Activate/Deactivate",
                 "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "RouteResponse ID",
-                        "name": "route_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RouteGet"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/routerole/{route_id}/{role_id}": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Add Route Role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "RouteRole Operations"
-                ],
-                "summary": "Add Role to Route",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Route ID",
-                        "name": "route_id",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Role ID",
                         "name": "role_id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Active",
+                        "name": "active",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1059,397 +2318,11 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete Route Role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "RouteRole Operations"
-                ],
-                "summary": "Add Role",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Route ID",
-                        "name": "route_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Role ID",
-                        "name": "role_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RolePost"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
                     }
                 }
             }
         },
-        "/api/routes": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Refresh": []
-                    }
-                ],
-                "description": "Get Routes",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Routes"
-                ],
-                "summary": "Get Routes",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "page",
-                        "name": "page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page size",
-                        "name": "size",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponsePagination"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/responses.RouteGet"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Add Route",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Routes"
-                ],
-                "summary": "Add a new Route",
-                "parameters": [
-                    {
-                        "description": "Add Route",
-                        "name": "route",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/responses.RoutePost"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RoutePost"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/routes/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get route by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Routes"
-                ],
-                "summary": "Get Route by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Route ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RouteGet"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Remove route by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Routes"
-                ],
-                "summary": "Remove Route by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Route ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Patch Route",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Routes"
-                ],
-                "summary": "Patch Route",
-                "parameters": [
-                    {
-                        "description": "Patch Route",
-                        "name": "route",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/responses.RoutePost"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Route ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RoutePost"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/userrole/{user_id}": {
+        "/userrole/{user_id}": {
             "get": {
                 "security": [
                     {
@@ -1503,17 +2376,11 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
                     }
                 }
             }
         },
-        "/api/userrole/{user_id}/{role_id}": {
+        "/userrole/{user_id}/{role_id}": {
             "post": {
                 "security": [
                     {
@@ -1528,7 +2395,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "UserRole Operations"
+                    "Users"
                 ],
                 "summary": "Add Role to User",
                 "parameters": [
@@ -1548,32 +2415,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.RolePost"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -1594,7 +2437,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "UserRole Operations"
+                    "Users"
                 ],
                 "summary": "Add Role",
                 "parameters": [
@@ -1647,8 +2490,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users": {
+        "/users": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get Users",
                 "consumes": [
                     "application/json"
@@ -1700,12 +2548,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -1764,17 +2606,11 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
                     }
                 }
             }
         },
-        "/api/users/{id}": {
+        "/users/{id}": {
             "get": {
                 "security": [
                     {
@@ -1825,12 +2661,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
                     }
                 }
             },
@@ -1869,12 +2699,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -1940,9 +2764,47 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Activate/Deactivate User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Activate/Deactivate User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    {
+                        "type": "boolean",
+                        "description": "Disabled",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseHTTP"
                         }
@@ -1955,10 +2817,10 @@ const docTemplate = `{
         "common.ResponseHTTP": {
             "type": "object",
             "properties": {
+                "data": {},
                 "details": {
                     "type": "string"
                 },
-                "itmes": {},
                 "success": {
                     "type": "boolean"
                 }
@@ -1988,12 +2850,58 @@ const docTemplate = `{
                 }
             }
         },
+        "models.EndPoint": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "feature_id": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "route_path": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Feature": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "endpoints": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.EndPoint"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "number"
+                }
+            }
+        },
         "models.Page": {
             "type": "object",
             "properties": {
-                "App": {
-                    "type": "string"
-                },
                 "active": {
                     "type": "boolean"
                 },
@@ -2006,10 +2914,10 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "routes": {
+                "roles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.RouteResponse"
+                        "$ref": "#/definitions/models.Role"
                     }
                 }
             }
@@ -2017,34 +2925,20 @@ const docTemplate = `{
         "models.Role": {
             "type": "object",
             "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "app": {
+                    "type": "number"
+                },
                 "description": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "routes": {
+                "features": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.RouteResponse"
+                        "$ref": "#/definitions/models.Feature"
                     }
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.User"
-                    }
-                }
-            }
-        },
-        "models.RouteResponse": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -2058,14 +2952,11 @@ const docTemplate = `{
                         "$ref": "#/definitions/models.Page"
                     }
                 },
-                "roles": {
+                "users": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Role"
+                        "$ref": "#/definitions/models.User"
                     }
-                },
-                "route_path": {
-                    "type": "string"
                 }
             }
         },
@@ -2098,6 +2989,53 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.AppGet": {
+            "type": "object",
+            "required": [
+                "active",
+                "description",
+                "id",
+                "name"
+            ],
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.RoleGet"
+                    }
+                }
+            }
+        },
+        "responses.AppPost": {
+            "description": "App type information Contains id name and description",
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Devloper Mode Acecss"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "superuser"
+                }
+            }
+        },
         "responses.EmailMessage": {
             "type": "object",
             "required": [
@@ -2117,6 +3055,124 @@ const docTemplate = `{
                 },
                 "subject": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.EndPointDropDown": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.EndPointGet": {
+            "description": "EndPoint type information Contains id name and description",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "route_path": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.EndPointPost": {
+            "description": "EndPoint type information Contains id name and description",
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "route_path"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "Fetchs user list"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "get users"
+                },
+                "route_path": {
+                    "type": "string",
+                    "example": "/route/path"
+                }
+            }
+        },
+        "responses.FeatureDropDown": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.FeatureGet": {
+            "type": "object",
+            "required": [
+                "active",
+                "description",
+                "id",
+                "name"
+            ],
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "endpoints": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.EndPointGet"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.FeaturePost": {
+            "description": "Feature type information Contains id name and description",
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Devloper Mode Acecss"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "superuser"
                 }
             }
         },
@@ -2160,10 +3216,10 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "routes": {
+                "roles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.RouteResponse"
+                        "$ref": "#/definitions/models.Role"
                     }
                 }
             }
@@ -2172,16 +3228,27 @@ const docTemplate = `{
             "description": "Page type information Contains id name and description",
             "type": "object",
             "required": [
-                "app",
                 "description",
                 "name"
             ],
             "properties": {
-                "app": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.RoleDropDown": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -2191,13 +3258,24 @@ const docTemplate = `{
         "responses.RoleGet": {
             "type": "object",
             "required": [
+                "active",
                 "description",
                 "id",
                 "name"
             ],
             "properties": {
+                "active": {
+                    "type": "boolean"
+                },
                 "description": {
                     "type": "string"
+                },
+                "features": {
+                    "description": "Users       []UserGet    ` + "`" + `json:\"users,omitempty\"` + "`" + `",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.FeatureGet"
+                    }
                 },
                 "id": {
                     "type": "integer"
@@ -2218,46 +3296,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "superuser"
-                }
-            }
-        },
-        "responses.RouteGet": {
-            "type": "object",
-            "properties": {
-                "RoutePath": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.RoutePost": {
-            "description": "Route type information Contains id name and description",
-            "type": "object",
-            "required": [
-                "description",
-                "name",
-                "route_path"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "example": "Fetchs user list"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "get users"
-                },
-                "route_path": {
-                    "type": "string",
-                    "example": "/route/path"
                 }
             }
         },
@@ -2290,8 +3328,11 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "password": {
-                    "type": "string"
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Role"
+                    }
                 },
                 "uuid": {
                     "type": "string"
@@ -2334,7 +3375,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "0.1",
 	Host:             "",
-	BasePath:         "",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Swagger Blue API",
 	Description:      "This is User Admin server.",

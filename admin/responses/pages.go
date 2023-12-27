@@ -14,19 +14,18 @@ import (
 )
 
 type PageGet struct {
-	ID          uint                   `gorm:"primaryKey;autoIncrement:true" json:"id,omitempty"`
-	Name        string                 `gorm:"type:string; constraint:not null;" json:"name,omitempty"`
-	App         string                 `gorm:"type:string; constraint:not null;" json:"App,omitempty"`
-	Active      bool                   `gorm:"default:true; constraint:not null;" json:"active,omitempty" `
-	Description string                 `gorm:"type:string;" json:"description,omitempty"`
-	Routes      []models.RouteResponse `gorm:"many2many:page_routes" json:"routes,omitempty"`
+	ID          uint          `gorm:"primaryKey;autoIncrement:true" json:"id,omitempty"`
+	Name        string        `gorm:"type:string; constraint:not null;" json:"name,omitempty"`
+	App         string        `gorm:"type:string; constraint:not null;" json:"App,omitempty"`
+	Active      bool          `gorm:"default:true; constraint:not null;" json:"active,omitempty" `
+	Description string        `gorm:"type:string;" json:"description,omitempty"`
+	Roles       []models.Role `gorm:"many2many:page_roles" json:"roles,omitempty"`
 }
 
 // Page Post model info
 // @Description Page type information
 // @Description Contains id name and description
 type PagePost struct {
-	App         string `validate:"required" json:"app,omitempty"`
 	Name        string `validate:"required" json:"name,omitempty"`
 	Description string `validate:"required"  json:"description,omitempty"`
 }
@@ -43,8 +42,7 @@ type PagePost struct {
 // @Param size query int true "page size"
 // @Success 200 {object} common.ResponsePagination{data=[]PageGet}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/pages [get]
+// @Router /pages [get]
 func GetPages(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	Page, _ := strconv.Atoi(contx.Query("page"))
@@ -58,11 +56,12 @@ func GetPages(contx *fiber.Ctx) error {
 	}
 
 	result, err := common.PaginationPureModel(db, models.Page{}, []PageGet{}, uint(Page), uint(Limit))
+
 	if err != nil {
 		return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 			Success: true,
 			Message: "Success get all pages.",
-			Data:    "something",
+			Data:    err.Error(),
 		})
 	}
 	return contx.JSON(result)
@@ -79,8 +78,7 @@ func GetPages(contx *fiber.Ctx) error {
 // @Param id path int true "Page ID"
 // @Success 200 {object} common.ResponseHTTP{data=PageGet}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/pages/{id} [get]
+// @Router /pages/{id} [get]
 func GetPageID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	id, err := strconv.Atoi(contx.Params("id"))
@@ -91,8 +89,8 @@ func GetPageID(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-	var pages models.Page
-	if res := db.Model(&models.Page{}).Preload(clause.Associations).Where("id = ?", id).First(&pages); res.Error != nil {
+	var page models.Page
+	if res := db.Model(&models.Page{}).Preload(clause.Associations).Where("id = ?", id).First(&page); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: res.Error.Error(),
@@ -103,13 +101,13 @@ func GetPageID(contx *fiber.Ctx) error {
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one page.",
-		Data:    &pages,
+		Data:    &page,
 	})
 }
 
-// Get Routes of Page By ID
-// @Summary Get Page Routes by ID
-// @Description Get page by ID
+// Get Roles of Page By ID
+// @Summary Get Page Roles by ID
+// @Description Get Roles by page by ID
 // @Tags Page
 // @Security ApiKeyAuth
 // @Accept json
@@ -117,9 +115,8 @@ func GetPageID(contx *fiber.Ctx) error {
 // @Param page_id path int true "Page ID"
 // @Success 200 {object} common.ResponseHTTP{data=PageGet}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/pageroute/{page_id} [get]
-func GetPageRoutes(contx *fiber.Ctx) error {
+// @Router /pagesroles/{page_id} [get]
+func GetPageRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	page_id, err := strconv.Atoi(contx.Params("page_id"))
 	if err != nil {
@@ -129,7 +126,7 @@ func GetPageRoutes(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-	var routes []RouteGet
+	var roles []models.Role
 	var page models.Page
 	if res := db.Model(&models.Page{}).Where("id = ?", page_id).Find(&page); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
@@ -138,12 +135,12 @@ func GetPageRoutes(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-	db.Model(&page).Association("Routes").Find(&routes)
+	db.Model(&page).Association("Roles").Find(&roles)
 
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one route.",
-		Data:    &routes,
+		Data:    &roles,
 	})
 }
 
@@ -157,8 +154,7 @@ func GetPageRoutes(contx *fiber.Ctx) error {
 // @Param page body PagePost true "Add Page"
 // @Success 200 {object} common.ResponseHTTP{data=PagePost}
 // @Failure 400 {object} common.ResponseHTTP{}
-// @Failure 500 {object} common.ResponseHTTP{}
-// @Router /api/pages [post]
+// @Router /pages [post]
 func PostPage(contx *fiber.Ctx) error {
 
 	db := database.ReturnSession()
@@ -186,11 +182,9 @@ func PostPage(contx *fiber.Ctx) error {
 	}
 	page := new(models.Page)
 	page.Name = posted_page.Name
-	page.App = posted_page.App
 	page.Description = posted_page.Description
 	tx := db.Begin()
 	// add  data using transaction if values are valid
-	// if err := tx.Create(&page).Error; err != nil {
 	if err := tx.Model(&page).Create(&page).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusInternalServerError).JSON(common.ResponseHTTP{
@@ -220,8 +214,7 @@ func PostPage(contx *fiber.Ctx) error {
 // @Param id path int true "Page ID"
 // @Success 200 {object} common.ResponseHTTP{data=PagePost}
 // @Failure 400 {object} common.ResponseHTTP{}
-// @Failure 500 {object} common.ResponseHTTP{}
-// @Router /api/pages/{id} [patch]
+// @Router /pages/{id} [patch]
 func PatchPage(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -283,8 +276,7 @@ func PatchPage(contx *fiber.Ctx) error {
 // @Param id path int true "Page ID"
 // @Success 200 {object} common.ResponseHTTP{}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/pages/{id} [delete]
+// @Router /pages/{id} [delete]
 func DeletePage(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var page models.Page

@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"semay.com/bluerabbit"
 	"semay.com/common"
 )
@@ -27,7 +27,7 @@ type EmailMessage struct {
 // @Success 200 {object} common.ResponseHTTP{data=EmailMessage}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/email [post]
+// @Router /api/v1/email [post]
 func SendEmail(contx *fiber.Ctx) error {
 	validate := validator.New()
 	//   connection and channels from rabbitmq
@@ -67,12 +67,13 @@ func SendEmail(contx *fiber.Ctx) error {
 
 	//send to rabbit app module qeue using channel
 	// Attempt to publish a message to the queue.
-	if err := channel.Publish(
-		"",          // exchange
-		"blueadmin", // queue name
-		false,       // mandatory
-		false,       // immediate
-		message,     // message to publish
+	if err := channel.PublishWithContext(
+		contx.Context(), // context
+		"",              // exchange
+		"blueadmin",     // queue name
+		false,           // mandatory
+		false,           // immediate
+		message,         // message to publish
 	); err != nil {
 		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
 			Success: false,

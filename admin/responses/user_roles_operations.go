@@ -13,16 +13,14 @@ import (
 // Add Role to User
 // @Summary Add Role to User
 // @Description Add User Role
-// @Tags UserRole Operations
+// @Tags Users
 // @Security ApiKeyAuth
 // @Accept json
 // @Produce json
 // @Param user_id path int true "User ID"
 // @Param role_id path int true "Role ID"
-// @Success 200 {object} common.ResponseHTTP{data=RolePost}
 // @Failure 400 {object} common.ResponseHTTP{}
-// @Failure 500 {object} common.ResponseHTTP{}
-// @Router /api/userrole/{user_id}/{role_id} [post]
+// @Router /userrole/{user_id}/{role_id} [post]
 func AddUserRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 
@@ -46,23 +44,8 @@ func AddUserRoles(contx *fiber.Ctx) error {
 		})
 	}
 
-	// startng create transaction
-	user_role := new(models.UserRoles)
-	user_role.UserID = uint(user_id)
-	user_role.RoleID = uint(role_id)
-	tx := db.Begin()
-	if err := db.Model(&user_role).Create(&user_role).Error; err != nil {
-		tx.Rollback()
-		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
-			Success: false,
-			Message: "Record not Found",
-			Data:    err,
-		})
-	}
-	tx.Commit()
-
-	// fetching added role
-	var role RoleGet
+	// fetching role to be added
+	var role models.Role
 	if res := db.Model(&models.Role{}).Where("id = ?", role_id).First(&role); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
@@ -70,6 +53,27 @@ func AddUserRoles(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
+
+	//  appending assocation
+	var user models.User
+	if err := db.Model(&models.User{}).Where("id = ?", user_id).First(&user); err.Error != nil {
+		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: "Record not Found",
+			Data:    err.Error.Error(),
+		})
+	}
+
+	tx := db.Begin()
+	if err := db.Model(&user).Association("Roles").Append(&role); err != nil {
+		tx.Rollback()
+		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: "Appending Role Failed",
+			Data:    err.Error(),
+		})
+	}
+	tx.Commit()
 
 	// return value if transaction is sucessfull
 	return contx.JSON(common.ResponseHTTP{
@@ -82,7 +86,7 @@ func AddUserRoles(contx *fiber.Ctx) error {
 // Delete Role to User
 // @Summary Add Role
 // @Description Delete User Role
-// @Tags UserRole Operations
+// @Tags Users
 // @Security ApiKeyAuth
 // @Accept json
 // @Produce json
@@ -91,12 +95,12 @@ func AddUserRoles(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RolePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /api/userrole/{user_id}/{role_id} [delete]
+// @Router /userrole/{user_id}/{role_id} [delete]
 func DeleteUserRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	// validate path params
 	user_id, err := strconv.Atoi(contx.Params("user_id"))
-	if err != nil {
+	if err != nil || user_id == 0 {
 		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: err.Error(),
@@ -105,32 +109,15 @@ func DeleteUserRoles(contx *fiber.Ctx) error {
 	}
 
 	role_id, err := strconv.Atoi(contx.Params("role_id"))
-	if err != nil {
+	if err != nil || role_id == 0 {
 		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: err.Error(),
 			Data:    nil,
 		})
 	}
-
-	// instance for row to be deleted
-	// user_role := new(models.UserRoles)
-
-	// starting transaction
-	tx := db.Begin()
-	if err := db.Where("user_id = ?", user_id).Where("role_id = ?", role_id).Delete(&models.UserRoles{}).Error; err != nil {
-		tx.Rollback()
-		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
-			Success: false,
-			Message: "Record not Found",
-			Data:    err,
-		})
-	}
-	// db.Delete(&user_role)
-
-	tx.Commit()
-
-	var role RoleGet
+	// fetching role to be deleted
+	var role models.Role
 	if res := db.Model(&models.Role{}).Where("id = ?", role_id).First(&role); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
@@ -138,6 +125,30 @@ func DeleteUserRoles(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
+
+	// fettchng user
+	var user models.User
+	if err := db.Model(&models.User{}).Where("id = ?", user_id).First(&user); err.Error != nil {
+		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: "Record not Found",
+			Data:    err.Error.Error(),
+		})
+	}
+
+	// removing role
+	tx := db.Begin()
+	if err := db.Model(&user).Association("Roles").Delete(&role); err != nil {
+		tx.Rollback()
+		return contx.Status(http.StatusNonAuthoritativeInfo).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: "Please Try Again Something Unexpected Happened",
+			Data:    err.Error(),
+		})
+	}
+
+	tx.Commit()
+
 	// return value if transaction is sucessfull
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,

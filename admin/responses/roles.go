@@ -7,15 +7,30 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/mitchellh/mapstructure"
+	"gorm.io/gorm/clause"
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/common"
 )
 
 type RoleGet struct {
-	ID          uint   `validate:"required"`
-	Name        string `validate:"required"`
-	Description string `validate:"required"`
+	ID          uint   `validate:"required" json:"id"`
+	Name        string `validate:"required" json:"name"`
+	Active      bool   `validate:"required" json:"active"`
+	Description string `validate:"required" json:"description"`
+	// Users       []UserGet    `json:"users,omitempty"`
+	Features []FeatureGet `json:"features,omitempty"`
+}
+
+type RoleDropDown struct {
+	ID   uint   `validate:"required" json:"id"`
+	Name string `validate:"required" json:"name"`
+}
+
+type EndpiontsRoles struct {
+	ID   uint   `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 // Role Post model info
@@ -38,8 +53,7 @@ type RolePost struct {
 // @Param size query int true "page size"
 // @Success 200 {object} common.ResponsePagination{data=[]RoleGet}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/roles [get]
+// @Router /roles [get]
 func GetRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	Page, _ := strconv.Atoi(contx.Query("page"))
@@ -52,7 +66,7 @@ func GetRoles(contx *fiber.Ctx) error {
 		})
 	}
 
-	result, err := common.PaginationPureModel(db, models.Role{}, []RoleGet{}, uint(Page), uint(Limit))
+	result, err := common.PaginationPureModel(db, models.Role{}, []models.Role{}, uint(Page), uint(Limit))
 	if err != nil {
 		return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 			Success: true,
@@ -60,6 +74,8 @@ func GetRoles(contx *fiber.Ctx) error {
 			Data:    "something",
 		})
 	}
+
+	// result.Items = role_get
 	return contx.Status(http.StatusOK).JSON(result)
 
 }
@@ -74,8 +90,7 @@ func GetRoles(contx *fiber.Ctx) error {
 // @Param id path int true "Role ID"
 // @Success 200 {object} common.ResponseHTTP{data=RoleGet}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/roles/{id} [get]
+// @Router /roles/{id} [get]
 func GetRolesID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	id, err := strconv.Atoi(contx.Params("id"))
@@ -86,8 +101,37 @@ func GetRolesID(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-	var roles RoleGet
-	if res := db.Model(&models.Role{}).Where("id = ?", id).First(&roles); res.Error != nil {
+	var roles_get RoleGet
+	var roles models.Role
+	if res := db.Model(&models.Role{}).Preload(clause.Associations).Where("id = ?", id).First(&roles); res.Error != nil {
+		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: res.Error.Error(),
+			Data:    nil,
+		})
+	}
+	mapstructure.Decode(roles, &roles_get)
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
+		Success: true,
+		Message: "Success got one role.",
+		Data:    &roles_get,
+	})
+}
+
+// Get Roles Dropdown only active roles
+// @Summary Get RoleDropDown
+// @Description Get RoleDropDown
+// @Tags Role
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Success 200 {object} common.ResponseHTTP{data=[]RoleDropDown}
+// @Failure 404 {object} common.ResponseHTTP{}
+// @Router /droproles [get]
+func GetDropDownRoles(contx *fiber.Ctx) error {
+	db := database.ReturnSession()
+	var roles_drop []RoleDropDown
+	if res := db.Model(&models.Role{}).Where("active = ?", true).Find(&roles_drop); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: res.Error.Error(),
@@ -98,7 +142,49 @@ func GetRolesID(contx *fiber.Ctx) error {
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one role.",
-		Data:    &roles,
+		Data:    &roles_drop,
+	})
+}
+
+// GetRole EndPoints By ID is a function to get a Roles by ID
+// @Summary Get EndPoints Role by ID
+// @Description Get role EndPoints by ID
+// @Tags Role
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param role_id query int true "Role ID"
+// @Success 200 {object} common.ResponseHTTP{data=[]EndPointGet}
+// @Failure 404 {object} common.ResponseHTTP{}
+// @Router /role_endpoints [get]
+func GetRoleEndpointsID(contx *fiber.Ctx) error {
+	db := database.ReturnSession()
+	role_id := contx.QueryInt("role_id")
+	var endpoints []EndpiontsRoles
+	var roles models.Role
+	if res := db.Model(&models.Role{}).Preload(clause.Associations).Preload("Features.Endpoints").Preload(clause.Associations).Where("id = ?", role_id).First(&roles); res.Error != nil {
+		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: res.Error.Error(),
+			Data:    "nil",
+		})
+	}
+	role_ends := roles.Features
+
+	for x := range role_ends {
+		if len(role_ends[x].Endpoints) > 1 {
+			for i := range role_ends[x].Endpoints {
+				resp_endpoint := EndpiontsRoles{ID: role_ends[x].Endpoints[i].ID, Name: role_ends[x].Endpoints[i].Name}
+
+				endpoints = append(endpoints, resp_endpoint)
+			}
+		}
+	}
+
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
+		Success: true,
+		Message: "Success got one role.",
+		Data:    &endpoints,
 	})
 }
 
@@ -113,7 +199,7 @@ func GetRolesID(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RolePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /api/roles [post]
+// @Router /roles [post]
 func PostRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -174,7 +260,7 @@ func PostRoles(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{data=RolePost}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Failure 500 {object} common.ResponseHTTP{}
-// @Router /api/roles/{id} [patch]
+// @Router /roles/{id} [patch]
 func PatchRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -226,6 +312,53 @@ func PatchRoles(contx *fiber.Ctx) error {
 	})
 }
 
+// Activate/Deactivate Role to data
+// @Summary Activate/Deactivate
+// @Description Activate/Deactivate
+// @Tags Role
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param role_id path int true "Role ID"
+// @Param active query bool true "Active"
+// @Success 200 {object} common.ResponseHTTP{data=RolePost}
+// @Failure 400 {object} common.ResponseHTTP{}
+// @Router /roles/{role_id} [put]
+func ActivateDeactivateRoles(contx *fiber.Ctx) error {
+	db := database.ReturnSession()
+	// validate path params
+	id, err := strconv.Atoi(contx.Params("role_id"))
+	if err != nil {
+		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+	//  Get qurery Parm
+	active := contx.QueryBool("active")
+	// startng update transaction
+	var role models.Role
+	tx := db.Begin()
+	if err := db.Model(&models.Role{}).Where("id = ?", id).First(&role).Update("active", active).Error; err != nil {
+		tx.Rollback()
+		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: "Record not Found",
+			Data:    err,
+		})
+	}
+	tx.Commit()
+
+	role.Active = active
+	// return value if transaction is sucessfull
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
+		Success: true,
+		Message: "Success Updating a role.",
+		Data:    role,
+	})
+}
+
 // DeleteRoles function removes a role by ID
 // @Summary Remove Role by ID
 // @Description Remove role by ID
@@ -237,7 +370,7 @@ func PatchRoles(contx *fiber.Ctx) error {
 // @Success 200 {object} common.ResponseHTTP{}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/roles/{id} [delete]
+// @Router /roles/{id} [delete]
 func DeleteRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var role models.Role

@@ -1,9 +1,10 @@
+basePath: /api/v1
 definitions:
   common.ResponseHTTP:
     properties:
+      data: {}
       details:
         type: string
-      itmes: {}
       success:
         type: boolean
     type: object
@@ -23,10 +24,40 @@ definitions:
       total:
         type: integer
     type: object
+  models.EndPoint:
+    properties:
+      description:
+        type: string
+      feature_id:
+        type: number
+      id:
+        type: integer
+      method:
+        type: string
+      name:
+        type: string
+      route_path:
+        type: string
+    type: object
+  models.Feature:
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      endpoints:
+        items:
+          $ref: '#/definitions/models.EndPoint'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      role:
+        type: number
+    type: object
   models.Page:
     properties:
-      App:
-        type: string
       active:
         type: boolean
       description:
@@ -35,32 +66,23 @@ definitions:
         type: integer
       name:
         type: string
-      routes:
+      roles:
         items:
-          $ref: '#/definitions/models.RouteResponse'
+          $ref: '#/definitions/models.Role'
         type: array
     type: object
   models.Role:
     properties:
+      active:
+        type: boolean
+      app:
+        type: number
       description:
         type: string
-      id:
-        type: integer
-      name:
-        type: string
-      routes:
+      features:
         items:
-          $ref: '#/definitions/models.RouteResponse'
+          $ref: '#/definitions/models.Feature'
         type: array
-      users:
-        items:
-          $ref: '#/definitions/models.User'
-        type: array
-    type: object
-  models.RouteResponse:
-    properties:
-      description:
-        type: string
       id:
         type: integer
       name:
@@ -69,12 +91,10 @@ definitions:
         items:
           $ref: '#/definitions/models.Page'
         type: array
-      roles:
+      users:
         items:
-          $ref: '#/definitions/models.Role'
+          $ref: '#/definitions/models.User'
         type: array
-      route_path:
-        type: string
     type: object
   models.User:
     properties:
@@ -95,6 +115,39 @@ definitions:
       uuid:
         type: string
     type: object
+  responses.AppGet:
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/responses.RoleGet'
+        type: array
+    required:
+    - active
+    - description
+    - id
+    - name
+    type: object
+  responses.AppPost:
+    description: App type information Contains id name and description
+    properties:
+      active:
+        example: true
+        type: boolean
+      description:
+        example: Devloper Mode Acecss
+        type: string
+      name:
+        example: superuser
+        type: string
+    type: object
   responses.EmailMessage:
     properties:
       emails:
@@ -109,6 +162,88 @@ definitions:
     - emails
     - message
     - subject
+    type: object
+  responses.EndPointDropDown:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  responses.EndPointGet:
+    description: EndPoint type information Contains id name and description
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      route_path:
+        type: string
+    type: object
+  responses.EndPointPost:
+    description: EndPoint type information Contains id name and description
+    properties:
+      description:
+        example: Fetchs user list
+        type: string
+      name:
+        example: get users
+        type: string
+      route_path:
+        example: /route/path
+        type: string
+    required:
+    - description
+    - name
+    - route_path
+    type: object
+  responses.FeatureDropDown:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  responses.FeatureGet:
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      endpoints:
+        items:
+          $ref: '#/definitions/responses.EndPointGet'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - active
+    - description
+    - id
+    - name
+    type: object
+  responses.FeaturePost:
+    description: Feature type information Contains id name and description
+    properties:
+      active:
+        example: true
+        type: boolean
+      description:
+        example: Devloper Mode Acecss
+        type: string
+      name:
+        example: superuser
+        type: string
     type: object
   responses.LoginPost:
     properties:
@@ -137,34 +272,49 @@ definitions:
         type: integer
       name:
         type: string
-      routes:
+      roles:
         items:
-          $ref: '#/definitions/models.RouteResponse'
+          $ref: '#/definitions/models.Role'
         type: array
     type: object
   responses.PagePost:
     description: Page type information Contains id name and description
     properties:
-      app:
-        type: string
       description:
         type: string
       name:
         type: string
     required:
-    - app
     - description
     - name
     type: object
-  responses.RoleGet:
+  responses.RoleDropDown:
     properties:
-      description:
-        type: string
       id:
         type: integer
       name:
         type: string
     required:
+    - id
+    - name
+    type: object
+  responses.RoleGet:
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      features:
+        description: Users       []UserGet    `json:"users,omitempty"`
+        items:
+          $ref: '#/definitions/responses.FeatureGet'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - active
     - description
     - id
     - name
@@ -178,34 +328,6 @@ definitions:
       name:
         example: superuser
         type: string
-    type: object
-  responses.RouteGet:
-    properties:
-      RoutePath:
-        type: string
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
-  responses.RoutePost:
-    description: Route type information Contains id name and description
-    properties:
-      description:
-        example: Fetchs user list
-        type: string
-      name:
-        example: get users
-        type: string
-      route_path:
-        example: /route/path
-        type: string
-    required:
-    - description
-    - name
-    - route_path
     type: object
   responses.TokenResponse:
     properties:
@@ -226,8 +348,10 @@ definitions:
         type: string
       id:
         type: integer
-      password:
-        type: string
+      roles:
+        items:
+          $ref: '#/definitions/models.Role'
+        type: array
       uuid:
         type: string
     type: object
@@ -248,7 +372,7 @@ info:
   title: Swagger Blue API
   version: "0.1"
 paths:
-  /api/email:
+  /api/v1/email:
     post:
       consumes:
       - application/json
@@ -283,7 +407,802 @@ paths:
       summary: Send Email to
       tags:
       - Utilities
-  /api/login:
+  /apps:
+    get:
+      consumes:
+      - application/json
+      description: Get Apps
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponsePagination'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.AppGet'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      - Refresh: []
+      summary: Get Apps
+      tags:
+      - App
+    post:
+      consumes:
+      - application/json
+      description: Add App
+      parameters:
+      - description: Add App
+        in: body
+        name: app
+        required: true
+        schema:
+          $ref: '#/definitions/responses.AppPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.AppPost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Add a new App
+      tags:
+      - App
+  /apps/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove app by ID
+      parameters:
+      - description: App ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Remove App by ID
+      tags:
+      - App
+    get:
+      consumes:
+      - application/json
+      description: Get app by ID
+      parameters:
+      - description: App ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.AppGet'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get App by ID
+      tags:
+      - App
+    patch:
+      consumes:
+      - application/json
+      description: Patch App
+      parameters:
+      - description: Patch App
+        in: body
+        name: app
+        required: true
+        schema:
+          $ref: '#/definitions/responses.AppPost'
+      - description: App ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.AppPost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Patch App
+      tags:
+      - App
+  /checklogin:
+    get:
+      consumes:
+      - application/json
+      description: CheckLogin
+      parameters:
+      - description: Login
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/responses.LoginPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.TokenResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      summary: Auth
+      tags:
+      - Authentication
+  /droproles:
+    get:
+      consumes:
+      - application/json
+      description: Get RoleDropDown
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.RoleDropDown'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get RoleDropDown
+      tags:
+      - Role
+  /endpointdrop:
+    get:
+      consumes:
+      - application/json
+      description: Get EndPointDropDown
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.EndPointDropDown'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get EndPointDropDown
+      tags:
+      - EndPoint
+  /endpoints:
+    get:
+      consumes:
+      - application/json
+      description: Get Endpoints
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponsePagination'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.EndPointGet'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      - Refresh: []
+      summary: Get Endpoints
+      tags:
+      - EndPoints
+    post:
+      consumes:
+      - application/json
+      description: Add EndPoint
+      parameters:
+      - description: Add EndPoint
+        in: body
+        name: route
+        required: true
+        schema:
+          $ref: '#/definitions/responses.EndPointPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.EndPointPost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Add a new EndPoint
+      tags:
+      - EndPoints
+  /endpoints/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove route by ID
+      parameters:
+      - description: EndPoint ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Remove EndPoint by ID
+      tags:
+      - EndPoints
+    get:
+      consumes:
+      - application/json
+      description: Get route by ID
+      parameters:
+      - description: EndPoint ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.EndPointGet'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get EndPoint by ID
+      tags:
+      - EndPoints
+    patch:
+      consumes:
+      - application/json
+      description: Patch EndPoint
+      parameters:
+      - description: Patch EndPoint
+        in: body
+        name: route
+        required: true
+        schema:
+          $ref: '#/definitions/responses.EndPointPost'
+      - description: EndPoint ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.EndPointPost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Patch EndPoint
+      tags:
+      - EndPoints
+  /feature_endpoint/{endpoint_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Feature Endpoint
+      parameters:
+      - description: Feature ID
+        in: path
+        name: endpoint_id
+        required: true
+        type: integer
+      - description: Endpoint ID
+        in: query
+        name: feature_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Feature Endpoint
+      tags:
+      - EndPoints
+    patch:
+      consumes:
+      - application/json
+      description: Add Feature to Endpoint
+      parameters:
+      - description: Feature ID
+        in: path
+        name: endpoint_id
+        required: true
+        type: integer
+      - description: Endpoint ID
+        in: query
+        name: feature_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Add Feature to Endpoint
+      tags:
+      - EndPoints
+  /featuredrop:
+    get:
+      consumes:
+      - application/json
+      description: Get FeatureDropDown
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.FeatureDropDown'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get FeatureDropDown
+      tags:
+      - Feature
+  /features:
+    get:
+      consumes:
+      - application/json
+      description: Get Features
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponsePagination'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.FeatureGet'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      - Refresh: []
+      summary: Get Features
+      tags:
+      - Feature
+    post:
+      consumes:
+      - application/json
+      description: Add Feature
+      parameters:
+      - description: Add Feature
+        in: body
+        name: feature
+        required: true
+        schema:
+          $ref: '#/definitions/responses.FeaturePost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.FeaturePost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Add a new Feature
+      tags:
+      - Feature
+  /features/{feature_id}:
+    put:
+      consumes:
+      - application/json
+      description: Activate/Deactivate Feature
+      parameters:
+      - description: Feature ID
+        in: path
+        name: feature_id
+        required: true
+        type: integer
+      - description: Active
+        in: query
+        name: active
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.FeaturePost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Activate/Deactivate Feature
+      tags:
+      - Feature
+  /features/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove feature by ID
+      parameters:
+      - description: Feature ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Remove Feature by ID
+      tags:
+      - Feature
+    get:
+      consumes:
+      - application/json
+      description: Get feature by ID
+      parameters:
+      - description: Feature ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.FeatureGet'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Feature by ID
+      tags:
+      - Feature
+    patch:
+      consumes:
+      - application/json
+      description: Patch Feature
+      parameters:
+      - description: Patch Feature
+        in: body
+        name: feature
+        required: true
+        schema:
+          $ref: '#/definitions/responses.FeaturePost'
+      - description: Feature ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.FeaturePost'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Patch Feature
+      tags:
+      - Feature
+  /featuresrole/{feature_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Feature Role
+      parameters:
+      - description: Feature ID
+        in: path
+        name: feature_id
+        required: true
+        type: integer
+      - description: Role ID
+        in: query
+        name: role_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Feature Role
+      tags:
+      - Feature
+    patch:
+      consumes:
+      - application/json
+      description: Add Feature Role
+      parameters:
+      - description: Feature ID
+        in: path
+        name: feature_id
+        required: true
+        type: integer
+      - description: Role ID
+        in: query
+        name: role_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Add Feature Role
+      tags:
+      - Feature
+  /login:
     post:
       consumes:
       - application/json
@@ -318,15 +1237,20 @@ paths:
       summary: Auth
       tags:
       - Authentication
-  /api/pageroute/{page_id}:
-    get:
+  /pagerole/{page_id}/{role_id}:
+    delete:
       consumes:
       - application/json
-      description: Get page by ID
+      description: Delete Page Role
       parameters:
       - description: Page ID
         in: path
         name: page_id
+        required: true
+        type: integer
+      - description: Role ID
+        in: path
+        name: role_id
         required: true
         type: integer
       produces:
@@ -339,99 +1263,49 @@ paths:
             - $ref: '#/definitions/common.ResponseHTTP'
             - properties:
                 data:
-                  $ref: '#/definitions/responses.PageGet'
+                  $ref: '#/definitions/responses.RolePost'
               type: object
-        "404":
-          description: Not Found
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
-      summary: Get Page Routes by ID
+      summary: Add Role
       tags:
       - Page
-  /api/pageroute/{page_id}/{route_id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete Page Route
-      parameters:
-      - description: Page ID
-        in: path
-        name: page_id
-        required: true
-        type: integer
-      - description: Route ID
-        in: path
-        name: route_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RoutePost'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      summary: Add Route
-      tags:
-      - PageRoute Operations
     post:
       consumes:
       - application/json
-      description: Add Page Route
+      description: Add Page Role
       parameters:
       - description: Page ID
         in: path
         name: page_id
         required: true
         type: integer
-      - description: Route ID
+      - description: Role ID
         in: path
-        name: route_id
+        name: role_id
         required: true
         type: integer
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RoutePost'
-              type: object
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      summary: Add Route to Page
+      security:
+      - ApiKeyAuth: []
+      summary: Add Role to Page
       tags:
-      - PageRoute Operations
-  /api/pages:
+      - Page
+  /pages:
     get:
       consumes:
       - application/json
@@ -463,10 +1337,6 @@ paths:
               type: object
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
@@ -502,16 +1372,12 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
       summary: Add a new Page
       tags:
       - Page
-  /api/pages/{id}:
+  /pages/{id}:
     delete:
       consumes:
       - application/json
@@ -531,10 +1397,6 @@ paths:
             $ref: '#/definitions/common.ResponseHTTP'
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
@@ -566,10 +1428,6 @@ paths:
               type: object
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
@@ -609,16 +1467,78 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
       summary: Patch Page
       tags:
       - Page
-  /api/roles:
+  /pagesroles/{page_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Roles by page by ID
+      parameters:
+      - description: Page ID
+        in: path
+        name: page_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.PageGet'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Page Roles by ID
+      tags:
+      - Page
+  /role_endpoints:
+    get:
+      consumes:
+      - application/json
+      description: Get role EndPoints by ID
+      parameters:
+      - description: Role ID
+        in: query
+        name: role_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.EndPointGet'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get EndPoints Role by ID
+      tags:
+      - Role
+  /roles:
     get:
       consumes:
       - application/json
@@ -650,10 +1570,6 @@ paths:
               type: object
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
@@ -698,7 +1614,7 @@ paths:
       summary: Add a new Role
       tags:
       - Role
-  /api/roles/{id}:
+  /roles/{id}:
     delete:
       consumes:
       - application/json
@@ -755,10 +1671,6 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
       summary: Get Role by ID
@@ -805,58 +1717,22 @@ paths:
       summary: Patch Role
       tags:
       - Role
-  /api/routerole/{route_id}:
-    get:
+  /roles/{role_id}:
+    put:
       consumes:
       - application/json
-      description: Get route by ID
+      description: Activate/Deactivate
       parameters:
-      - description: RouteResponse ID
-        in: path
-        name: route_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RouteGet'
-              type: object
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      summary: Get Route Roles by ID
-      tags:
-      - Routes
-  /api/routerole/{route_id}/{role_id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete Route Role
-      parameters:
-      - description: Route ID
-        in: path
-        name: route_id
-        required: true
-        type: integer
       - description: Role ID
         in: path
         name: role_id
         required: true
         type: integer
+      - description: Active
+        in: query
+        name: active
+        required: true
+        type: boolean
       produces:
       - application/json
       responses:
@@ -873,244 +1749,12 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
-      summary: Add Role
+      summary: Activate/Deactivate
       tags:
-      - RouteRole Operations
-    post:
-      consumes:
-      - application/json
-      description: Add Route Role
-      parameters:
-      - description: Route ID
-        in: path
-        name: route_id
-        required: true
-        type: integer
-      - description: Role ID
-        in: path
-        name: role_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RolePost'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      summary: Add Role to Route
-      tags:
-      - RouteRole Operations
-  /api/routes:
-    get:
-      consumes:
-      - application/json
-      description: Get Routes
-      parameters:
-      - description: page
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: page size
-        in: query
-        name: size
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponsePagination'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/responses.RouteGet'
-                  type: array
-              type: object
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      - ApiKeyAuth: []
-      - Refresh: []
-      summary: Get Routes
-      tags:
-      - Routes
-    post:
-      consumes:
-      - application/json
-      description: Add Route
-      parameters:
-      - description: Add Route
-        in: body
-        name: route
-        required: true
-        schema:
-          $ref: '#/definitions/responses.RoutePost'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RoutePost'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      summary: Add a new Route
-      tags:
-      - Routes
-  /api/routes/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Remove route by ID
-      parameters:
-      - description: Route ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      summary: Remove Route by ID
-      tags:
-      - Routes
-    get:
-      consumes:
-      - application/json
-      description: Get route by ID
-      parameters:
-      - description: Route ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RouteGet'
-              type: object
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      summary: Get Route by ID
-      tags:
-      - Routes
-    patch:
-      consumes:
-      - application/json
-      description: Patch Route
-      parameters:
-      - description: Patch Route
-        in: body
-        name: route
-        required: true
-        schema:
-          $ref: '#/definitions/responses.RoutePost'
-      - description: Route ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RoutePost'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
-      summary: Patch Route
-      tags:
-      - Routes
-  /api/userrole/{user_id}:
+      - Role
+  /userrole/{user_id}:
     get:
       consumes:
       - application/json
@@ -1139,16 +1783,12 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
       summary: Get User Roles by ID
       tags:
       - Users
-  /api/userrole/{user_id}/{role_id}:
+  /userrole/{user_id}/{role_id}:
     delete:
       consumes:
       - application/json
@@ -1188,7 +1828,7 @@ paths:
       - ApiKeyAuth: []
       summary: Add Role
       tags:
-      - UserRole Operations
+      - Users
     post:
       consumes:
       - application/json
@@ -1207,29 +1847,16 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.RolePost'
-              type: object
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
       summary: Add Role to User
       tags:
-      - UserRole Operations
-  /api/users:
+      - Users
+  /users:
     get:
       consumes:
       - application/json
@@ -1263,10 +1890,8 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
       summary: Get Users
       tags:
       - Users
@@ -1297,16 +1922,12 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
       summary: Add a new Users
       tags:
       - Users
-  /api/users/{id}:
+  /users/{id}:
     delete:
       consumes:
       - application/json
@@ -1326,10 +1947,6 @@ paths:
             $ref: '#/definitions/common.ResponseHTTP'
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
@@ -1361,10 +1978,6 @@ paths:
               type: object
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
@@ -1404,13 +2017,37 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Patch User
+      tags:
+      - Users
+  /users/{user_id}:
+    put:
+      consumes:
+      - application/json
+      description: Activate/Deactivate User
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: Disabled
+        in: query
+        name: status
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
-      summary: Patch User
+      summary: Activate/Deactivate User
       tags:
       - Users
 securityDefinitions:

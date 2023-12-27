@@ -8,6 +8,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	"github.com/mitchellh/mapstructure"
 	"gorm.io/gorm/clause"
 	"semay.com/admin/database"
 	"semay.com/admin/models"
@@ -16,12 +17,12 @@ import (
 )
 
 type UserGet struct {
-	ID             uint      `json:"id,omitempty"`
-	UUID           uuid.UUID `json:"uuid,omitempty"`
-	Email          string    `json:"email,omitempty"`
-	Password       string    `json:"password,omitempty"`
-	DateRegistered time.Time `json:"date_registered,omitempty"`
-	Disabled       bool      `json:"disabled,omitempty"`
+	ID             uint          `json:"id,omitempty"`
+	UUID           uuid.UUID     `json:"uuid,omitempty"`
+	Email          string        `json:"email,omitempty"`
+	DateRegistered time.Time     `json:"date_registered,omitempty"`
+	Disabled       bool          `json:"disabled"`
+	Roles          []models.Role `gorm:"many2many:user_roles;" json:"roles,omitempty"`
 }
 
 type UserPost struct {
@@ -32,6 +33,7 @@ type UserPost struct {
 // GetUsers is a function to get a Users by ID
 // @Summary Get Users
 // @Description Get Users
+// @Security ApiKeyAuth
 // @Tags Users
 // @Accept json
 // @Produce json
@@ -39,13 +41,11 @@ type UserPost struct {
 // @Param size query int true "page size"
 // @Success 200 {object} common.ResponsePagination{data=[]UserGet}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/users [get]
+// @Router /users [get]
 func GetUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
-	var Users []UserGet
-	// // var pag_Users []models.User
-	// Select `id`, `name` automatically when querying
+
+	var users []UserGet
 	Page, _ := strconv.Atoi(contx.Query("page"))
 	Limit, _ := strconv.Atoi(contx.Query("size"))
 	if Page == 0 || Limit == 0 {
@@ -56,7 +56,7 @@ func GetUsers(contx *fiber.Ctx) error {
 		})
 	}
 
-	result, err := common.PaginationPureModel(db, models.User{}, Users, uint(Page), uint(Limit))
+	result, err := common.PaginationPureModel(db, models.User{}, users, uint(Page), uint(Limit))
 	if err != nil {
 		return contx.JSON(common.ResponseHTTP{
 			Success: true,
@@ -64,6 +64,7 @@ func GetUsers(contx *fiber.Ctx) error {
 			Data:    "something",
 		})
 	}
+
 	return contx.Status(http.StatusOK).JSON(result)
 
 }
@@ -78,8 +79,7 @@ func GetUsers(contx *fiber.Ctx) error {
 // @Param id path int true "User ID"
 // @Success 200 {object} common.ResponseHTTP{data=UserGet}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/users/{id} [get]
+// @Router /users/{id} [get]
 func GetUsersID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	id, err := strconv.Atoi(contx.Params("id"))
@@ -91,6 +91,7 @@ func GetUsersID(contx *fiber.Ctx) error {
 		})
 	}
 	var users models.User
+	var user_get UserGet
 	if res := db.Model(&models.User{}).Preload(clause.Associations).Where("id = ?", id).First(&users); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
@@ -98,11 +99,11 @@ func GetUsersID(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-
+	mapstructure.Decode(users, &user_get)
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one User.",
-		Data:    &users,
+		Data:    &user_get,
 	})
 }
 
@@ -116,8 +117,7 @@ func GetUsersID(contx *fiber.Ctx) error {
 // @Param user_id path int true "User ID"
 // @Success 200 {object} common.ResponseHTTP{data=[]RoleGet}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/userrole/{user_id} [get]
+// @Router /userrole/{user_id} [get]
 func GetUsersRolesByID(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	//validate user id
@@ -130,7 +130,8 @@ func GetUsersRolesByID(contx *fiber.Ctx) error {
 		})
 	}
 
-	var roles []RoleGet
+	var roles_get []RoleGet
+	var roles []models.Role
 	var user models.User
 	if res := db.Model(&models.User{}).Where("id = ?", user_id).Find(&user); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
@@ -140,15 +141,15 @@ func GetUsersRolesByID(contx *fiber.Ctx) error {
 		})
 	}
 	db.Model(&user).Association("Roles").Find(&roles)
-
+	mapstructure.Decode(roles, &roles_get)
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one route.",
-		Data:    &roles,
+		Data:    &roles_get,
 	})
 }
 
-// Add Users to data
+// Add Users
 // @Summary Add a new Users
 // @Description Add Users
 // @Tags Users
@@ -158,8 +159,7 @@ func GetUsersRolesByID(contx *fiber.Ctx) error {
 // @Param User body UserPost true "Add User"
 // @Success 200 {object} common.ResponseHTTP{data=UserPost}
 // @Failure 400 {object} common.ResponseHTTP{}
-// @Failure 500 {object} common.ResponseHTTP{}
-// @Router /api/users [post]
+// @Router /users [post]
 func PostUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -199,16 +199,18 @@ func PostUsers(contx *fiber.Ctx) error {
 		})
 	}
 	tx.Commit()
+	user := UserGet{}
 
+	mapstructure.Decode(User, &user)
 	// return data if transaction is sucessfull
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success register a User.",
-		Data:    User,
+		Data:    user,
 	})
 }
 
-// Patch User to data
+// Update User Details
 // @Summary Patch User
 // @Description Patch User
 // @Tags Users
@@ -219,8 +221,7 @@ func PostUsers(contx *fiber.Ctx) error {
 // @Param id path int true "User ID"
 // @Success 200 {object} common.ResponseHTTP{data=UserPost}
 // @Failure 400 {object} common.ResponseHTTP{}
-// @Failure 500 {object} common.ResponseHTTP{}
-// @Router /api/users/{id} [patch]
+// @Router /users/{id} [patch]
 func PatchUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -254,6 +255,7 @@ func PatchUsers(contx *fiber.Ctx) error {
 	patch_User.Password = utils.HashFunc(patch_User.Password)
 	// startng update transaction
 	User := new(models.User)
+	var user UserGet
 	tx := db.Begin()
 	if err := db.Model(&User).Where("id = ?", id).First(&User).UpdateColumns(*patch_User).Error; err != nil {
 		tx.Rollback()
@@ -265,11 +267,71 @@ func PatchUsers(contx *fiber.Ctx) error {
 	}
 	tx.Commit()
 
+	mapstructure.Decode(User, &user)
 	// return value if transaction is sucessfull
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Updating a User.",
-		Data:    User,
+		Data:    user,
+	})
+}
+
+// Activate/Deactivate User
+// @Summary Activate/Deactivate User
+// @Description Activate/Deactivate User
+// @Tags Users
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param user_id path int true "User ID"
+// @Param status query bool true "Disabled"
+// @Failure 400 {object} common.ResponseHTTP{}
+// @Router /users/{user_id} [put]
+func ActivateDeactivateUser(contx *fiber.Ctx) error {
+	db := database.ReturnSession()
+
+	// validate path params
+	user_id, err := strconv.Atoi(contx.Params("user_id"))
+	if err != nil {
+		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+
+	// Getting Query Parameter
+	status := contx.QueryBool("status")
+
+	// Fetching User
+	var user models.User
+	if res := db.Model(&models.User{}).Where("id = ?", user_id).Find(&user); res.Error != nil {
+		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: res.Error.Error(),
+			Data:    nil,
+		})
+	}
+
+	//Updating Didabled Status
+	tx := db.Begin()
+	if err := db.Model(&user).Update("disabled", status).Error; err != nil {
+		tx.Rollback()
+		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: "Record not Found",
+			Data:    err.Error(),
+		})
+	}
+	tx.Commit()
+	var response_user UserGet
+	mapstructure.Decode(user, &response_user)
+	response_user.Disabled = status
+	// return value if transaction is sucessfull
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
+		Success: true,
+		Message: "Success Updating a User.",
+		Data:    response_user,
 	})
 }
 
@@ -283,8 +345,7 @@ func PatchUsers(contx *fiber.Ctx) error {
 // @Param id path int true "User ID"
 // @Success 200 {object} common.ResponseHTTP{}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/users/{id} [delete]
+// @Router /users/{id} [delete]
 func DeleteUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var User models.User

@@ -8,6 +8,7 @@ import (
 //	@version		0.1
 //	@description	This is User Admin server.
 //	@termsOfService	http://swagger.io/terms/
+//  @BasePath  /api/v1
 
 //	@securityDefinitions.apikey	ApiKeyAuth
 //	@in							header

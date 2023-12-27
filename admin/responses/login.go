@@ -37,7 +37,7 @@ type TokenResponse struct {
 // @Success 200 {object} common.ResponseHTTP{data=TokenResponse{}}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/login [post]
+// @Router /login [post]
 func PostLogin(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	validate := validator.New()
@@ -92,7 +92,7 @@ func PostLogin(contx *fiber.Ctx) error {
 				Data:    data,
 			})
 		} else {
-			return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
+			return contx.Status(http.StatusUnauthorized).JSON(common.ResponseHTTP{
 				Success: false,
 				Message: "Make sure You are Providing the Correct Credentials",
 				Data:    "Authenthication Failed",
@@ -100,7 +100,6 @@ func PostLogin(contx *fiber.Ctx) error {
 		}
 		// return "something"
 	case "refresh_token":
-
 		claims, err := utils.ParseJWTToken(login_request_data.Token)
 		email, _ := claims["email"].(string)
 		uuid, _ := claims["uuid"].(string)
@@ -149,4 +148,48 @@ func PostLogin(contx *fiber.Ctx) error {
 		})
 	}
 
+}
+
+// CheckLogin is a function to checktoken Status
+// @Summary Auth
+// @Description CheckLogin
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param user body LoginPost true "Login"
+// @Success 200 {object} common.ResponseHTTP{data=TokenResponse{}}
+// @Failure 404 {object} common.ResponseHTTP{}
+// @Router /checklogin [get]
+func CheckLogin(contx *fiber.Ctx) error {
+
+	// Getting header X-APP-TOKEN
+	type Token struct {
+		token string `reqHeader:"X-APP-TOKEN"`
+	}
+	var token Token
+	err := contx.ReqHeaderParser(token)
+	if err != nil {
+		contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    "Error Getting Header Value",
+		})
+	}
+
+	claims, err := utils.ParseJWTToken(token.token)
+	//  Decoding the token
+	if err != nil {
+		return contx.Status(http.StatusAccepted).JSON(common.ResponseHTTP{
+			Success: true,
+			Message: "Token decode sucessfull",
+			Data:    claims,
+		})
+	}
+
+	// returning the value
+	return contx.Status(http.StatusAccepted).JSON(common.ResponseHTTP{
+		Success: true,
+		Message: "Token decode sucessfull",
+		Data:    claims,
+	})
 }

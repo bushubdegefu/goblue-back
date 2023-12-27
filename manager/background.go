@@ -7,7 +7,7 @@ import (
 
 var (
 	backgroundCmd = &cobra.Command{
-		Use:   "start consumer",
+		Use:   "startconsumer",
 		Short: "Start rabbit qeue task consumers Database",
 		Long:  `Start RabbitMQ consumer`,
 		Run: func(cmd *cobra.Command, args []string) {

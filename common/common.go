@@ -9,7 +9,7 @@ import (
 
 type ResponseHTTP struct {
 	Success bool        `json:"success"`
-	Data    interface{} `json:"itmes"`
+	Data    interface{} `json:"data"`
 	Message string      `json:"details"`
 }
 
@@ -98,7 +98,6 @@ func PaginationPureModel(db *gorm.DB, queryModel interface{}, responseObjectMode
 	count := <-count_channel
 	response_obj := <-str_chann
 	pages := math.Ceil(float64(count) / float64(size))
-	// fmt.Println(responseObjectModel)
 	result := ResponsePagination{
 		Success: true,
 		Items:   responseObjectModel,
