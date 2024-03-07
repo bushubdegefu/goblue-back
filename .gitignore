@@ -7,3 +7,9 @@ main
 goblue.log
 trash.txt
 trash.json
+gormblue.log
+logs/
+*.mp4
+Stream/*.mp4
+toying.go
+temp/

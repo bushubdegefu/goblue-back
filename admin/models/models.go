@@ -7,11 +7,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"semay.com/admin/database"
-	"semay.com/config"
-	"semay.com/utils"
 )
 
 type Role struct {
@@ -22,7 +19,7 @@ type Role struct {
 	Users       []User        `gorm:"many2many:user_roles; constraint:OnUpdate:CASCADE; OnDelete:CASCADE;" json:"users,omitempty"`
 	Features    []Feature     `gorm:"foreignkey:RoleID; constraint:OnUpdate:CASCADE; OnDelete:SET NULL;" json:"features,omitempty"`
 	Pages       []Page        `gorm:"many2many:page_roles; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"pages,omitempty"`
-	AppID       sql.NullInt64 `gorm:"foreignkey:AppID" json:"app,omitempty" swaggertype:"number"`
+	AppID       sql.NullInt64 `gorm:"foreignkey:AppID OnDelete:SET NULL" json:"app,omitempty" swaggertype:"number"`
 }
 
 type EndPoint struct {
@@ -35,7 +32,7 @@ type EndPoint struct {
 }
 
 type Page struct {
-	ID          uint   `gorm:"primaryKey;autoIncrement:true"`
+	ID          uint   `gorm:"primaryKey;autoIncrement:true" json:"id"`
 	Name        string `gorm:"type:string; constraint:not null; unique;" json:"name,omitempty"`
 	Active      bool   `gorm:"default:true; constraint:not null;" json:"active,omitempty" `
 	Description string `gorm:"type:string;" json:"description,omitempty"`
@@ -48,7 +45,7 @@ type App struct {
 	UUID        uuid.UUID `gorm:"constraint:not null; type:uuid;" json:"uuid"`
 	Active      bool      `gorm:"default:true; constraint:not null;" json:"active,omitempty" `
 	Description string    `gorm:"type:string;" json:"description,omitempty"`
-	Roles       []Role    `gorm:"association_foreignkey:AppID constraint:OnUpdate:CASCADE,OnDelete:SET NULL" json:"roles,omitempty"`
+	Roles       []Role    `gorm:"association_foreignkey:AppID constraint:OnUpdate:SET NULL OnDelete:SET NULL" json:"roles,omitempty"`
 }
 
 func (app *App) BeforeCreate(tx *gorm.DB) (err error) {
@@ -79,7 +76,7 @@ type User struct {
 func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
 	// UUID version 4
 	user.UUID = uuid.New()
-	user.Password = utils.HashFunc(user.Password)
+	user.Password = hashfunc(user.Password)
 	return
 }
 
@@ -97,27 +94,40 @@ type SessionData struct {
 	TimeStamp time.Time `gorm:"constraint:not null; default:current_timestamp;" json:"signed_time"`
 }
 
-func InitDatabase() {
-	var err error
-	database.DBConn, err = gorm.Open(sqlite.Open(config.Config("SQLITE_URI")))
-	if err != nil {
-		panic("failed to connect database")
-	}
-	fmt.Println("Connection Opened to Database")
+type BlobPicture struct {
+	ID          uint   `gorm:"primaryKey;autoIncrement:true"`
+	BlobPicture []byte `json:"blob_picture"`
+}
 
-	if err := database.DBConn.AutoMigrate(
+type BlobVideo struct {
+	ID        uint   `gorm:"primaryKey;autoIncrement:true"`
+	Name      string `gorm:"index" json:"name"`
+	BlobVideo []byte `json:"blob_video"`
+}
+
+type JWTSalt struct {
+	ID    uint   `gorm:"primaryKey;autoIncrement:true"`
+	SaltA string `gorm:"constraint:not null;" json:"salt_a"`
+	SaltB string `gorm:"constraint:not null;" json:"salt_b"`
+}
+
+func InitDatabase() {
+	database := database.ReturnSession()
+	fmt.Println("Connection Opened to Database")
+	if err := database.AutoMigrate(
 		&User{},
+		&App{},
 		&Role{},
 		&Page{},
 		&EndPoint{},
 		&Feature{},
-		&SessionData{},
-		&SiteData{},
-		&App{},
+		// &SessionData{},
+		// &SiteData{},
+		&BlobPicture{},
+		&BlobVideo{},
+		&JWTSalt{},
 	); err != nil {
 		log.Fatalln(err)
 	}
-	// database.DBConn.Model(&UserRoles{}).AddForeignKey("role_id", "roles(role_id)", "CASCADE", "CASCADE")
-	// database.DBConn.Model(&UserRoles{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE")
 	fmt.Println("Database Migrated")
 }

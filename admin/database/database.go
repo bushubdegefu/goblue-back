@@ -5,7 +5,8 @@ import (
 	"os"
 	"time"
 
-	"gorm.io/driver/sqlite"
+	// "gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"semay.com/config"
@@ -15,14 +16,21 @@ var (
 	DBConn *gorm.DB
 )
 
-func ReturnSession() *gorm.DB {
-	//  This is file to output gorm logger on to
-	gormfile, err := os.OpenFile("gormblue.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
+func GormLoggerFile() *os.File {
+
+	gormLogFile, gerr := os.OpenFile("gormblue.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if gerr != nil {
+		log.Fatalf("error opening file: %v", gerr)
 	}
+	return gormLogFile
+}
+
+func ReturnSession() *gorm.DB {
+
+	//  This is file to output gorm logger on to
+	gormlogger := GormLoggerFile()
 	gormFileLogger := log.Logger{}
-	gormFileLogger.SetOutput(gormfile)
+	gormFileLogger.SetOutput(gormlogger)
 	gormFileLogger.Writer()
 	gormLogger := log.New(gormFileLogger.Writer(), "\r\n", log.LstdFlags|log.Ldate|log.Ltime|log.Lshortfile)
 	newLogger := logger.New(
@@ -37,15 +45,33 @@ func ReturnSession() *gorm.DB {
 		},
 	)
 
-	// io.Copy(gormfile, gorm_logs)
-	// fmt.Println(log_buffer.String())
 	var DBSession *gorm.DB
-	db, _ := gorm.Open(sqlite.Open(config.Config("SQLITE_URI")), &gorm.Config{
+	//  this is for postgresql connection
+	// conn := "host=192.168.49.2 user=blueuser password=default dbname=bluev5 port=30432 sslmode=disable"
+	conn := config.Config("PSQL_URI")
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  conn,
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage,
+
+	}), &gorm.Config{
 		Logger:                 newLogger,
 		SkipDefaultTransaction: true,
 	})
+	if err != nil {
+		panic(err)
+	}
+
+	//  this is sqlite connection
+	// db, _ := gorm.Open(sqlite.Open(config.Config("SQLITE_URI")), &gorm.Config{
+	// 	Logger:                 newLogger,
+	// 	SkipDefaultTransaction: true,
+	// })
+	sqlDB, _ := db.DB()
+	sqlDB.SetMaxOpenConns(4)
+	sqlDB.SetConnMaxLifetime(2 * time.Second)
 
 	DBSession = db
+
 	return DBSession
 
 }

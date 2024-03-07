@@ -18,7 +18,7 @@ import (
 // @Description Contains id name and description
 type EndPointGet struct {
 	ID          uint   `json:"id,omitempty"`
-	RoutePath   string `json:"route_path,omitempty"`
+	RoutePaths  string `json:"route_path,omitempty"`
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 }
@@ -33,7 +33,7 @@ type EndPointDropDown struct {
 // @Description Contains id name and description
 type EndPointPost struct {
 	Name        string `validate:"required" json:"name,omitempty"  example:"get users"`
-	RoutePath   string `validate:"required" json:"route_path,omitempty"  example:"/route/path"`
+	RoutePaths  string `validate:"required" json:"route_path,omitempty"  example:"/route/path"`
 	Description string `validate:"required" json:"description" example:"Fetchs user list"`
 }
 
@@ -70,6 +70,7 @@ func GetEndPointResponse(contx *fiber.Ctx) error {
 			Data:    err.Error(),
 		})
 	}
+
 	return contx.Status(http.StatusOK).JSON(result)
 
 }
@@ -114,7 +115,7 @@ func GetEndPointsID(contx *fiber.Ctx) error {
 // Get EndPoint Dropdown only active roles
 // @Summary Get EndPointDropDown
 // @Description Get EndPointDropDown
-// @Tags EndPoint
+// @Tags EndPoints
 // @Security ApiKeyAuth
 // @Accept json
 // @Produce json
@@ -177,10 +178,11 @@ func PostEndPoint(contx *fiber.Ctx) error {
 	route := new(models.EndPoint)
 	route.Name = posted_route.Name
 	route.Description = posted_route.Description
+	route.RoutePaths = posted_route.RoutePaths
+
 	tx := db.Begin()
 	// add  data using transaction if values are valid
-	// if err := tx.Create(&route).Error; err != nil {
-	if err := tx.Model(&route).Create(&route).Error; err != nil {
+	if err := tx.Create(&route).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusInternalServerError).JSON(common.ResponseHTTP{
 			Success: false,
@@ -242,8 +244,9 @@ func PatchEndPoint(contx *fiber.Ctx) error {
 	}
 	// startng update transaction
 	route := new(models.EndPoint)
+	route.ID = uint(id)
 	tx := db.Begin()
-	if err := db.Model(&route).Where("id = ?", id).First(&route).UpdateColumns(*patch_route).Error; err != nil {
+	if err := db.Model(&route).UpdateColumns(*patch_route).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,

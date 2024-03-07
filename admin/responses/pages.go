@@ -2,6 +2,7 @@ package responses
 
 // https://morkid.github.io/paginate/
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -17,7 +18,7 @@ type PageGet struct {
 	ID          uint          `gorm:"primaryKey;autoIncrement:true" json:"id,omitempty"`
 	Name        string        `gorm:"type:string; constraint:not null;" json:"name,omitempty"`
 	App         string        `gorm:"type:string; constraint:not null;" json:"App,omitempty"`
-	Active      bool          `gorm:"default:true; constraint:not null;" json:"active,omitempty" `
+	Active      bool          `gorm:"default:true; constraint:not null;" json:"active" `
 	Description string        `gorm:"type:string;" json:"description,omitempty"`
 	Roles       []models.Role `gorm:"many2many:page_roles" json:"roles,omitempty"`
 }
@@ -28,6 +29,15 @@ type PageGet struct {
 type PagePost struct {
 	Name        string `validate:"required" json:"name,omitempty"`
 	Description string `validate:"required"  json:"description,omitempty"`
+}
+
+// Page Post model info
+// @Description Page type information
+// @Description Contains id name and description
+type PagePatch struct {
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Active      bool   `json:"active,omitempty"`
 }
 
 // GetPages is a function to get a Pages by ID
@@ -55,7 +65,7 @@ func GetPages(contx *fiber.Ctx) error {
 		})
 	}
 
-	result, err := common.PaginationPureModel(db, models.Page{}, []PageGet{}, uint(Page), uint(Limit))
+	result, err := common.Pagination(db, models.Page{}, []models.Page{}, uint(Page), uint(Limit))
 
 	if err != nil {
 		return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
@@ -185,7 +195,7 @@ func PostPage(contx *fiber.Ctx) error {
 	page.Description = posted_page.Description
 	tx := db.Begin()
 	// add  data using transaction if values are valid
-	if err := tx.Model(&page).Create(&page).Error; err != nil {
+	if err := tx.Create(&page).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusInternalServerError).JSON(common.ResponseHTTP{
 			Success: false,
@@ -229,7 +239,7 @@ func PatchPage(contx *fiber.Ctx) error {
 	}
 	// validate data struct
 	// first parsing
-	patch_page := new(PagePost)
+	patch_page := new(PagePatch)
 	if err := contx.BodyParser(&patch_page); err != nil {
 		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
 			Success: false,
@@ -239,16 +249,19 @@ func PatchPage(contx *fiber.Ctx) error {
 	}
 	// then validating
 	if err := validate.Struct(patch_page); err != nil {
+		fmt.Println(err.Error())
 		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: err.Error(),
 			Data:    nil,
 		})
 	}
+
 	// startng update transaction
 	page := new(models.Page)
+	page.ID = uint(id)
 	tx := db.Begin()
-	if err := db.Model(&page).Where("id = ?", id).First(&page).UpdateColumns(*patch_page).Error; err != nil {
+	if err := db.Model(&page).UpdateColumns(*patch_page).Update("active", patch_page.Active).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,

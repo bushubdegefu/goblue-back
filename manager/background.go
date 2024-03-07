@@ -11,12 +11,12 @@ var (
 		Short: "Start rabbit qeue task consumers Database",
 		Long:  `Start RabbitMQ consumer`,
 		Run: func(cmd *cobra.Command, args []string) {
-			start_consumer()
+			StartConsumer()
 		},
 	}
 )
 
-func start_consumer() {
+func StartConsumer() {
 
 	bluerabbit.BlueConsumer()
 }

@@ -186,7 +186,7 @@ func PostFeatures(contx *fiber.Ctx) error {
 	tx := db.Begin()
 	// add  data using transaction if values are valid
 	// if err := tx.Create(&feature).Error; err != nil {
-	if err := tx.Model(&feature).Create(&feature).Error; err != nil {
+	if err := tx.Create(&feature).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusInternalServerError).JSON(common.ResponseHTTP{
 			Success: false,
@@ -247,10 +247,10 @@ func PatchFeatures(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-	// startng update transaction
 	feature := new(models.Feature)
+	feature.ID = uint(id)
 	tx := db.Begin()
-	if err := db.Model(&feature).Where("id = ?", id).First(&feature).UpdateColumns(*patch_feature).Error; err != nil {
+	if err := db.Model(&feature).UpdateColumns(*patch_feature).Update("active", patch_feature.Active).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,
@@ -295,8 +295,9 @@ func ActivateDeactivateFeature(contx *fiber.Ctx) error {
 	active := contx.QueryBool("active")
 	// startng update transaction
 	var feature models.Feature
+	feature.ID = uint(feature_id)
 	tx := db.Begin()
-	if err := db.Model(&feature).Where("id = ?", feature_id).First(&feature).Update("active", active).Error; err != nil {
+	if err := db.Model(&feature).Update("active", active).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,

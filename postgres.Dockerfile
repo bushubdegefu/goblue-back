@@ -1,0 +1,8 @@
+FROM  postgres:16.1-alpine3.19
+
+ENV POSTGRES_USER="blueuser"
+ENV POSTGRES_PASSWORD="default@123"
+# PGDATA
+ENV POSTGRES_DB="bluev5"
+
+EXPOSE 5432

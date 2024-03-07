@@ -9,6 +9,7 @@ import (
 
 // Config func to get env value
 func Config(key string) string {
+
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("err loading: %v", err)

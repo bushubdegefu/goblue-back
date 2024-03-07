@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blueapp
+  labels:
+    name:blueapp-db
+spec:
+  selector:
+  matchLabels:
+    app: blueapp-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blueapp-db
+    spec:
+      containers:
+      - name: blueapp-db
+        image: bluegres
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgredb
+      volumes:
+      - name: postgredb
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv-volume
+  labels:
+    type: local
+    app: blueapp
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+  labels:
+    app: blueapp
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blueapp-database
+  labels:
+    app: blueapp
+spec:
+    selector: 
+      app: blueapp-db
+    type: NodePort
+    ports:
+    - name: blueapp-database
+      port: 5432
+      nodePort: 30432
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-postgres
+  labels:
+    app: blue-postgres-db
+spec:
+  selector:
+    matchLabels:
+      app: blue-postgres-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blue-postgres-db 
+    spec:
+      containers:
+      - name: bluegres
+        image: bluegres
+        ports:
+        -containerPort: 5432
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+    name: blue-postgres-service
+spec:
+    selector:
+    app: blue-postgres-db
+    ports:
+    port: 5432
+    targetPort: 5432
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bluegres-ingress
+spec:
+  rules:
+  - host: bluegres-database
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: blueapp-database
+            
+

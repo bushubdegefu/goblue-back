@@ -13,7 +13,6 @@ import (
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/common"
-	"semay.com/utils"
 )
 
 type UserGet struct {
@@ -27,6 +26,15 @@ type UserGet struct {
 
 type UserPost struct {
 	Email    string `validate:"required"`
+	Password string `validate:"required"`
+}
+
+type UserPatch struct {
+	Email    string `json:"email" example:"someone@domain.com"`
+	Disabled bool   `json:"disabled" example:"true"`
+}
+
+type UserPassword struct {
 	Password string `validate:"required"`
 }
 
@@ -133,7 +141,7 @@ func GetUsersRolesByID(contx *fiber.Ctx) error {
 	var roles_get []RoleGet
 	var roles []models.Role
 	var user models.User
-	if res := db.Model(&models.User{}).Where("id = ?", user_id).Find(&user); res.Error != nil {
+	if res := db.Model(&models.User{ID: uint(user_id)}).Find(&user); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: res.Error.Error(),
@@ -190,7 +198,7 @@ func PostUsers(contx *fiber.Ctx) error {
 	tx := db.Begin()
 	// add  data using transaction if values are valid
 	// if err := tx.Create(&User).Error; err != nil {
-	if err := tx.Model(&User).Create(&User).Error; err != nil {
+	if err := tx.Create(&User).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusInternalServerError).JSON(common.ResponseHTTP{
 			Success: false,
@@ -219,7 +227,7 @@ func PostUsers(contx *fiber.Ctx) error {
 // @Produce json
 // @Param User body UserPost true "Patch User"
 // @Param id path int true "User ID"
-// @Success 200 {object} common.ResponseHTTP{data=UserPost}
+// @Success 200 {object} common.ResponseHTTP{data=UserPatch}
 // @Failure 400 {object} common.ResponseHTTP{}
 // @Router /users/{id} [patch]
 func PatchUsers(contx *fiber.Ctx) error {
@@ -236,7 +244,7 @@ func PatchUsers(contx *fiber.Ctx) error {
 	}
 	// validate data struct
 	// first parsing
-	patch_User := new(UserPost)
+	patch_User := new(UserPatch)
 	if err := contx.BodyParser(&patch_User); err != nil {
 		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
 			Success: false,
@@ -252,12 +260,13 @@ func PatchUsers(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-	patch_User.Password = utils.HashFunc(patch_User.Password)
+	// patch_User.Password = utils.HashFunc(patch_User.Password)
 	// startng update transaction
 	User := new(models.User)
 	var user UserGet
+	User.ID = uint(id)
 	tx := db.Begin()
-	if err := db.Model(&User).Where("id = ?", id).First(&User).UpdateColumns(*patch_User).Error; err != nil {
+	if err := db.Model(&User).UpdateColumns(*patch_User).Update("disabled", patch_User.Disabled).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,
@@ -305,13 +314,7 @@ func ActivateDeactivateUser(contx *fiber.Ctx) error {
 
 	// Fetching User
 	var user models.User
-	if res := db.Model(&models.User{}).Where("id = ?", user_id).Find(&user); res.Error != nil {
-		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
-			Success: false,
-			Message: res.Error.Error(),
-			Data:    nil,
-		})
-	}
+	user.ID = uint(user_id)
 
 	//Updating Didabled Status
 	tx := db.Begin()

@@ -115,6 +115,18 @@ definitions:
       uuid:
         type: string
     type: object
+  responses.AppEndpointsMeta:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
+  responses.AppFeaturesMeta:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
   responses.AppGet:
     properties:
       active:
@@ -135,6 +147,17 @@ definitions:
     - id
     - name
     type: object
+  responses.AppMeta:
+    properties:
+      name:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/responses.roles'
+        type: array
+      uuid:
+        type: string
+    type: object
   responses.AppPost:
     description: App type information Contains id name and description
     properties:
@@ -147,6 +170,15 @@ definitions:
       name:
         example: superuser
         type: string
+    type: object
+  responses.AppsMatrix:
+    properties:
+      role:
+        type: string
+      role_features:
+        items:
+          type: string
+        type: array
     type: object
   responses.EmailMessage:
     properties:
@@ -302,6 +334,8 @@ definitions:
     properties:
       active:
         type: boolean
+      app_id:
+        type: integer
       description:
         type: string
       features:
@@ -322,6 +356,9 @@ definitions:
   responses.RolePost:
     description: Role type information Contains id name and description
     properties:
+      app_id:
+        example: "1"
+        type: string
       description:
         example: Devloper Mode Acecss
         type: string
@@ -355,6 +392,15 @@ definitions:
       uuid:
         type: string
     type: object
+  responses.UserPatch:
+    properties:
+      disabled:
+        example: true
+        type: boolean
+      email:
+        example: someone@domain.com
+        type: string
+    type: object
   responses.UserPost:
     properties:
       email:
@@ -365,6 +411,33 @@ definitions:
     - email
     - password
     type: object
+  responses.endpoints:
+    properties:
+      method:
+        type: string
+      name:
+        type: string
+      route_path:
+        type: string
+    type: object
+  responses.features:
+    properties:
+      endpoints:
+        items:
+          $ref: '#/definitions/responses.endpoints'
+        type: array
+      name:
+        type: string
+    type: object
+  responses.roles:
+    properties:
+      features:
+        items:
+          $ref: '#/definitions/responses.features'
+        type: array
+      name:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is User Admin server.
@@ -372,41 +445,34 @@ info:
   title: Swagger Blue API
   version: "0.1"
 paths:
-  /api/v1/email:
-    post:
+  /approle/{role_id}:
+    patch:
       consumes:
       - application/json
-      description: Sending Email
+      description: Add Role to App
       parameters:
-      - description: messages
-        in: body
-        name: User
+      - description: Role ID
+        in: path
+        name: role_id
         required: true
-        schema:
-          $ref: '#/definitions/responses.EmailMessage'
+        type: integer
+      - description: App ID
+        in: query
+        name: app_id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.ResponseHTTP'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.EmailMessage'
-              type: object
-        "404":
-          description: Not Found
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-      summary: Send Email to
+      security:
+      - ApiKeyAuth: []
+      summary: Add Role to App
       tags:
-      - Utilities
+      - Role
   /apps:
     get:
       consumes:
@@ -472,10 +538,6 @@ paths:
               type: object
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
       security:
@@ -581,15 +643,143 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.ResponseHTTP'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.ResponseHTTP'
       security:
       - ApiKeyAuth: []
       summary: Patch App
       tags:
       - App
+  /appsdrop:
+    get:
+      consumes:
+      - application/json
+      description: Get FeatureDropDown
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.FeatureDropDown'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get FeatureDropDown
+      tags:
+      - Feature
+  /appsmatrix/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get App Features By ID
+      parameters:
+      - description: App ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.AppsMatrix'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Features
+      tags:
+      - App
+  /blobpic:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Get Users
+      parameters:
+      - in: formData
+        name: picture_name
+        type: string
+      - description: Picture
+        in: formData
+        name: picture
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponsePagination'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: PostPicture
+      tags:
+      - Files
+  /blobvideo:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Get Users
+      parameters:
+      - in: formData
+        name: video_name
+        type: string
+      - description: Video
+        in: formData
+        name: video
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponsePagination'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: PostVideo
+      tags:
+      - Files
   /checklogin:
     get:
       consumes:
@@ -621,6 +811,198 @@ paths:
       summary: Auth
       tags:
       - Authentication
+  /dashboard:
+    get:
+      consumes:
+      - application/json
+      description: Get App summary by App ID
+      parameters:
+      - description: App ID
+        in: query
+        name: app_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.AppMeta'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Roles Grouped By APP ID
+      tags:
+      - Dashboard Meta
+  /dashboardends:
+    get:
+      consumes:
+      - application/json
+      description: Get App Endpoints summary
+      parameters:
+      - description: App ID
+        in: query
+        name: app_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.AppEndpointsMeta'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get App Endpoints Grouped By Role
+      tags:
+      - Dashboard Meta
+  /dashboardfeat:
+    get:
+      consumes:
+      - application/json
+      description: Get App Featuers summary
+      parameters:
+      - description: App ID
+        in: query
+        name: app_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.AppFeaturesMeta'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get App Features Grouped By Role
+      tags:
+      - Dashboard Meta
+  /dashboardpages:
+    get:
+      consumes:
+      - application/json
+      description: Get App Pages summary
+      parameters:
+      - description: App ID
+        in: query
+        name: app_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.AppFeaturesMeta'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get App Pages
+      tags:
+      - Dashboard Meta
+  /dashboardroles:
+    get:
+      consumes:
+      - application/json
+      description: Get App Roles summary
+      parameters:
+      - description: App ID
+        in: query
+        name: app_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.AppFeaturesMeta'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get App Roles
+      tags:
+      - Dashboard Meta
+  /dashboardrolespage:
+    get:
+      consumes:
+      - application/json
+      description: Get Roles by page by ID
+      parameters:
+      - description: App ID
+        in: query
+        name: app_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.PageGet'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Page Roles for Secfic App by ID
+      tags:
+      - Dashboard Meta
   /droproles:
     get:
       consumes:
@@ -649,6 +1031,39 @@ paths:
       summary: Get RoleDropDown
       tags:
       - Role
+  /email:
+    post:
+      consumes:
+      - application/json
+      description: Sending Email
+      parameters:
+      - description: messages
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/responses.EmailMessage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.EmailMessage'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Send Email to
+      tags:
+      - Utilities
   /endpointdrop:
     get:
       consumes:
@@ -676,7 +1091,7 @@ paths:
       - ApiKeyAuth: []
       summary: Get EndPointDropDown
       tags:
-      - EndPoint
+      - EndPoints
   /endpoints:
     get:
       consumes:
@@ -1504,6 +1919,13 @@ paths:
       summary: Get Page Roles by ID
       tags:
       - Page
+  /pics:
+    get:
+      description: StreamPicture
+      responses: {}
+      summary: StreamPicture
+      tags:
+      - Files
   /role_endpoints:
     get:
       consumes:
@@ -1754,6 +2176,19 @@ paths:
       summary: Activate/Deactivate
       tags:
       - Role
+  /stream/{file_name}:
+    get:
+      description: StreamVideo
+      parameters:
+      - description: File Name
+        in: path
+        name: name
+        required: true
+        type: string
+      responses: {}
+      summary: StreamVideo
+      tags:
+      - Files
   /userrole/{user_id}:
     get:
       consumes:
@@ -2011,7 +2446,7 @@ paths:
             - $ref: '#/definitions/common.ResponseHTTP'
             - properties:
                 data:
-                  $ref: '#/definitions/responses.UserPost'
+                  $ref: '#/definitions/responses.UserPatch'
               type: object
         "400":
           description: Bad Request

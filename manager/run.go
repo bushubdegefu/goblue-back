@@ -1,25 +1,29 @@
 package manager
 
-// export PATH=$PATH:$(go env GOPATH)/bin
-
 import (
 	"errors"
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"os/signal"
 	"regexp"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/idempotency"
 	"github.com/gofiber/fiber/v2/middleware/keyauth"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
+	"github.com/madflojo/tasks"
+
 	"github.com/spf13/cobra"
 	"gorm.io/gorm/clause"
 	"semay.com/admin/database"
@@ -28,6 +32,7 @@ import (
 	"semay.com/common"
 	"semay.com/config"
 	_ "semay.com/docs"
+	"semay.com/utils"
 )
 
 var (
@@ -41,13 +46,13 @@ var (
 	}
 	protectedURLs = []*regexp.Regexp{
 		regexp.MustCompile("^/api/v1/login"),
+		regexp.MustCompile("^/api/v1/stream"),
+		regexp.MustCompile("^/api/v1/pics"),
 		regexp.MustCompile("^/lmetrics"),
 		regexp.MustCompile("^/bluedocs"),
 		regexp.MustCompile("^/docs"),
 		regexp.MustCompile("^/metrics$"),
 	}
-	stop_flag  = 0
-	route_name string
 )
 
 // API validation Key function to be run on middleware
@@ -80,22 +85,17 @@ var (
 // 		})
 // 	}
 // 	db.Model(&route).Association("Roles").Find(&roles_fetch)
-
 // 	for _, value := range roles_fetch {
-
 // 		roles = append(roles, string(value.Name))
 // 	}
 // 	// parsing token
 // 	token_roles, err := utils.ParseJWTToken(key)
-
 // 	// validating token role against route
 // 	tok_roles, _ := json.Marshal(token_roles)
 // 	var tok_rol utils.UserClaim
 // 	json.Unmarshal(tok_roles, &tok_rol)
-
 // 	flag := true
 // 	for _, route_priv := range roles {
-
 // 		for _, tok_value := range tok_rol.Roles {
 // 			if route_priv == tok_value {
 // 				flag = true
@@ -108,7 +108,6 @@ var (
 // 	if err != nil {
 // 		return flag, err
 // 	}
-
 // 	return flag, nil
 // 	return true, nil
 // }
@@ -119,31 +118,129 @@ func authFilter(c *fiber.Ctx) bool {
 
 	for _, pattern := range protectedURLs {
 		if pattern.MatchString(originalURL) {
-
+			c.Request().Header.Add("X-APP-TOKEN", "allowed")
 			return true
 		}
 	}
 	return false
 }
+
+func NextFunc(contx *fiber.Ctx) error {
+	return nil
+}
+
 func NextRoute(contx *fiber.Ctx, key string) (bool, error) {
-	if stop_flag == 0 {
-		stop_flag = 2
-		contx.Next()
-		route_name = contx.Route().Name
-		contx.RestartRouting()
-		// fmt.Println(route_name)
-		// fmt.Println(contx.Route().Path)
-	}
+	contx.Next()
 	return true, nil
 }
 
 func run() {
+	scheduler := tasks.New()
+	defer scheduler.Stop()
+
+	app, log_file := MakeApp("dev")
+	defer log_file.Close()
+	// updating response function route names to database
+	// first parsing route names from app
+	db := database.ReturnSession()
+
+	//  database logger file
+	gormLoggeFile := database.GormLoggerFile()
+
+	//  registering endpoints related to app
+	for _, routes := range app.Stack() {
+		for _, route := range routes {
+			if (route.Path != "") && (route.Path != "/") && (route.Name != "") && (route.Method != "HEAD") {
+				response_meta := models.EndPoint{Name: route.Name + "_" + strings.ToLower(route.Method), RoutePaths: route.Path, Description: route.Name + "-" + route.Method, Method: route.Method}
+				tx := db.Begin()
+				if err := tx.Model(&models.EndPoint{}).Clauses(clause.OnConflict{DoNothing: true}).Create(&response_meta).Error; err != nil {
+					tx.Rollback()
+				}
+				tx.Commit()
+
+			}
+		}
+	}
+
+	// recording available route name ends here
+	port_1 := config.Config("PORT")
+	// port_2 := config.Config("PORT_2")
+
+	// starting on two provided ports
+	go func(app *fiber.App) {
+		log.Fatal(app.Listen(":" + port_1))
+	}(app)
+
+	// go func(app *fiber.App) {
+	// 	log.Fatal(app.Listen(":" + port_2))
+
+	// }(app)
+
+	// // Add a task to move to Logs Directory Every Interval, Interval to Be Provided From Configuration File
+	if _, err := scheduler.Add(&tasks.Task{
+		Interval: time.Duration(1 * time.Hour),
+		TaskFunc: func() error {
+			currentTime := time.Now()
+			FileName := fmt.Sprintf("%v-%v-%v-%v-%v", currentTime.Year(), currentTime.Month(), currentTime.Day(), currentTime.Hour(), currentTime.Minute())
+			Command := fmt.Sprintf("cp goblue.log logs/blue-%v.log", FileName)
+			Command2 := fmt.Sprintf("cp gormblue.log logs/gorm-%v.log", FileName)
+			if _, err := exec.Command("bash", "-c", Command).Output(); err != nil {
+				fmt.Printf("error: %v\n", err)
+			}
+
+			if _, err := exec.Command("bash", "-c", Command2).Output(); err != nil {
+				fmt.Printf("error: %v\n", err)
+			}
+			log_file.Truncate(0)
+			gormLoggeFile.Truncate(0)
+			return nil
+		},
+	}); err != nil {
+		fmt.Println(err)
+
+	}
+
+	//  Salt Timer Tasks
+	clear_run, _ := strconv.Atoi(config.Config("JWT_SALT_LIFE_TIME"))
+	clear_run = int(clear_run)
+	jwt_update_interval := time.Second * time.Duration(clear_run)
+	//  Task 2 for testing Make random heartbeat call
+
+	if _, err := scheduler.Add(&tasks.Task{
+		Interval: jwt_update_interval,
+		TaskFunc: func() error {
+			utils.JWTSaltUpdate()
+			return nil
+		},
+	}); err != nil {
+		fmt.Println(err)
+
+	}
+
+	c := make(chan os.Signal, 1)   // Create channel to signify a signal being sent
+	signal.Notify(c, os.Interrupt) // When an interrupt or termination signal is sent, notify the channel
+
+	<-c // This blocks the main thread until an interrupt is received
+	fmt.Println("Gracefully shutting down...")
+	app.Shutdown()
+
+	fmt.Println("Running cleanup tasks...")
+	// Your cleanup tasks go here
+	fmt.Println("Blue was successful shutdown.")
+
+}
+
+func MakeApp(appType string) (*fiber.App, *os.File) {
+
 	// initalaizing the app
 	app := fiber.New(fiber.Config{
-		// Prefork:     true,
+		// Prefork: true,
 		// Network:     fiber.NetworkTCP,
-		JSONEncoder: json.Marshal,
-		JSONDecoder: json.Unmarshal,
+		// Immutable:   true,
+		JSONEncoder:    json.Marshal,
+		JSONDecoder:    json.Unmarshal,
+		BodyLimit:      70 * 1024 * 1024,
+		ReadBufferSize: 10 * 4096,
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			// Status code defaults to 500
 			code := fiber.StatusInternalServerError
@@ -181,7 +278,6 @@ func run() {
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
-	defer file.Close()
 
 	// logger middle ware with the custom file writer object
 	app.Use(logger.New(logger.Config{
@@ -201,7 +297,7 @@ func run() {
 	// fiber native monitoring metrics endpoint
 	app.Get("/lmetrics", monitor.New(monitor.Config{Title: "goBlue Metrics Page"})).Name("custom_metrics_route")
 
-	// setting up applications from other moduels
+	// setting up Applications from other moduels
 	app.Get("/", func(contx *fiber.Ctx) error {
 		return contx.JSON(common.ResponseHTTP{
 			Success: true,
@@ -212,123 +308,106 @@ func run() {
 	}).Name("index_route")
 
 	// adding group with authenthication middleware
-	// admin_app := app.Group("/api/v1")
-	admin_app := app.Group("/api/v1", keyauth.New(keyauth.Config{
-		Next:      authFilter,
-		KeyLookup: "header:X-APP-TOKEN",
-		Validator: NextRoute,
-	}))
+	if appType == "dev" {
+		// adding group with authenthication middleware
+		admin_app := app.Group("/api/v1", keyauth.New(keyauth.Config{
+			Next:      authFilter,
+			KeyLookup: "header:X-APP-TOKEN",
+			Validator: NextRoute,
+		}))
+		setupRoutes(admin_app.(*fiber.Group))
+	} else {
+		admin_app := app.Group("/api/v1")
+		setupRoutes(admin_app.(*fiber.Group))
 
-	setupRoutes(admin_app.(*fiber.Group))
-
-	// updating response function route names to database
-	// first parsing route names from app
-	db := database.ReturnSession()
-	// data, _ := json.MarshalIndent(app.Stack(), "", "  ")
-	// fmt.Println(string(data))
-	for _, routes := range app.Stack() {
-		for _, route := range routes {
-
-			if (route.Path != "") && (route.Path != "/") && (route.Name != "") && (route.Method != "HEAD") {
-				response_meta := models.EndPoint{Name: route.Name + "_" + strings.ToLower(route.Method), RoutePaths: route.Path, Description: route.Name + "-" + route.Method, Method: route.Method}
-				tx := db.Begin()
-				if err := tx.Model(&models.EndPoint{}).Clauses(clause.OnConflict{DoNothing: true}).Create(&response_meta).Error; err != nil {
-					tx.Rollback()
-				}
-				tx.Commit()
-
-			}
-		}
 	}
-
-	// recording available route name ends here
-	port_1 := config.Config("PORT")
-	// port_2 := config.Config("PORT_2")
-	// starting on two provided ports
-
-	// forking port 1
-	go func() {
-		log.Fatal(app.Listen(":" + port_1))
-	}()
-	// // forking port 2
-	// go func() {
-	// 	log.Fatal(app.Listen(":" + port_2))
-
-	// }()
-
-	c := make(chan os.Signal, 1)   // Create channel to signify a signal being sent
-	signal.Notify(c, os.Interrupt) // When an interrupt or termination signal is sent, notify the channel
-
-	<-c // This blocks the main thread until an interrupt is received
-	fmt.Println("Gracefully shutting down...")
-	app.Shutdown()
-
-	fmt.Println("Running cleanup tasks...")
-	// Your cleanup tasks go here
-	fmt.Println("Blue was successful shutdown.")
-
+	app.Use(idempotency.New(idempotency.Config{
+		Lifetime: 10 * time.Second,
+	}))
+	// app.Use(earlydata.New(earlydata.Config{
+	// 	Error: fiber.ErrTooEarly,
+	// 	// ...
+	// }))
+	utils.JWTSaltUpdate()
+	return app, file
 }
 
 func setupRoutes(app *fiber.Group) {
 
 	// adding endpoints
-	app.Get("/checklogin", responses.CheckLogin).Name("check_login")
+	app.Get("/checklogin", NextFunc).Name("check_login").Get("/checklogin", responses.CheckLogin).Name("check_login")
 	app.Post("/login", responses.PostLogin).Name("login_route")
 
-	app.Get("/roles", responses.GetRoles).Name("roles")
-	app.Post("/roles", responses.PostRoles).Name("roles")
-	app.Get("/roles/:id", responses.GetRolesID).Name("roles_single")
-	app.Get("/droproles", responses.GetDropDownRoles).Name("drop_roles")
-	app.Patch("/roles/:id", responses.PatchRoles).Name("roles_single")
-	app.Delete("/roles/:id", responses.DeleteRoles).Name("roles_single")
-	app.Put("/roles/:role_id", responses.ActivateDeactivateRoles).Name("activate_deactivate_role")
-	app.Get("/role_endpoints", responses.GetRoleEndpointsID).Name("roles_endpoints")
+	app.Get("/roles", NextFunc).Name("roles").Get("/roles", responses.GetRoles)
+	app.Post("/roles", NextFunc).Name("roles").Post("/roles", responses.PostRoles)
+	app.Get("/roles/:id", NextFunc).Name("roles_single").Get("/roles/:id", responses.GetRolesID)
+	app.Get("/droproles", NextFunc).Name("drop_roles").Get("/droproles", responses.GetDropDownRoles)
+	app.Patch("/roles/:id", NextFunc).Name("roles_single").Patch("/roles/:id", responses.PatchRoles)
+	app.Patch("/approle/:role_id", NextFunc).Name("roles_app").Patch("/approle/:role_id", responses.UpdateRoleApp)
+	app.Delete("/roles/:id", NextFunc).Name("roles_single").Delete("/roles/:id", responses.DeleteRoles)
+	app.Put("/roles/:role_id", NextFunc).Name("activate_deactivate_role").Put("/roles/:role_id", responses.ActivateDeactivateRoles)
+	app.Get("/role_endpoints", NextFunc).Name("roles_endpoints").Get("/role_endpoints", responses.GetRoleEndpointsID)
 
-	app.Get("/features", responses.GetFeatures).Name("features")
-	app.Post("/features", responses.PostFeatures).Name("features")
-	app.Get("/features/:id", responses.GetFeaturesID).Name("features_single")
-	app.Get("/featuredrop", responses.GetDropFeatures).Name("drop_features")
-	app.Patch("/features/:id", responses.PatchFeatures).Name("features_single")
-	app.Delete("/features/:id", responses.DeleteFeatures).Name("features_single")
-	app.Put("/features/:feature_id", responses.ActivateDeactivateFeature).Name("activate_deactivate_features")
-	app.Patch("/featuresrole/:feature_id", responses.AddFeatureRole).Name("feature_role")
-	app.Delete("/featuresrole/:feature_id", responses.DeleteFeatureRole).Name("feature_role")
+	app.Get("/features", NextFunc).Name("features").Get("/features", responses.GetFeatures)
+	app.Post("/features", NextFunc).Name("features").Post("/features", responses.PostFeatures)
+	app.Get("/features/:id", NextFunc).Name("features_single").Get("/features/:id", responses.GetFeaturesID)
+	app.Get("/featuredrop", NextFunc).Name("drop_features").Get("/featuredrop", responses.GetDropFeatures)
+	app.Patch("/features/:id", NextFunc).Name("features_single").Patch("/features/:id", responses.PatchFeatures)
+	app.Delete("/features/:id", NextFunc).Name("features_single").Delete("/features/:id", responses.DeleteFeatures)
+	app.Put("/features/:feature_id", NextFunc).Name("activate_deactivate_features").Put("/features/:feature_id", responses.ActivateDeactivateFeature)
+	app.Patch("/featuresrole/:feature_id", NextFunc).Name("feature_role").Patch("/featuresrole/:feature_id", responses.AddFeatureRole)
+	app.Delete("/featuresrole/:feature_id", NextFunc).Name("feature_role").Delete("/featuresrole/:feature_id", responses.DeleteFeatureRole)
 
-	app.Get("/apps", responses.GetApps).Name("apps")
-	app.Post("/apps", responses.PatchApps).Name("apps")
-	app.Get("/apps/:id", responses.GetAppsID).Name("apps_single")
-	app.Patch("/apps/:id", responses.PostApps).Name("apps_single")
-	app.Delete("/apps/:id", responses.DeleteApps).Name("apps_single")
+	app.Get("/apps", NextFunc).Name("apps").Get("/apps", responses.GetApps)
+	app.Post("/apps", NextFunc).Name("apps").Post("/apps", responses.PostApps)
+	app.Get("/apps/:id", NextFunc).Name("apps_single").Get("/apps/:id", responses.GetAppsID)
+	app.Get("/appsdrop", NextFunc).Name("drop_sppd").Get("/appsdrop", responses.GetDropApps)
+	app.Get("/appsmatrix/:id", NextFunc).Name("apps_features").Get("/appsmatrix/:id", responses.GetAppMatrix)
+	app.Patch("/apps/:id", NextFunc).Name("apps_single").Patch("/apps/:id", responses.PatchApps)
+	app.Delete("/apps/:id", NextFunc).Name("apps_single").Delete("/apps/:id", responses.DeleteApps)
 
-	app.Get("/users", responses.GetUsers).Name("users")
-	app.Post("/users", responses.PostUsers).Name("users")
-	app.Get("/users/:id", responses.GetUsersID).Name("user_single")
-	app.Patch("/users/:id", responses.PatchUsers).Name("user_single")
-	app.Delete("/users/:id", responses.DeleteUsers).Name("user_single")
-	app.Put("/users/:user_id", responses.ActivateDeactivateUser).Name("activate_deactivate_user")
-	app.Get("/userrole/:user_id", responses.GetUsersRolesByID).Name("get_user_roles")
-	app.Post("/userrole/:user_id/:role_id", responses.AddUserRoles).Name("user_role")
-	app.Delete("/userrole/:user_id/:role_id", responses.DeleteUserRoles).Name("user_role")
+	app.Get("/users", NextFunc).Name("users").Get("/users", responses.GetUsers)
+	app.Post("/users", NextFunc).Name("users").Post("/users", responses.PostUsers)
+	app.Get("/users/:id", NextFunc).Name("user_single").Get("/users/:id", responses.GetUsersID)
+	app.Patch("/users/:id", NextFunc).Name("user_single").Patch("/users/:id", responses.PatchUsers)
+	app.Delete("/users/:id", NextFunc).Name("user_single").Delete("/users/:id", responses.DeleteUsers)
+	app.Put("/users/:user_id", NextFunc).Name("activate_deactivate_user").Put("/users/:user_id", responses.ActivateDeactivateUser)
+	app.Get("/userrole/:user_id", NextFunc).Name("get_user_roles").Get("/userrole/:user_id", responses.GetUsersRolesByID)
+	app.Post("/userrole/:user_id/:role_id", NextFunc).Name("user_role").Post("/userrole/:user_id/:role_id", responses.AddUserRoles)
+	app.Delete("/userrole/:user_id/:role_id", NextFunc).Name("user_role").Delete("/userrole/:user_id/:role_id", responses.DeleteUserRoles)
 
-	app.Get("/pages", responses.GetPages).Name("pages")
-	app.Post("/pages", responses.PostPage).Name("pages")
-	app.Get("/pages/:id", responses.GetPageID).Name("page_single")
-	app.Patch("/pages/:id", responses.PatchPage).Name("page_single")
-	app.Delete("/pages/:id", responses.DeletePage).Name("page_single")
-	app.Get("/pagesroles/:page_id", responses.GetPageRoles).Name("get_page_roles")
-	app.Post("/pagerole/:page_id/:role_id", responses.AddPageRoles).Name("page_roles")
-	app.Delete("/pagerole/:page_id/:role_id", responses.DeletePageRoles).Name("page_roles")
+	app.Get("/pages", NextFunc).Name("pages").Get("/pages", responses.GetPages)
+	app.Post("/pages", NextFunc).Name("pages").Post("/pages", responses.PostPage)
+	app.Get("/pages/:id", NextFunc).Name("page_single").Get("/pages/:id", responses.GetPageID)
+	app.Patch("/pages/:id", NextFunc).Name("page_single").Patch("/pages/:id", responses.PatchPage)
+	app.Delete("/pages/:id", NextFunc).Name("page_single").Delete("/pages/:id", responses.DeletePage)
+	app.Get("/pagesroles/:page_id", NextFunc).Name("get_page_roles").Get("/pagesroles/:page_id", responses.GetPageRoles)
+	app.Post("/pagerole/:page_id/:role_id", NextFunc).Name("page_roles").Post("/pagerole/:page_id/:role_id", responses.AddPageRoles)
+	app.Delete("/pagerole/:page_id/:role_id", NextFunc).Name("page_roles").Delete("/pagerole/:page_id/:role_id", responses.DeletePageRoles)
 
-	app.Get("/endpoints", responses.GetEndPointResponse).Name("end_point")
-	app.Post("/endpoints", responses.PostEndPoint).Name("end_point")
-	app.Get("/endpoints/:id", responses.GetEndPointsID).Name("end_point_single")
-	app.Get("/endpointdrop", responses.GetDropEndPoints).Name("drop_endpoints")
-	app.Patch("/endpoints/:id", responses.PatchEndPoint).Name("end_point_single")
-	app.Delete("/endpoints/:id", responses.DeleteEndPoint).Name("end_point_single")
-	app.Patch("/feature_endpoint/:endpoint_id", responses.AddEndpointFeature).Name("feature_endpoint")
-	app.Delete("/feature_endpoint/:endpoint_id", responses.DeleteEndpointFeature).Name("feature_endpoint")
+	app.Get("/endpoints", NextFunc).Name("end_point").Get("/endpoints", responses.GetEndPointResponse)
+	app.Post("/endpoints", NextFunc).Name("end_point").Post("/endpoints", responses.PostEndPoint)
+	app.Get("/endpoints/:id", NextFunc).Name("end_point_single").Get("/endpoints/:id", responses.GetEndPointsID)
+	app.Get("/endpointdrop", NextFunc).Name("drop_endpoints").Get("/endpointdrop", responses.GetDropEndPoints)
+	app.Patch("/endpoints/:id", NextFunc).Name("end_point_single").Patch("/endpoints/:id", responses.PatchEndPoint)
+	app.Delete("/endpoints/:id", NextFunc).Name("end_point_single").Delete("/endpoints/:id", responses.DeleteEndPoint)
+	app.Patch("/feature_endpoint/:endpoint_id", NextFunc).Name("feature_endpoint").Patch("/feature_endpoint/:endpoint_id", responses.AddEndpointFeature)
+	app.Delete("/feature_endpoint/:endpoint_id", NextFunc).Name("feature_endpoint").Delete("/feature_endpoint/:endpoint_id", responses.DeleteEndpointFeature)
 
-	app.Post("/email", responses.SendEmail).Name("send_email")
+	app.Post("/email", NextFunc).Name("send_email").Post("/email", responses.SendEmail)
+
+	app.Post("/blobpic", NextFunc).Name("blob_picture").Post("/blobpic", responses.UploadingPicture)
+	app.Post("/blobvideo", NextFunc).Name("blob_video").Post("/blobvideo", responses.UploadingVideo)
+	app.Get("/stream/:file_name", responses.StreamingVideo)
+	app.Get("/pics", responses.StreamingPicture)
+
+	app.Get("/dashboard", NextFunc).Name("dashboard").Get("/dashboard", responses.GetDashBoardGrouped)
+	app.Get("/dashboardends", NextFunc).Name("dashboard").Get("/dashboardends", responses.GetAppEndpoitnsGroupedBy)
+	app.Get("/dashboardfeat", NextFunc).Name("dashboard").Get("/dashboardfeat", responses.GetAppFeaturesGroupedBy)
+	app.Get("/dashboardpages", NextFunc).Name("dashboard").Get("/dashboardpages", responses.GetAppPages)
+	app.Get("/dashboardroles", NextFunc).Name("dashboard").Get("/dashboardroles", responses.GetAppRoles)
+	app.Get("/dashboardrolespage", NextFunc).Name("dashboard").Get("/dashboardrolespage", responses.GetAppPagesInRoles)
+
 }
 
 func init() {

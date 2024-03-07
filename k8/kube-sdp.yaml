@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-sdp
+  labels:
+    app: blue-sdp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blue-sdp
+  template:
+    metadata:
+      labels:
+        app: blue-sdp
+    spec:
+      containers:
+      - name: blue-sdp
+        image: blue-sdp-v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9500
+

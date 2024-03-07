@@ -1,6 +1,8 @@
 package bluerabbit
 
 import (
+	"fmt"
+
 	amqp "github.com/rabbitmq/amqp091-go"
 	"semay.com/config"
 )
@@ -13,15 +15,15 @@ func BrokerConnect() (*amqp.Connection, *amqp.Channel) {
 
 	connection, err := amqp.Dial(config.Config("RABBIT_BROKER_URL"))
 	if err != nil {
-		panic(err)
+		fmt.Printf("connectin to %v failed due to : %v\n", config.Config("RABBIT_BROKER_URL"), err)
 	}
 
-	// creating a channel to create a qeue
+	// creating a channel to create a queue
 	// instance over the connection we have already
 	// established.
 	channel, err := connection.Channel()
 	if err != nil {
-		panic(err)
+		fmt.Printf("connectin to channel failed due to : %v\n", err)
 	}
 	// With the instance and declare Queues that we can
 	// publish and subscribe to.
@@ -34,7 +36,8 @@ func BrokerConnect() (*amqp.Connection, *amqp.Channel) {
 		nil,         // arguments
 	)
 	if err != nil {
-		panic(err)
+		fmt.Printf("creating queue to %v failed due to : %v\n", config.Config("RABBIT_BROKER_URL"), err)
+
 	}
 	return connection, channel
 

@@ -8,7 +8,7 @@ COPY docs /playground/
 
 COPY main /playground/
 
-COPY goBlue.db /playground/
+COPY goBluev2.db /playground/
 
 COPY .env /playground/
 

@@ -2,6 +2,7 @@ package responses
 
 // https://morkid.github.io/paginate/
 import (
+	"database/sql"
 	"net/http"
 	"strconv"
 
@@ -19,6 +20,7 @@ type RoleGet struct {
 	Name        string `validate:"required" json:"name"`
 	Active      bool   `validate:"required" json:"active"`
 	Description string `validate:"required" json:"description"`
+	AppID       uint   `json:"app_id"`
 	// Users       []UserGet    `json:"users,omitempty"`
 	Features []FeatureGet `json:"features,omitempty"`
 }
@@ -38,6 +40,7 @@ type EndpiontsRoles struct {
 // @Description Contains id name and description
 type RolePost struct {
 	Name        string `json:"name" example:"superuser"`
+	AppID       string `json:"app_id" example:"1" `
 	Description string `json:"description" example:"Devloper Mode Acecss"`
 }
 
@@ -111,6 +114,7 @@ func GetRolesID(contx *fiber.Ctx) error {
 		})
 	}
 	mapstructure.Decode(roles, &roles_get)
+	roles_get.AppID = uint(roles.AppID.Int64)
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success got one role.",
@@ -169,17 +173,17 @@ func GetRoleEndpointsID(contx *fiber.Ctx) error {
 			Data:    "nil",
 		})
 	}
-	role_ends := roles.Features
-
-	for x := range role_ends {
-		if len(role_ends[x].Endpoints) > 1 {
-			for i := range role_ends[x].Endpoints {
-				resp_endpoint := EndpiontsRoles{ID: role_ends[x].Endpoints[i].ID, Name: role_ends[x].Endpoints[i].Name}
-
+	// role_ends := roles.Features
+	// // fmt.Println(roles.Features)
+	for x := range roles.Features {
+		if len(roles.Features[x].Endpoints) > 0 {
+			for i := range roles.Features[x].Endpoints {
+				resp_endpoint := EndpiontsRoles{ID: roles.Features[x].Endpoints[i].ID, Name: roles.Features[x].Endpoints[i].Name}
 				endpoints = append(endpoints, resp_endpoint)
 			}
 		}
 	}
+	// fmt.Println(endpoints)
 
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
@@ -224,13 +228,15 @@ func PostRoles(contx *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
+	app_id, _ := strconv.Atoi(posted_role.AppID)
 	role := new(models.Role)
 	role.Name = posted_role.Name
 	role.Description = posted_role.Description
+	role.AppID = sql.NullInt64{Int64: int64(app_id), Valid: true}
+
 	tx := db.Begin()
 	// add  data using transaction if values are valid
-	// if err := tx.Create(&role).Error; err != nil {
-	if err := tx.Model(&role).Create(&role).Error; err != nil {
+	if err := tx.Create(&role).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusInternalServerError).JSON(common.ResponseHTTP{
 			Success: false,
@@ -293,8 +299,9 @@ func PatchRoles(contx *fiber.Ctx) error {
 	}
 	// startng update transaction
 	role := new(models.Role)
+	role.ID = uint(id)
 	tx := db.Begin()
-	if err := db.Model(&role).Where("id = ?", id).First(&role).UpdateColumns(*patch_role).Error; err != nil {
+	if err := db.Model(&role).UpdateColumns(*patch_role).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,
@@ -339,8 +346,9 @@ func ActivateDeactivateRoles(contx *fiber.Ctx) error {
 	active := contx.QueryBool("active")
 	// startng update transaction
 	var role models.Role
+	role.ID = uint(id)
 	tx := db.Begin()
-	if err := db.Model(&models.Role{}).Where("id = ?", id).First(&role).Update("active", active).Error; err != nil {
+	if err := db.Model(&role).Update("active", active).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,
@@ -400,5 +408,68 @@ func DeleteRoles(contx *fiber.Ctx) error {
 		Success: true,
 		Message: "Success Delete a role.",
 		Data:    role,
+	})
+}
+
+// Add Role App
+// @Summary Add Role to App
+// @Description Add Role to App
+// @Tags Role
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param role_id path int true "Role ID"
+// @Param app_id query int true "App ID"
+// @Failure 400 {object} common.ResponseHTTP{}
+// @Router /approle/{role_id} [patch]
+func UpdateRoleApp(contx *fiber.Ctx) error {
+	db := database.ReturnSession()
+
+	// validate path params
+	role_id, err := strconv.Atoi(contx.Params("role_id"))
+	if err != nil {
+		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+	// fetching role to be added
+	var role models.Role
+	if res := db.Model(&models.Role{}).Where("id = ?", role_id).First(&role); res.Error != nil {
+		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: res.Error.Error(),
+			Data:    nil,
+		})
+	}
+	// startng update transaction
+	app_id := contx.QueryInt("app_id")
+	var app models.App
+	if res := db.Model(&models.App{}).Where("id = ?", app_id).First(&app); res.Error != nil {
+		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: res.Error.Error(),
+			Data:    nil,
+		})
+	}
+
+	tx := db.Begin()
+	//  Adding one to many Relation
+	if err := db.Model(&app).Association("Roles").Append(&role); err != nil {
+		tx.Rollback()
+		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: "Error Adding Record",
+			Data:    err.Error(),
+		})
+	}
+	tx.Commit()
+
+	// return value if transaction is sucessfull
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
+		Success: true,
+		Message: "Success Adding a Role to App.",
+		Data:    &app,
 	})
 }

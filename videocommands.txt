@@ -1,0 +1,48 @@
+#bash commands to create bash and manifests
+MP4Box -dash 4000 -frag 4000 -rap -segment-name comethou come.mp4#video come.mp4#audio
+MP4Box -dash 8000 -frag 8000 -rap -segment-name cometnew come.mp4#video come.mp4#audio
+
+#
+https://popsql.com/learn-sql/postgresql/how-to-query-a-json-column-in-postgresql
+
+
+
+#If video in hvace format to adjust video
+
+x264 --output comethou.264 --fps 29.97 --preset slow --bitrate 987 --vbv-maxrate 1122 --vbv-bufsize 2244 --min-keyint 48 --keyint 48 --scenecut 0 --no-scenecut --pass 1 --video-filter "resize:width=1280,height=720" come.mp4
+
+
+#snap install go
+sudo snap install go --channel=1.16/stable --classic
+
+
+# export container IP as follows for container in container image filter
+
+export CONTAINER_IP=$(hostname -I | awk '{print $1}')
+
+
+// go test -v ./tests/... # this is the test command
+// gedit ~/.bashrc
+// export PATH=$PATH:$(go env GOPATH)/bin
+// docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.12-management
+// docker run -d -it --rm --name runrabbit -p 5672:5672 -p 15672:15672 bluerabbit
+// docker run -it --rm --name runrabbit -p7000:7000 -p9000:9000 -p15433:15433 -p5433:5433 -p9042:9042 -v ~/yb_data:/home/bushu/Documents/goland/goblue-back/go_bluev3 blueyugabyte
+// docker run -p 5432:5432 bluegres
+// docker run --name bluepg -p 82:80 -e PGADMIN_DEFAULT_EMAIL=blue@yahoo.com -e PGADMIN_DEFAULT_PASSWORD=pass123 -d dpage/pgadmin4
+
+// export PATH=$(go env GOPATH)/bin
+// export GOPATH=$(go env GOPATH)/bin
+// export GOMODCACHE=$(go env GOCACHE)
+
+
+// protoc --go_out=. --go_opt=paths=source_relative     --go-grpc_out=. --go-grpc_opt=paths=source_relative     bluerpc.proto
+//  this is the one that is working
+// protoc --go_out=. --go_opt=paths=source_relative     --go-grpc_out=. --go-grpc_opt=paths=source_relative    bluerpc/bluerpc.proto
+
+db.DryRun = true
+db.Find(&model)
+db.Statement.SQL.String()
+db.DryRun = false
+
+// PG dump command sample
+pg_dump -h 192.168.49.2 -p 30432 -U blueuser -d bluev5 --format plain --verbose --file bluev5dump.sql

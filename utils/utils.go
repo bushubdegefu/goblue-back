@@ -1,35 +1,23 @@
 package utils
 
 import (
-	"crypto/rand"
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+
 	"semay.com/config"
 )
 
-var key = config.Config("TOKEN_SALT")
+// var key = config.Config("TOKEN_SALT")
 
 type UserClaim struct {
 	jwt.RegisteredClaims
 	Email string   `json:"email"`
 	Roles []string `json:"roles"`
 	UUID  string   `json:"uuid"`
-}
-
-// Generate 16 bytes randomly
-func GenerateSalt(saltSize int) []byte {
-	var salt = make([]byte, saltSize)
-	_, err := rand.Read(salt[:])
-
-	if err != nil {
-		panic(err)
-	}
-
-	return salt
 }
 
 // Combine password and salt then hash them using the SHA-512
@@ -60,7 +48,6 @@ func HashFunc(password string) string {
 func PasswordsMatch(hashedPassword, currPassword string) bool {
 
 	var currPasswordHash = HashFunc(currPassword)
-
 	return hashedPassword == currPasswordHash
 }
 
@@ -74,13 +61,14 @@ func CreateJWTToken(email string, uuid string, roles []string, duration int) (st
 		UUID:             uuid,
 	}
 
-	exp := time.Now().Add(time.Duration(duration) * time.Minute)
+	salt_a, _ := GetJWTSalt()
+	exp := time.Now().UTC().Add(time.Duration(duration) * time.Minute)
 	my_claim.ExpiresAt = jwt.NewNumericDate(exp)
 	my_claim.Issuer = "Blue Admin"
 	my_claim.Subject = "UI Authentication Token"
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, my_claim)
 
-	signedString, err := token.SignedString([]byte(key))
+	signedString, err := token.SignedString([]byte(salt_a))
 
 	if err != nil {
 		return "", fmt.Errorf("error creating signed string: %v", err)
@@ -90,19 +78,42 @@ func CreateJWTToken(email string, uuid string, roles []string, duration int) (st
 }
 
 func ParseJWTToken(jwtToken string) (map[string]interface{}, error) {
+	salt_a, salt_b := GetJWTSalt()
+	response_a := jwt.MapClaims{}
+	response_b := jwt.MapClaims{}
 
-	response_claim := jwt.MapClaims{}
-	token, err := jwt.ParseWithClaims(jwtToken, response_claim, func(token *jwt.Token) (interface{}, error) {
-		return []byte(key), nil
+	token_a, aerr := jwt.ParseWithClaims(jwtToken, response_a, func(token *jwt.Token) (interface{}, error) {
+		return []byte(salt_a), nil
 	})
-	if err != nil {
-		return nil, err
+
+	token_b, berr := jwt.ParseWithClaims(jwtToken, response_b, func(token *jwt.Token) (interface{}, error) {
+		return []byte(salt_b), nil
+	})
+
+	if aerr != nil && berr != nil {
+		return nil, aerr
 	}
 
 	// check token validity, for example token might have been expired
-	if !token.Valid {
-		return nil, fmt.Errorf("invalid token")
+	if !token_a.Valid {
+		if !token_b.Valid {
+			return nil, fmt.Errorf("invalid token")
+		}
+		return response_b, nil
 	}
-	return response_claim, nil
+	return response_a, nil
 
+}
+
+// Return Unique values in list
+func UniqueSlice(slice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range slice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }

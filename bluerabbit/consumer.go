@@ -22,7 +22,7 @@ func BlueConsumer() {
 	// opening a channel over the connection established to interact with RabbitMQ
 	channel, err := connection.Channel()
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
 	// declaring consumer with its properties over channel opened
@@ -36,12 +36,13 @@ func BlueConsumer() {
 		nil,         //args
 	)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
 	// process received messages based on their types
 	// for update
 	forever := make(chan bool)
+	//  go routine with infinite loop to consume tasks set on rabbit mq
 	go func() {
 		for msg := range msgs {
 			switch msg.Type {

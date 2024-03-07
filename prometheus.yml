@@ -1,16 +1,10 @@
-# my global config
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
     monitor: "gobluefiber"
-
 rule_files:
-
 scrape_configs:
   - job_name: "gobluefiber"
-    dns_sd_configs:
-      - names:
-          - goblue   
-        type: A
-        port: 5500
+    static_configs:
+    - targets: ['blue-admin:5500']

@@ -46,7 +46,8 @@ func AddPageRoles(contx *fiber.Ctx) error {
 
 	// fetching role to be added
 	var role models.Role
-	if res := db.Model(&models.Role{}).Where("id = ?", role_id).First(&role); res.Error != nil {
+	role.ID = uint(role_id)
+	if res := db.Find(&role); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: res.Error.Error(),
@@ -56,7 +57,8 @@ func AddPageRoles(contx *fiber.Ctx) error {
 
 	//  appending assocation
 	var page models.Page
-	if err := db.Model(&models.Page{}).Where("id = ?", page_id).First(&page); err.Error != nil {
+	page.ID = uint(page_id)
+	if err := db.Find(&page); err.Error != nil {
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: "Record not Found",
@@ -118,7 +120,8 @@ func DeletePageRoles(contx *fiber.Ctx) error {
 	}
 	// fetching role to be deleted
 	var role models.Role
-	if res := db.Model(&models.Role{}).Where("id = ?", role_id).First(&role); res.Error != nil {
+	role.ID = uint(role_id)
+	if res := db.Find(&role); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: res.Error.Error(),
@@ -128,7 +131,8 @@ func DeletePageRoles(contx *fiber.Ctx) error {
 
 	// fettchng page
 	var page models.Page
-	if err := db.Model(&models.Page{}).Where("id = ?", page_id).First(&page); err.Error != nil {
+	page.ID = uint(page_id)
+	if err := db.Find(&page); err.Error != nil {
 		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: "Record not Found",

@@ -21,18 +21,17 @@ type EmailMessage struct {
 // @Summary Send Email to
 // @Description Sending Email
 // @Tags Utilities
+// @Security ApiKeyAuth
 // @Accept json
 // @Produce json
 // @Param User body EmailMessage true "messages"
 // @Success 200 {object} common.ResponseHTTP{data=EmailMessage}
 // @Failure 404 {object} common.ResponseHTTP{}
-// @Failure 503 {object} common.ResponseHTTP{}
-// @Router /api/v1/email [post]
+// @Router /email [post]
 func SendEmail(contx *fiber.Ctx) error {
 	validate := validator.New()
 	//   connection and channels from rabbitmq
 	connection, channel := bluerabbit.BrokerConnect()
-
 	defer connection.Close()
 	defer channel.Close()
 	//validating post data
