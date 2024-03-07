@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"os/signal"
 	"regexp"
 	"strconv"
@@ -29,6 +28,7 @@ import (
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/admin/responses"
+	"semay.com/bluerabbit"
 	"semay.com/common"
 	"semay.com/config"
 	_ "semay.com/docs"
@@ -171,26 +171,26 @@ func run() {
 		log.Fatal(app.Listen(":" + port_1))
 	}(app)
 
-	// go func(app *fiber.App) {
-	// 	log.Fatal(app.Listen(":" + port_2))
-
-	// }(app)
+	// running background consumer
+	go func() {
+		bluerabbit.BlueConsumer()
+	}()
 
 	// // Add a task to move to Logs Directory Every Interval, Interval to Be Provided From Configuration File
 	if _, err := scheduler.Add(&tasks.Task{
 		Interval: time.Duration(1 * time.Hour),
 		TaskFunc: func() error {
-			currentTime := time.Now()
-			FileName := fmt.Sprintf("%v-%v-%v-%v-%v", currentTime.Year(), currentTime.Month(), currentTime.Day(), currentTime.Hour(), currentTime.Minute())
-			Command := fmt.Sprintf("cp goblue.log logs/blue-%v.log", FileName)
-			Command2 := fmt.Sprintf("cp gormblue.log logs/gorm-%v.log", FileName)
-			if _, err := exec.Command("bash", "-c", Command).Output(); err != nil {
-				fmt.Printf("error: %v\n", err)
-			}
+			// currentTime := time.Now()
+			// FileName := fmt.Sprintf("%v-%v-%v-%v-%v", currentTime.Year(), currentTime.Month(), currentTime.Day(), currentTime.Hour(), currentTime.Minute())
+			// Command := fmt.Sprintf("cp goblue.log logs/blue-%v.log", FileName)
+			// Command2 := fmt.Sprintf("cp gormblue.log logs/gorm-%v.log", FileName)
+			// if _, err := exec.Command("bash", "-c", Command).Output(); err != nil {
+			// 	fmt.Printf("error: %v\n", err)
+			// }
 
-			if _, err := exec.Command("bash", "-c", Command2).Output(); err != nil {
-				fmt.Printf("error: %v\n", err)
-			}
+			// if _, err := exec.Command("bash", "-c", Command2).Output(); err != nil {
+			// 	fmt.Printf("error: %v\n", err)
+			// }
 			log_file.Truncate(0)
 			gormLoggeFile.Truncate(0)
 			return nil

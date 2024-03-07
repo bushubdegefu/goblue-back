@@ -3,7 +3,6 @@ ssl.cert
 .env
 .space/
 server
-main
 goblue.log
 trash.txt
 trash.json
