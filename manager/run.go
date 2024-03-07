@@ -162,6 +162,10 @@ func run() {
 		}
 	}
 
+	// running background consumer
+	go func() {
+		bluerabbit.BlueConsumer()
+	}()
 	// recording available route name ends here
 	port_1 := config.Config("PORT")
 	// port_2 := config.Config("PORT_2")
@@ -170,11 +174,6 @@ func run() {
 	go func(app *fiber.App) {
 		log.Fatal(app.Listen(":" + port_1))
 	}(app)
-
-	// running background consumer
-	go func() {
-		bluerabbit.BlueConsumer()
-	}()
 
 	// // Add a task to move to Logs Directory Every Interval, Interval to Be Provided From Configuration File
 	if _, err := scheduler.Add(&tasks.Task{

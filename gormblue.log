@@ -5731,3 +5731,552 @@
 
 2024/03/07 09:45:24 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
 [0m[33m[351.262ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_endpoint_patch','/api/v1/feature_endpoint/:endpoint_id','PATCH','feature_endpoint-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:31 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/utils/dynamic_salt.go:41
+[0m[33m[306.283ms] [34;1m[rows:1][0m SELECT * FROM "jwt_salts" WHERE id = 1 ORDER BY "jwt_salts"."id" LIMIT 1
+
+2024/03/07 14:08:34 logger.go:173: [32m/home/bushu/Documents/goland/goblue-back/utils/dynamic_salt.go:50 [33mSLOW SQL >= 1s
+[0m[31;1m[2354.123ms] [33m[rows:1][35m UPDATE "jwt_salts" SET "salt_a"='HrAPhJgVAROuxmK',"salt_b"='xSKpbVM6vaU3tdY' WHERE "id" = 1[0m
+
+2024/03/07 14:08:37 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[286.440ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('swagger_routes_get','/docs/*','GET','swagger_routes-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:38 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[310.356ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('custom_metrics_route_get','/lmetrics','GET','custom_metrics_route-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:41 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.447ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('check_login_get','/api/v1/checklogin','GET','check_login-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:42 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.182ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_get','/api/v1/roles','GET','roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:43 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.529ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_single_get','/api/v1/roles/:id','GET','roles_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:47 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[518.613ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_roles_get','/api/v1/droproles','GET','drop_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:49 logger.go:173: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156 [33mSLOW SQL >= 1s
+[0m[31;1m[1249.636ms] [33m[rows:0][35m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_endpoints_get','/api/v1/role_endpoints','GET','roles_endpoints-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"[0m
+
+2024/03/07 14:08:52 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[295.574ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_get','/api/v1/features','GET','features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:53 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[286.235ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_single_get','/api/v1/features/:id','GET','features_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:54 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[308.229ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_features_get','/api/v1/featuredrop','GET','drop_features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:08:58 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[598.864ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_get','/api/v1/apps','GET','apps-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:00 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[512.425ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_single_get','/api/v1/apps/:id','GET','apps_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:04 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[459.816ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_sppd_get','/api/v1/appsdrop','GET','drop_sppd-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:06 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[458.315ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_features_get','/api/v1/appsmatrix/:id','GET','apps_features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:08 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.928ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('users_get','/api/v1/users','GET','users-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:09 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.775ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_single_get','/api/v1/users/:id','GET','user_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:10 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[290.027ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('get_user_roles_get','/api/v1/userrole/:user_id','GET','get_user_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:13 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.100ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('pages_get','/api/v1/pages','GET','pages-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:14 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.852ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_single_get','/api/v1/pages/:id','GET','page_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:15 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[305.586ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('get_page_roles_get','/api/v1/pagesroles/:page_id','GET','get_page_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:20 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[512.672ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_get','/api/v1/endpoints','GET','end_point-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:21 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[512.861ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_single_get','/api/v1/endpoints/:id','GET','end_point_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:26 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[512.523ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_endpoints_get','/api/v1/endpointdrop','GET','drop_endpoints-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:28 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[512.485ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboard','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:31 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.838ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardends','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:32 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.056ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardfeat','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:33 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[305.940ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardpages','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:37 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[417.993ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardroles','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:38 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[417.626ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardrolespage','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:41 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.338ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('login_route_post','/api/v1/login','POST','login_route-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:42 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.369ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_post','/api/v1/roles','POST','roles-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:45 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[315.620ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_post','/api/v1/features','POST','features-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:46 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.988ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_post','/api/v1/apps','POST','apps-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:47 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.362ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('users_post','/api/v1/users','POST','users-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:52 logger.go:173: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156 [33mSLOW SQL >= 1s
+[0m[31;1m[1434.343ms] [33m[rows:0][35m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_role_post','/api/v1/userrole/:user_id/:role_id','POST','user_role-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"[0m
+
+2024/03/07 14:09:55 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[309.292ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('pages_post','/api/v1/pages','POST','pages-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:56 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[309.794ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_roles_post','/api/v1/pagerole/:page_id/:role_id','POST','page_roles-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:09:57 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.886ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_post','/api/v1/endpoints','POST','end_point-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:01 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[417.020ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('send_email_post','/api/v1/email','POST','send_email-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:02 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[411.013ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('blob_picture_post','/api/v1/blobpic','POST','blob_picture-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:06 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[459.710ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('blob_video_post','/api/v1/blobvideo','POST','blob_video-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:08 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[511.673ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_role_put','/api/v1/roles/:role_id','PUT','activate_deactivate_role-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:12 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.856ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_features_put','/api/v1/features/:feature_id','PUT','activate_deactivate_features-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:13 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.474ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_user_put','/api/v1/users/:user_id','PUT','activate_deactivate_user-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:15 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.001ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_single_delete','/api/v1/roles/:id','DELETE','roles_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:18 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[409.206ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_single_delete','/api/v1/features/:id','DELETE','features_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:19 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[418.359ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_role_delete','/api/v1/featuresrole/:feature_id','DELETE','feature_role-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:23 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[417.831ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_single_delete','/api/v1/apps/:id','DELETE','apps_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:24 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[458.134ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_single_delete','/api/v1/users/:id','DELETE','user_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:28 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.432ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_role_delete','/api/v1/userrole/:user_id/:role_id','DELETE','user_role-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 14:10:29 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.520ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_single_delete','/api/v1/pages/:id','DELETE','page_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:15:59 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/utils/dynamic_salt.go:41
+[0m[33m[495.646ms] [34;1m[rows:1][0m SELECT * FROM "jwt_salts" WHERE id = 1 ORDER BY "jwt_salts"."id" LIMIT 1
+
+2024/03/07 15:16:02 logger.go:173: [32m/home/bushu/Documents/goland/goblue-back/utils/dynamic_salt.go:50 [33mSLOW SQL >= 1s
+[0m[31;1m[2655.368ms] [33m[rows:1][35m UPDATE "jwt_salts" SET "salt_a"='iZXI8NGwXiQsH9M',"salt_b"='HrAPhJgVAROuxmK' WHERE "id" = 1[0m
+
+2024/03/07 15:16:07 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[623.946ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('swagger_routes_get','/docs/*','GET','swagger_routes-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:10 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[286.229ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('custom_metrics_route_get','/lmetrics','GET','custom_metrics_route-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:11 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[868.831ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('check_login_get','/api/v1/checklogin','GET','check_login-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:19 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[432.346ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_get','/api/v1/roles','GET','roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:21 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[511.678ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_single_get','/api/v1/roles/:id','GET','roles_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:24 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[291.110ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_roles_get','/api/v1/droproles','GET','drop_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:25 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.520ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_endpoints_get','/api/v1/role_endpoints','GET','roles_endpoints-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:26 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[323.235ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_get','/api/v1/features','GET','features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:29 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[409.773ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_single_get','/api/v1/features/:id','GET','features_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:30 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.240ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_features_get','/api/v1/featuredrop','GET','drop_features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:33 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[564.341ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_get','/api/v1/apps','GET','apps-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:34 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[527.005ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_single_get','/api/v1/apps/:id','GET','apps_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:37 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[517.735ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_sppd_get','/api/v1/appsdrop','GET','drop_sppd-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:39 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[528.255ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_features_get','/api/v1/appsmatrix/:id','GET','apps_features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:42 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[313.002ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('users_get','/api/v1/users','GET','users-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:43 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[402.812ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_single_get','/api/v1/users/:id','GET','user_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:46 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[308.029ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('get_user_roles_get','/api/v1/userrole/:user_id','GET','get_user_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:47 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[344.228ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('pages_get','/api/v1/pages','GET','pages-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:51 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[427.012ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_single_get','/api/v1/pages/:id','GET','page_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:51 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[310.526ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('get_page_roles_get','/api/v1/pagesroles/:page_id','GET','get_page_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:52 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.745ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_get','/api/v1/endpoints','GET','end_point-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:16:57 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[281.470ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_single_get','/api/v1/endpoints/:id','GET','end_point_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:01 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[337.136ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_endpoints_get','/api/v1/endpointdrop','GET','drop_endpoints-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:02 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[276.864ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboard','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:03 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[318.743ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardends','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:07 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[323.675ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardfeat','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:08 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[425.936ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardpages','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:11 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[408.098ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardroles','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:14 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[482.627ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardrolespage','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:18 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[336.058ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('login_route_post','/api/v1/login','POST','login_route-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:19 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.580ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_post','/api/v1/roles','POST','roles-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:22 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[301.778ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_post','/api/v1/features','POST','features-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:23 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[472.274ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_post','/api/v1/apps','POST','apps-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:24 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[328.781ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('users_post','/api/v1/users','POST','users-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:30 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[398.898ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_role_post','/api/v1/userrole/:user_id/:role_id','POST','user_role-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:35 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[419.605ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('pages_post','/api/v1/pages','POST','pages-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:36 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[600.889ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_roles_post','/api/v1/pagerole/:page_id/:role_id','POST','page_roles-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:39 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[264.510ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_post','/api/v1/endpoints','POST','end_point-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:41 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[268.768ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('send_email_post','/api/v1/email','POST','send_email-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:43 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[323.038ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('blob_picture_post','/api/v1/blobpic','POST','blob_picture-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:44 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.845ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('blob_video_post','/api/v1/blobvideo','POST','blob_video-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:45 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[324.172ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_role_put','/api/v1/roles/:role_id','PUT','activate_deactivate_role-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:48 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[291.988ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_features_put','/api/v1/features/:feature_id','PUT','activate_deactivate_features-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:49 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[309.836ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_user_put','/api/v1/users/:user_id','PUT','activate_deactivate_user-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:50 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[323.323ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_single_delete','/api/v1/roles/:id','DELETE','roles_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:55 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[507.119ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_single_delete','/api/v1/features/:id','DELETE','features_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:17:56 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[500.541ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_role_delete','/api/v1/featuresrole/:feature_id','DELETE','feature_role-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:01 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[269.209ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_single_delete','/api/v1/apps/:id','DELETE','apps_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:02 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[409.350ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_single_delete','/api/v1/users/:id','DELETE','user_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:05 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[308.327ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_role_delete','/api/v1/userrole/:user_id/:role_id','DELETE','user_role-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:06 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[529.839ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_single_delete','/api/v1/pages/:id','DELETE','page_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:12 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[409.492ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_roles_delete','/api/v1/pagerole/:page_id/:role_id','DELETE','page_roles-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:14 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[399.805ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_single_delete','/api/v1/endpoints/:id','DELETE','end_point_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:17 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[322.225ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_endpoint_delete','/api/v1/feature_endpoint/:endpoint_id','DELETE','feature_endpoint-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:18 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[394.387ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_single_patch','/api/v1/roles/:id','PATCH','roles_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:19 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[292.870ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_app_patch','/api/v1/approle/:role_id','PATCH','roles_app-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:22 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[442.226ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_single_patch','/api/v1/features/:id','PATCH','features_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:23 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[307.371ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_role_patch','/api/v1/featuresrole/:feature_id','PATCH','feature_role-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:27 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[292.492ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_single_patch','/api/v1/apps/:id','PATCH','apps_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:28 logger.go:173: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156 [33mSLOW SQL >= 1s
+[0m[31;1m[1009.060ms] [33m[rows:0][35m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_single_patch','/api/v1/users/:id','PATCH','user_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"[0m
+
+2024/03/07 15:18:33 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[619.878ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_single_patch','/api/v1/pages/:id','PATCH','page_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:35 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[619.769ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_single_patch','/api/v1/endpoints/:id','PATCH','end_point_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 15:18:40 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[486.451ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_endpoint_patch','/api/v1/feature_endpoint/:endpoint_id','PATCH','feature_endpoint-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:07:47 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/utils/dynamic_salt.go:41
+[0m[33m[278.083ms] [34;1m[rows:1][0m SELECT * FROM "jwt_salts" WHERE id = 1 ORDER BY "jwt_salts"."id" LIMIT 1
+
+2024/03/07 16:07:49 logger.go:173: [32m/home/bushu/Documents/goland/goblue-back/utils/dynamic_salt.go:50 [33mSLOW SQL >= 1s
+[0m[31;1m[2114.656ms] [33m[rows:1][35m UPDATE "jwt_salts" SET "salt_a"='zVUgdTz6NXUaJY7',"salt_b"='ASuvsiOBLeINEuw' WHERE "id" = 1[0m
+
+2024/03/07 16:07:52 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[320.012ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('swagger_routes_get','/docs/*','GET','swagger_routes-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:07:53 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[285.390ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('custom_metrics_route_get','/lmetrics','GET','custom_metrics_route-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:07:57 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[321.539ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('check_login_get','/api/v1/checklogin','GET','check_login-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:00 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[318.267ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_get','/api/v1/roles','GET','roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:03 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[282.204ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_single_get','/api/v1/roles/:id','GET','roles_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:04 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.679ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_roles_get','/api/v1/droproles','GET','drop_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:05 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[317.252ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_endpoints_get','/api/v1/role_endpoints','GET','roles_endpoints-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:08 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[327.256ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_get','/api/v1/features','GET','features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:10 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[322.291ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_single_get','/api/v1/features/:id','GET','features_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:13 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[323.916ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_features_get','/api/v1/featuredrop','GET','drop_features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:14 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[323.149ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_get','/api/v1/apps','GET','apps-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:15 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[321.953ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_single_get','/api/v1/apps/:id','GET','apps_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:18 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[281.155ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_sppd_get','/api/v1/appsdrop','GET','drop_sppd-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:21 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[357.959ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_features_get','/api/v1/appsmatrix/:id','GET','apps_features-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:25 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[363.790ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('users_get','/api/v1/users','GET','users-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:28 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[285.920ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_single_get','/api/v1/users/:id','GET','user_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:29 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.361ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('get_user_roles_get','/api/v1/userrole/:user_id','GET','get_user_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:30 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.091ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('pages_get','/api/v1/pages','GET','pages-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:33 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[317.765ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_single_get','/api/v1/pages/:id','GET','page_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:34 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[318.239ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('get_page_roles_get','/api/v1/pagesroles/:page_id','GET','get_page_roles-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:35 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.860ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_get','/api/v1/endpoints','GET','end_point-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:37 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[320.437ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_single_get','/api/v1/endpoints/:id','GET','end_point_single-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:38 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[312.974ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('drop_endpoints_get','/api/v1/endpointdrop','GET','drop_endpoints-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:41 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[320.229ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboard','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:46 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[361.007ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardends','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:48 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[282.296ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardfeat','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:49 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[309.891ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardpages','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:50 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[289.419ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardroles','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:53 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[357.084ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('dashboard_get','/api/v1/dashboardrolespage','GET','dashboard-GET',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:08:56 logger.go:173: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156 [33mSLOW SQL >= 1s
+[0m[31;1m[2556.859ms] [33m[rows:0][35m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('login_route_post','/api/v1/login','POST','login_route-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"[0m
+
+2024/03/07 16:08:59 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[321.148ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_post','/api/v1/roles','POST','roles-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:03 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.723ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_post','/api/v1/features','POST','features-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:04 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[285.717ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_post','/api/v1/apps','POST','apps-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:05 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.750ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('users_post','/api/v1/users','POST','users-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:08 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.058ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_role_post','/api/v1/userrole/:user_id/:role_id','POST','user_role-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:09 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[316.944ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('pages_post','/api/v1/pages','POST','pages-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:10 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[294.736ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_roles_post','/api/v1/pagerole/:page_id/:role_id','POST','page_roles-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:12 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[281.210ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_post','/api/v1/endpoints','POST','end_point-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:13 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[314.166ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('send_email_post','/api/v1/email','POST','send_email-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:14 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[323.521ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('blob_picture_post','/api/v1/blobpic','POST','blob_picture-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:17 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[294.557ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('blob_video_post','/api/v1/blobvideo','POST','blob_video-POST',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:18 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.937ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_role_put','/api/v1/roles/:role_id','PUT','activate_deactivate_role-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:19 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[294.100ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_features_put','/api/v1/features/:feature_id','PUT','activate_deactivate_features-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:21 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[282.412ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('activate_deactivate_user_put','/api/v1/users/:user_id','PUT','activate_deactivate_user-PUT',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:22 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[311.553ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_single_delete','/api/v1/roles/:id','DELETE','roles_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:23 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[288.190ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_single_delete','/api/v1/features/:id','DELETE','features_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:26 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.440ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_role_delete','/api/v1/featuresrole/:feature_id','DELETE','feature_role-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:27 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.807ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_single_delete','/api/v1/apps/:id','DELETE','apps_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:28 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[339.001ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_single_delete','/api/v1/users/:id','DELETE','user_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:31 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[312.656ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_role_delete','/api/v1/userrole/:user_id/:role_id','DELETE','user_role-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:32 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[359.561ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_single_delete','/api/v1/pages/:id','DELETE','page_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:33 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[303.920ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_roles_delete','/api/v1/pagerole/:page_id/:role_id','DELETE','page_roles-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:35 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[306.697ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_single_delete','/api/v1/endpoints/:id','DELETE','end_point_single-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:36 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[330.039ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_endpoint_delete','/api/v1/feature_endpoint/:endpoint_id','DELETE','feature_endpoint-DELETE',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:37 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[311.120ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_single_patch','/api/v1/roles/:id','PATCH','roles_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:40 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[319.895ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('roles_app_patch','/api/v1/approle/:role_id','PATCH','roles_app-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:41 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[293.916ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('features_single_patch','/api/v1/features/:id','PATCH','features_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:42 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[301.015ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_role_patch','/api/v1/featuresrole/:feature_id','PATCH','feature_role-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:44 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[287.024ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('apps_single_patch','/api/v1/apps/:id','PATCH','apps_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:45 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[322.736ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('user_single_patch','/api/v1/users/:id','PATCH','user_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:46 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[321.055ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('page_single_patch','/api/v1/pages/:id','PATCH','page_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:49 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[290.220ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('end_point_single_patch','/api/v1/endpoints/:id','PATCH','end_point_single-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/03/07 16:09:50 logger.go:180: [32m/home/bushu/Documents/goland/goblue-back/manager/run.go:156
+[0m[33m[286.892ms] [34;1m[rows:0][0m INSERT INTO "end_points" ("name","route_paths","method","description","feature_id") VALUES ('feature_endpoint_patch','/api/v1/feature_endpoint/:endpoint_id','PATCH','feature_endpoint-PATCH',NULL) ON CONFLICT DO NOTHING RETURNING "id"
