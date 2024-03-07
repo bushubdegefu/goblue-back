@@ -28,5 +28,4 @@ RUN chmod +x main
 
 RUN ./main run >> applog.log &
 
-
 RUN newman run blue_test.json -e test_env.json -r junit --reporter-junit-export result.xml
