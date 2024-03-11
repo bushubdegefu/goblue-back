@@ -84,7 +84,7 @@ func SendEmail(contx *fiber.Ctx) error {
 
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
-		Message: "Success get all Users.",
+		Message: "Success Sent Emails.",
 		Data:    posted_message,
 	})
 
