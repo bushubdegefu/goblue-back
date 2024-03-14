@@ -365,6 +365,8 @@ func AddEndpointFeature(contx *fiber.Ctx) error {
 		})
 	}
 	tx.Commit()
+	// Update Endpoint JSON
+	models.GetAppFeatures("48015a9b-5a86-4a15-944b-94108aa78b4b")
 
 	// return value if transaction is sucessfull
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
@@ -431,6 +433,8 @@ func DeleteEndpointFeature(contx *fiber.Ctx) error {
 	}
 	tx.Commit()
 
+	// Update Endpoint JSON
+	models.GetAppFeatures("48015a9b-5a86-4a15-944b-94108aa78b4b")
 	// return value if transaction is sucessfull
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,

@@ -13,6 +13,7 @@ import (
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/common"
+	"semay.com/utils"
 )
 
 type UserGet struct {
@@ -35,7 +36,8 @@ type UserPatch struct {
 }
 
 type UserPassword struct {
-	Password string `validate:"required"`
+	Email    string `validate:"required" json:"email" example:"someone@domain.com"`
+	Password string `validate:"required" json:"password"`
 }
 
 // GetUsers is a function to get a Users by ID
@@ -197,7 +199,6 @@ func PostUsers(contx *fiber.Ctx) error {
 	User.Password = posted_User.Password
 	tx := db.Begin()
 	// add  data using transaction if values are valid
-	// if err := tx.Create(&User).Error; err != nil {
 	if err := tx.Create(&User).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusInternalServerError).JSON(common.ResponseHTTP{
@@ -338,6 +339,90 @@ func ActivateDeactivateUser(contx *fiber.Ctx) error {
 	})
 }
 
+// Update User Password Details
+// @Summary Put User
+// @Description Put User
+// @Tags Users
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param user body UserPassword true "Password User"
+// @Param reset query bool true "Reset Password"
+// @Success 200 {object} common.ResponseHTTP{data=UserGet}
+// @Failure 400 {object} common.ResponseHTTP{}
+// @Router /users 	[put]
+func ChangePassword(contx *fiber.Ctx) error {
+	db := database.ReturnSession()
+	validate := validator.New()
+	// get query parms
+	reset_password := contx.QueryBool("reset")
+
+	// first parsing
+	patch_User := new(UserPassword)
+	if err := contx.BodyParser(&patch_User); err != nil {
+		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+	// then validating
+	if err := validate.Struct(patch_User); err != nil {
+		return contx.Status(http.StatusBadRequest).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+
+	// startng update transaction
+	var user_q models.User
+	if err := db.Model(&user_q).Where("email =?", patch_User.Email).Find(&user_q).Error; err != nil {
+
+		return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+			Success: false,
+			Message: "Record not Found",
+			Data:    err,
+		})
+	}
+
+	var user UserGet
+
+	if !reset_password {
+		tx := db.Begin()
+		patch_User.Password = utils.HashFunc(patch_User.Password)
+		if err := db.Model(&user_q).UpdateColumns(*patch_User).Error; err != nil {
+			tx.Rollback()
+			return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+				Success: false,
+				Message: "Record not Found",
+				Data:    err,
+			})
+		}
+		tx.Commit()
+	} else {
+		tx := db.Begin()
+		patch_User.Password = utils.HashFunc("default@123")
+		if err := db.Model(&user_q).UpdateColumns(*patch_User).Error; err != nil {
+			tx.Rollback()
+			return contx.Status(http.StatusNotFound).JSON(common.ResponseHTTP{
+				Success: false,
+				Message: "Record not Found",
+				Data:    err,
+			})
+		}
+		tx.Commit()
+	}
+
+	mapstructure.Decode(user_q, &user)
+	// return value if transaction is sucessfull
+	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
+		Success: true,
+		Message: "Success Updating a Password.",
+		Data:    user,
+	})
+}
+
 // DeleteUsers function removes a User by ID
 // @Summary Remove User by ID
 // @Description Remove User by ID
@@ -351,7 +436,7 @@ func ActivateDeactivateUser(contx *fiber.Ctx) error {
 // @Router /users/{id} [delete]
 func DeleteUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
-	var User models.User
+	var user models.User
 	// validate path params
 	id, err := strconv.Atoi(contx.Params("id"))
 	if err != nil {
@@ -363,7 +448,7 @@ func DeleteUsers(contx *fiber.Ctx) error {
 	}
 	// perform delete operation if the object exists
 	tx := db.Begin()
-	if err := db.Where("id = ?", id).First(&User).Error; err != nil {
+	if err := db.Where("id = ?", id).First(&user).Error; err != nil {
 		tx.Rollback()
 		return contx.Status(http.StatusInternalServerError).JSON(common.ResponseHTTP{
 			Success: false,
@@ -371,12 +456,19 @@ func DeleteUsers(contx *fiber.Ctx) error {
 			Data:    err,
 		})
 	}
-	db.Delete(&User)
+	if user.Email == "superuser@mail.com" || user.Email == "standarduser@mail.com" || user.Email == "adminuser@mail.com" {
+		return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
+			Success: true,
+			Message: "You are not allowed to Delete this specific User.",
+			Data:    user,
+		})
+	}
+	db.Delete(&user)
 	tx.Commit()
 	// return value if transaction is sucessfull
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,
 		Message: "Success Delete a User.",
-		Data:    User,
+		Data:    user,
 	})
 }

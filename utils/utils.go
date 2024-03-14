@@ -67,9 +67,7 @@ func CreateJWTToken(email string, uuid string, roles []string, duration int) (st
 	my_claim.Issuer = "Blue Admin"
 	my_claim.Subject = "UI Authentication Token"
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, my_claim)
-
 	signedString, err := token.SignedString([]byte(salt_a))
-
 	if err != nil {
 		return "", fmt.Errorf("error creating signed string: %v", err)
 	}
@@ -77,27 +75,26 @@ func CreateJWTToken(email string, uuid string, roles []string, duration int) (st
 	return signedString, nil
 }
 
-func ParseJWTToken(jwtToken string) (map[string]interface{}, error) {
+func ParseJWTToken(jwtToken string) (UserClaim, error) {
 	salt_a, salt_b := GetJWTSalt()
-	response_a := jwt.MapClaims{}
-	response_b := jwt.MapClaims{}
+	response_a := UserClaim{}
+	response_b := UserClaim{}
 
-	token_a, aerr := jwt.ParseWithClaims(jwtToken, response_a, func(token *jwt.Token) (interface{}, error) {
+	token_a, aerr := jwt.ParseWithClaims(jwtToken, &response_a, func(token *jwt.Token) (interface{}, error) {
 		return []byte(salt_a), nil
 	})
-
-	token_b, berr := jwt.ParseWithClaims(jwtToken, response_b, func(token *jwt.Token) (interface{}, error) {
+	token_b, berr := jwt.ParseWithClaims(jwtToken, &response_b, func(token *jwt.Token) (interface{}, error) {
 		return []byte(salt_b), nil
 	})
 
 	if aerr != nil && berr != nil {
-		return nil, aerr
+		return UserClaim{}, aerr
 	}
 
 	// check token validity, for example token might have been expired
 	if !token_a.Valid {
 		if !token_b.Valid {
-			return nil, fmt.Errorf("invalid token")
+			return UserClaim{}, fmt.Errorf("invalid token with second salt")
 		}
 		return response_b, nil
 	}
@@ -116,4 +113,14 @@ func UniqueSlice(slice []string) []string {
 		}
 	}
 	return list
+}
+
+// Return Unique values in list
+func CheckValueExistsInSlice(slice []string, role_test string) bool {
+	for _, role := range slice {
+		if role == role_test || role == "superuser" {
+			return true
+		}
+	}
+	return false
 }

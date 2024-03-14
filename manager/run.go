@@ -28,7 +28,6 @@ import (
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/admin/responses"
-	"semay.com/bluerabbit"
 	"semay.com/common"
 	"semay.com/config"
 	_ "semay.com/docs"
@@ -55,63 +54,6 @@ var (
 	}
 )
 
-// API validation Key function to be run on middleware
-// checks if token roles have required privilge to access the requested route
-// func validateAPIKey(contx *fiber.Ctx, key string) (bool, error) {
-// 	// Getting database session for app
-// 	db := database.ReturnSession()
-
-// 	// getting the name of the next function
-// this is
-// if stop_flag == 0 {
-// 	stop_flag = 2
-// 	contx.Next()
-// 	route_name = contx.Route().Name
-// 	contx.RestartRouting()
-
-// }
-
-// fmt.Println(stop_flag)
-// fmt.Println(route_name)
-// 	//  Getting list of roles required for the path
-// 	roles := make([]string, 0, 20)
-// 	var roles_fetch []models.Role
-// 	var route models.EndPoints
-// 	if res := db.Model(&models.EndPoints{}).Where("Name = ?", route_name).Find(&route); res.Error != nil {
-// 		return false, contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
-// 			Success: false,
-// 			Message: "Token role fetching: " + res.Error.Error(),
-// 			Data:    nil,
-// 		})
-// 	}
-// 	db.Model(&route).Association("Roles").Find(&roles_fetch)
-// 	for _, value := range roles_fetch {
-// 		roles = append(roles, string(value.Name))
-// 	}
-// 	// parsing token
-// 	token_roles, err := utils.ParseJWTToken(key)
-// 	// validating token role against route
-// 	tok_roles, _ := json.Marshal(token_roles)
-// 	var tok_rol utils.UserClaim
-// 	json.Unmarshal(tok_roles, &tok_rol)
-// 	flag := true
-// 	for _, route_priv := range roles {
-// 		for _, tok_value := range tok_rol.Roles {
-// 			if route_priv == tok_value {
-// 				flag = true
-// 				goto Exit // breaking out of loop if condition meet the requirement
-// 			}
-// 		}
-// 	}
-// 	// validating if value exists in available roles
-// Exit:
-// 	if err != nil {
-// 		return flag, err
-// 	}
-// 	return flag, nil
-// 	return true, nil
-// }
-
 // this is path filter which wavies token requirement for provided paths
 func authFilter(c *fiber.Ctx) bool {
 	originalURL := strings.ToLower(c.OriginalURL())
@@ -131,7 +73,22 @@ func NextFunc(contx *fiber.Ctx) error {
 
 func NextRoute(contx *fiber.Ctx, key string) (bool, error) {
 	contx.Next()
-	return true, nil
+	route_name := contx.Route().Name + "_" + strings.ToLower(contx.Route().Method)
+	if key == "anonymous" && models.Endpoints_JSON[route_name] == "Anonymous" {
+		return true, nil
+	}
+	//  first validating the token
+	claims, err := utils.ParseJWTToken(key)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// check if the token have the desired role for the route
+	role_test := utils.CheckValueExistsInSlice(claims.Roles, models.Endpoints_JSON[route_name])
+	if role_test {
+		return true, nil
+	}
+	return false, nil
 }
 
 func run() {
@@ -163,9 +120,9 @@ func run() {
 	}
 
 	// running background consumer
-	go func() {
-		bluerabbit.BlueConsumer()
-	}()
+	// go func() {
+	// 	bluerabbit.BlueConsumer()
+	// }()
 	// recording available route name ends here
 	port_1 := config.Config("PORT")
 	// port_2 := config.Config("PORT_2")
@@ -202,7 +159,7 @@ func run() {
 	//  Salt Timer Tasks
 	clear_run, _ := strconv.Atoi(config.Config("JWT_SALT_LIFE_TIME"))
 	clear_run = int(clear_run)
-	jwt_update_interval := time.Second * time.Duration(clear_run)
+	jwt_update_interval := time.Minute * time.Duration(clear_run)
 	//  Task 2 for testing Make random heartbeat call
 
 	if _, err := scheduler.Add(&tasks.Task{
@@ -258,6 +215,7 @@ func MakeApp(appType string) (*fiber.App, *os.File) {
 			return nil
 		},
 	})
+	models.GetAppFeatures("48015a9b-5a86-4a15-944b-94108aa78b4b")
 
 	// prometheus middleware concrete instance
 	prometheus := fiberprometheus.New("gobluefiber")
@@ -327,7 +285,7 @@ func MakeApp(appType string) (*fiber.App, *os.File) {
 	// 	Error: fiber.ErrTooEarly,
 	// 	// ...
 	// }))
-	utils.JWTSaltUpdate()
+
 	return app, file
 }
 
@@ -371,6 +329,7 @@ func setupRoutes(app *fiber.Group) {
 	app.Patch("/users/:id", NextFunc).Name("user_single").Patch("/users/:id", responses.PatchUsers)
 	app.Delete("/users/:id", NextFunc).Name("user_single").Delete("/users/:id", responses.DeleteUsers)
 	app.Put("/users/:user_id", NextFunc).Name("activate_deactivate_user").Put("/users/:user_id", responses.ActivateDeactivateUser)
+	app.Put("/users", NextFunc).Name("change_reset_password").Put("/users", responses.ChangePassword)
 	app.Get("/userrole/:user_id", NextFunc).Name("get_user_roles").Get("/userrole/:user_id", responses.GetUsersRolesByID)
 	app.Post("/userrole/:user_id/:role_id", NextFunc).Name("user_role").Post("/userrole/:user_id/:role_id", responses.AddUserRoles)
 	app.Delete("/userrole/:user_id/:role_id", NextFunc).Name("user_role").Delete("/userrole/:user_id/:role_id", responses.DeleteUserRoles)

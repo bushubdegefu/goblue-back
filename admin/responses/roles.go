@@ -173,8 +173,7 @@ func GetRoleEndpointsID(contx *fiber.Ctx) error {
 			Data:    "nil",
 		})
 	}
-	// role_ends := roles.Features
-	// // fmt.Println(roles.Features)
+
 	for x := range roles.Features {
 		if len(roles.Features[x].Endpoints) > 0 {
 			for i := range roles.Features[x].Endpoints {
@@ -183,7 +182,6 @@ func GetRoleEndpointsID(contx *fiber.Ctx) error {
 			}
 		}
 	}
-	// fmt.Println(endpoints)
 
 	return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 		Success: true,

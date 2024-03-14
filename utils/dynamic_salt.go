@@ -6,6 +6,7 @@ import (
 
 	"semay.com/admin/database"
 	"semay.com/admin/models"
+
 	"semay.com/config"
 )
 
@@ -79,6 +80,9 @@ func GetJWTSalt() (salt_a string, salt_b string) {
 
 	salt_a = jwt_object.SaltA
 	salt_b = jwt_object.SaltB
+	if salt_a == "" {
+		JWTSaltUpdate()
+	}
 	return salt_a, salt_b
 
 }

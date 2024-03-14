@@ -392,6 +392,17 @@ definitions:
       uuid:
         type: string
     type: object
+  responses.UserPassword:
+    properties:
+      email:
+        example: someone@domain.com
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   responses.UserPatch:
     properties:
       disabled:
@@ -2360,6 +2371,43 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Add a new Users
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Put User
+      parameters:
+      - description: Password User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/responses.UserPassword'
+      - description: Reset Password
+        in: query
+        name: reset
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.UserGet'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Put User
       tags:
       - Users
   /users/{id}:

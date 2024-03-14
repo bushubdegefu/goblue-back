@@ -101,9 +101,9 @@ func PostLogin(contx *fiber.Ctx) error {
 		// return "something"
 	case "refresh_token":
 		claims, err := utils.ParseJWTToken(login_request_data.Token)
-		email, _ := claims["email"].(string)
-		uuid, _ := claims["uuid"].(string)
-		roles, _ := claims["roles"].([]string)
+		email := claims.Email
+		uuid := claims.UUID
+		roles := claims.Roles
 		if err == nil {
 
 			accessString, _ := utils.CreateJWTToken(email, uuid, roles, 60)
