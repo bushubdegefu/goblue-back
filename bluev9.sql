@@ -1,4 +1,20 @@
 
+INSERT INTO apps (id, name, uuid, active, description) VALUES 
+  	(1,'BlueAdmin','48015a9b-5a86-4a15-944b-94108aa78b4b',true,'SSO Role Based User Administration solution'),
+  	(2,'BlueCom','21028fa1-8e04-464e-8be7-95ea9c82994b',true,'Commercial Order Management'),
+	(3, 'BlueHRM','9359b1ba-98b5-427c-96d8-023fc33cd1b0',true,'Human Resource Management') ON CONFLICT DO NOTHING;
+
+
+INSERT INTO pages (id, name, active, description) VALUES
+	(1, 'Login', true, 'Login'),
+	(2, 'Home', true, 'Home'),
+	(3, 'Role', true, 'View Roles'),
+	(4, 'User', true, 'View Users'),
+	(5, 'Page', true, 'View Pages'),
+	(6, 'Feature', true, 'View Features'),
+	(7, 'Endpoint', true, 'View Endpoints'),
+	(8, 'App', true, 'View Apps'),
+	(9, 'Sign Up', true, 'Sign Up Page For users Who have not registered') ON CONFLICT DO NOTHING;
 
 INSERT INTO roles (id, name, description, active, app_id) VALUES
 	(1, 'superuser', 'Have Access to All resources in the Apps', true, 1),
@@ -7,6 +23,15 @@ INSERT INTO roles (id, name, description, active, app_id) VALUES
 	(4, 'app_role', 'Have App CURD abilities', true, 1),
 	(5, 'Anonymous', 'For Pages that do not need user sign in', true, 1),
 	(6, 'Drop Down ', 'To access Drop Down menu fetching  endpoints', true, 1) ON CONFLICT DO NOTHING;
+
+INSERT INTO users (id, uuid, email, password, date_registered, disabled) VALUES
+	(4, '8a200cd4-9067-4508-b93c-4b242ef03740', 'beimnet.degefu@gmail.com', '089925fe07a4819e2f032fc4e7b6c1e191dc5d59dbf0bd6b7857a87ef1f7e5c6915ce7ca93f74b136417e362752f81ac5258f2f0be890eff3b7f7679e2cc1b7a', '2024-03-08 16:49:53.754679+00', false),
+	(6, '79731de0-de10-4f62-bcc5-7637d132110a', 'mickyasne123@gmail.com', '3d5267ceaa0759b8756837e4e817517fae8fa2d168267053e78428ac0941d5542c7bee61536be21f7d117fed80bc9aa27e2d450e261ab361ece2a701a1e2da72', '2024-03-12 10:52:01.052905+00', false),
+	(7, '586c2bc7-9a66-49df-a81e-93b2efaec8c9', 'mickyasne12@gmail.com', 'adfebcc24b8ce4be96b83381f08275bbd6fe355dee6a1a1407247cd15bbb8ec5952b5680af51c532d8785f950e4bb7ddeab72efc737c4656bcd27b7f73b72bf1', '2024-03-12 12:03:48.01416+00', false),
+	(1, '38ca7360-0138-4b0f-8985-b307ad188e92', 'superuser@mail.com', '089925fe07a4819e2f032fc4e7b6c1e191dc5d59dbf0bd6b7857a87ef1f7e5c6915ce7ca93f74b136417e362752f81ac5258f2f0be890eff3b7f7679e2cc1b7a', '2024-01-16 08:27:55.628203+00', false),
+	(2, '1323b2d9-5755-4e4c-9af5-93c17f59e6fd', 'standarduser@mail.com', '089925fe07a4819e2f032fc4e7b6c1e191dc5d59dbf0bd6b7857a87ef1f7e5c6915ce7ca93f74b136417e362752f81ac5258f2f0be890eff3b7f7679e2cc1b7a', '2024-01-17 12:33:56.443849+00', false),
+	(3, '12bc4954-487b-4263-8bdc-cacbf720f623', 'adminuser@mail.com', '089925fe07a4819e2f032fc4e7b6c1e191dc5d59dbf0bd6b7857a87ef1f7e5c6915ce7ca93f74b136417e362752f81ac5258f2f0be890eff3b7f7679e2cc1b7a', '2024-03-01 06:58:25.299887+00', true),
+	(5, 'b5c4d708-71de-4384-a91d-73843bb45947', 'somesuper@gmail.com', 'c320a2866e3a6feb0a6abf607c55f0466873c34a68c27fb6dd5e16fc53173f96f2326b97ec943063071fb95f14f883701a7b827e8b18767754190b623e051111', '2024-03-12 10:48:50.626919+00', false) ON CONFLICT DO NOTHING;
 
 
 
@@ -89,29 +114,6 @@ INSERT INTO end_points (name, route_paths, method, description, feature_id) VALU
 	('change_reset_password_put', '/api/v1/users/:email_id', 'PUT', 'change_reset_password-PUT', 4) ON CONFLICT DO NOTHING;
 
 
-
-INSERT INTO jwt_salts (id, salt_a, salt_b) VALUES
-	(1, 'ANJHTrDA7guiAaE', 'wnQh26QQNm9Oc0x') ON CONFLICT DO NOTHING;
-
-INSERT INTO apps (id, name, uuid, active, description) VALUES 
-  	(1,'BlueAdmin','48015a9b-5a86-4a15-944b-94108aa78b4b',true,'SSO Role Based User Administration solution'),
-  	(2,'BlueCom','21028fa1-8e04-464e-8be7-95ea9c82994b',true,'Commercial Order Management'),
-	(3, 'BlueHRM','9359b1ba-98b5-427c-96d8-023fc33cd1b0',true,'Human Resource Management') ON CONFLICT DO NOTHING;
-
-
-INSERT INTO pages (id, name, active, description) VALUES
-	(1, 'Login', true, 'Login'),
-	(2, 'Home', true, 'Home'),
-	(3, 'Role', true, 'View Roles'),
-	(4, 'User', true, 'View Users'),
-	(5, 'Page', true, 'View Pages'),
-	(6, 'Feature', true, 'View Features'),
-	(7, 'Endpoint', true, 'View Endpoints'),
-	(8, 'App', true, 'View Apps'),
-	(9, 'Sign Up', true, 'Sign Up Page For users Who have not registered') ON CONFLICT DO NOTHING;
-
-
-
 INSERT INTO page_roles (page_id, role_id) VALUES
 	(1, 5),
 	(5, 3),
@@ -139,20 +141,6 @@ INSERT INTO page_roles (page_id, role_id) VALUES
 	(9, 1) ON CONFLICT DO NOTHING;
 
 
-
-
-INSERT INTO users (id, uuid, email, password, date_registered, disabled) VALUES
-	(4, '8a200cd4-9067-4508-b93c-4b242ef03740', 'beimnet.degefu@gmail.com', '089925fe07a4819e2f032fc4e7b6c1e191dc5d59dbf0bd6b7857a87ef1f7e5c6915ce7ca93f74b136417e362752f81ac5258f2f0be890eff3b7f7679e2cc1b7a', '2024-03-08 16:49:53.754679+00', false),
-	(6, '79731de0-de10-4f62-bcc5-7637d132110a', 'mickyasne123@gmail.com', '3d5267ceaa0759b8756837e4e817517fae8fa2d168267053e78428ac0941d5542c7bee61536be21f7d117fed80bc9aa27e2d450e261ab361ece2a701a1e2da72', '2024-03-12 10:52:01.052905+00', false),
-	(7, '586c2bc7-9a66-49df-a81e-93b2efaec8c9', 'mickyasne12@gmail.com', 'adfebcc24b8ce4be96b83381f08275bbd6fe355dee6a1a1407247cd15bbb8ec5952b5680af51c532d8785f950e4bb7ddeab72efc737c4656bcd27b7f73b72bf1', '2024-03-12 12:03:48.01416+00', false),
-	(1, '38ca7360-0138-4b0f-8985-b307ad188e92', 'superuser@mail.com', '089925fe07a4819e2f032fc4e7b6c1e191dc5d59dbf0bd6b7857a87ef1f7e5c6915ce7ca93f74b136417e362752f81ac5258f2f0be890eff3b7f7679e2cc1b7a', '2024-01-16 08:27:55.628203+00', false),
-	(2, '1323b2d9-5755-4e4c-9af5-93c17f59e6fd', 'standarduser@mail.com', '089925fe07a4819e2f032fc4e7b6c1e191dc5d59dbf0bd6b7857a87ef1f7e5c6915ce7ca93f74b136417e362752f81ac5258f2f0be890eff3b7f7679e2cc1b7a', '2024-01-17 12:33:56.443849+00', false),
-	(3, '12bc4954-487b-4263-8bdc-cacbf720f623', 'adminuser@mail.com', '089925fe07a4819e2f032fc4e7b6c1e191dc5d59dbf0bd6b7857a87ef1f7e5c6915ce7ca93f74b136417e362752f81ac5258f2f0be890eff3b7f7679e2cc1b7a', '2024-03-01 06:58:25.299887+00', true),
-	(5, 'b5c4d708-71de-4384-a91d-73843bb45947', 'somesuper@gmail.com', 'c320a2866e3a6feb0a6abf607c55f0466873c34a68c27fb6dd5e16fc53173f96f2326b97ec943063071fb95f14f883701a7b827e8b18767754190b623e051111', '2024-03-12 10:48:50.626919+00', false) ON CONFLICT DO NOTHING;
-
-
-
-
 INSERT INTO user_roles (role_id, user_id) VALUES
 	(1, 1),
 	(1, 4),
@@ -162,3 +150,5 @@ INSERT INTO user_roles (role_id, user_id) VALUES
 	(2, 7),
 	(3, 3) ON CONFLICT DO NOTHING;
 
+INSERT INTO jwt_salts (id, salt_a, salt_b) VALUES
+	(1, 'ANJHTrDA7guiAaE', 'wnQh26QQNm9Oc0x') ON CONFLICT DO NOTHING;

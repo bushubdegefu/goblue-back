@@ -49,7 +49,9 @@ func ReturnSession() *gorm.DB {
 	var DBSession *gorm.DB
 	//  this is for postgresql connection
 	// conn := "host=localhost user=blueuser password=default dbname=bluev5 port=5432 sslmode=disable"
-	conn := config.Config("PSQL_URI")
+	// conn := config.Config("RSQL_URI")
+	conn := config.Config("RISQL_URI")
+	// conn := config.Config("PSQL_URI")
 	// conn := config.Config("SUPA_SQL_URI")
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  conn,
