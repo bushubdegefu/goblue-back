@@ -15,6 +15,7 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/earlydata"
 	"github.com/gofiber/fiber/v2/middleware/idempotency"
 	"github.com/gofiber/fiber/v2/middleware/keyauth"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -28,6 +29,7 @@ import (
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/admin/responses"
+	"semay.com/bluerabbit"
 	"semay.com/common"
 	"semay.com/config"
 	_ "semay.com/docs"
@@ -67,16 +69,23 @@ func authFilter(c *fiber.Ctx) bool {
 	return false
 }
 
+func testMiddleware(c *fiber.Ctx, key string) (bool, error) {
+	return true, nil
+}
+
 func NextFunc(contx *fiber.Ctx) error {
+	contx.Next()
 	return nil
 }
 
 func NextRoute(contx *fiber.Ctx, key string) (bool, error) {
 	contx.Next()
 	route_name := contx.Route().Name + "_" + strings.ToLower(contx.Route().Method)
+
 	if key == "anonymous" && models.Endpoints_JSON[route_name] == "Anonymous" {
 		return true, nil
 	}
+
 	//  first validating the token
 	claims, err := utils.ParseJWTToken(key)
 	if err != nil {
@@ -120,14 +129,15 @@ func run() {
 	}
 
 	// running background consumer
-	// go func() {
-	// 	bluerabbit.BlueConsumer()
-	// }()
+	go func() {
+		bluerabbit.BlueConsumer()
+	}()
+
 	// recording available route name ends here
 	port_1 := config.Config("PORT")
 	// port_2 := config.Config("PORT_2")
 
-	// starting on two provided ports
+	// starting on provided port
 	go func(app *fiber.App) {
 		log.Fatal(app.Listen(":" + port_1))
 	}(app)
@@ -217,13 +227,15 @@ func MakeApp(appType string) (*fiber.App, *os.File) {
 	})
 	models.GetAppFeatures("48015a9b-5a86-4a15-944b-94108aa78b4b")
 
-	// prometheus middleware concrete instance
-	prometheus := fiberprometheus.New("gobluefiber")
-	prometheus.RegisterAt(app, "/metrics")
+	// adding prometheus instrumantation only if prod or dev
+	if appType == "dev" || appType == "prod" {
+		// prometheus middleware concrete instance
+		prometheus := fiberprometheus.New("gobluefiber")
+		prometheus.RegisterAt(app, "/metrics")
 
-	// prometheus monitoring middleware
-	app.Use(prometheus.Middleware)
-
+		// prometheus monitoring middleware
+		app.Use(prometheus.Middleware)
+	}
 	// recover from panic attacks middlerware
 	app.Use(recover.New())
 
@@ -265,7 +277,7 @@ func MakeApp(appType string) (*fiber.App, *os.File) {
 	}).Name("index_route")
 
 	// adding group with authenthication middleware
-	if appType == "dev" {
+	if appType == "dev" || appType == "prod" {
 		// adding group with authenthication middleware
 		admin_app := app.Group("/api/v1", keyauth.New(keyauth.Config{
 			Next:      authFilter,
@@ -274,17 +286,23 @@ func MakeApp(appType string) (*fiber.App, *os.File) {
 		}))
 		setupRoutes(admin_app.(*fiber.Group))
 	} else {
-		admin_app := app.Group("/api/v1")
+		// adding group with authenthication middleware
+		admin_app := app.Group("/api/v1", keyauth.New(keyauth.Config{
+			Next:      authFilter,
+			KeyLookup: "header:X-APP-TOKEN",
+			Validator: testMiddleware,
+		}))
 		setupRoutes(admin_app.(*fiber.Group))
-
 	}
+
 	app.Use(idempotency.New(idempotency.Config{
 		Lifetime: 10 * time.Second,
 	}))
-	// app.Use(earlydata.New(earlydata.Config{
-	// 	Error: fiber.ErrTooEarly,
-	// 	// ...
-	// }))
+
+	app.Use(earlydata.New(earlydata.Config{
+		Error: fiber.ErrTooEarly,
+		// ...
+	}))
 
 	return app, file
 }

@@ -24,9 +24,14 @@ type ResponsePagination struct {
 }
 
 func Pagination(db *gorm.DB, queryModel interface{}, responseObjectModel interface{}, page uint, size uint) (ResponsePagination, error) {
+	var update_size uint
+	if size > 50 {
+		update_size = size
+	}
+
 	count_channel := make(chan int64)
 	str_chann := make(chan string)
-	var offset int64 = int64(page-1) * int64(size)
+	var offset int64 = int64(page-1) * int64(update_size)
 	//finding count value
 	go func() {
 		var local_counter int64
@@ -41,10 +46,10 @@ func Pagination(db *gorm.DB, queryModel interface{}, responseObjectModel interfa
 	go func() {
 
 		if page == 1 {
-			db.Model(&queryModel).Order("id asc").Limit(int(size)).Offset(0).Preload(clause.Associations).Find(&responseObjectModel)
+			db.Model(&queryModel).Order("id asc").Limit(int(update_size)).Offset(0).Preload(clause.Associations).Find(&responseObjectModel)
 			response_page = 1
 		} else {
-			db.Model(&queryModel).Order("id asc").Limit(int(size)).Offset(int(offset)).Preload(clause.Associations).Find(&responseObjectModel)
+			db.Model(&queryModel).Order("id asc").Limit(int(update_size)).Offset(int(offset)).Preload(clause.Associations).Find(&responseObjectModel)
 			// response_channel <- loc_resp
 			response_page = int64(page)
 		}
@@ -53,7 +58,7 @@ func Pagination(db *gorm.DB, queryModel interface{}, responseObjectModel interfa
 
 	count := <-count_channel
 	response_obj := <-str_chann
-	pages := math.Ceil(float64(count) / float64(size))
+	pages := math.Ceil(float64(count) / float64(update_size))
 	// fmt.Println(responseObjectModel)
 	result := ResponsePagination{
 		Success: true,
@@ -61,13 +66,17 @@ func Pagination(db *gorm.DB, queryModel interface{}, responseObjectModel interfa
 		Message: response_obj,
 		Total:   uint(count),
 		Page:    uint(response_page),
-		Size:    uint(size),
+		Size:    uint(update_size),
 		Pages:   uint(pages),
 	}
 	return result, nil
 }
 
 func PaginationPureModel(db *gorm.DB, queryModel interface{}, responseObjectModel interface{}, page uint, size uint) (ResponsePagination, error) {
+	if size > 50 {
+		size = 50
+	}
+
 	count_channel := make(chan int64)
 	str_chann := make(chan string)
 	var offset int64 = int64(page-1) * int64(size)

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: blue-prometheus
-          image:  blue-prom
+          image: bule-prom-v2
           imagePullPolicy: Never
           ports:
             - containerPort: 9090

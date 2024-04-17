@@ -7,7 +7,7 @@ ENV RABBITMQ_NODENAME=rabbit@localhost
 RUN chown rabbitmq:rabbitmq /etc/rabbitmq/rabbitmq.conf
 # Define environment variables.
 ENV RABBITMQ_USER bushu
-ENV RABBITMQ_PASSWORD yahweh
+ENV RABBITMQ_PASSWORD default
 ENV RABBITMQ_PID_FILE /var/lib/rabbitmq/mnesia/rabbitmq
 
 ADD rabbuser.sh /rabbuser.sh

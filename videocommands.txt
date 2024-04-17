@@ -46,3 +46,64 @@ db.DryRun = false
 
 // PG dump command sample
 pg_dump -h 192.168.49.2 -p 30432 -U blueuser -d bluev5 --format plain --verbose --file bluev5dump.sql
+
+// Kubernetes
+kubectl get services
+sudo rm -rf /home/bushu/.minikube/cache/images/amd64/blue-rabbit-v2
+ 2013  minikube stop
+ 2014  docker -t blue-data -f postgres.Dockerfile .
+ 2015  docker build -t blue-data -f postgres.Dockerfile .
+ 2016  minikube stop
+ 2017  minikube start
+ 2018  minikube ssh docker image ls
+ 2019  minikube ssh docker rmi -f 52c27a1ca233
+ 2020  minikube ssh docker rmi 52c27a1ca233
+ 2021  minikube ssh docker rmi --force 52c27a1ca233
+ 2022  docker rmi --help
+ 2023  minikube ssh docker rm --force 52c27a1ca233
+ 2024  minikube ssh docker image  rmi --force 52c27a1ca233
+ 2025  docker image ls
+ 2026  docker image rmi 4b7e1a1d5669
+ 2027  docker image rmi -f 4b7e1a1d5669
+ 2028  minikube ssh docker image  ls
+ 2029  minikube ssh docker image rmi -f 1ebff0f9671b
+ 2030  minikube ssh "docker image rmi -f 1ebff0f9671b"
+ 2031  minikube ssh "docker image rmi -f 52c27a1ca233"
+ 2032  minikube ssh "docker image rmi -f 83eced5f84f5"
+ 2033  minikube ssh docker image  ls
+ 2034  docker image ls
+ 2035  minikube load image blue-admin-v1
+ 2036  docker push $(minikube ip):5000/blue-admin-v1
+ 2037  docker tag blue-admin-v1 $(minikube ip):5000/blue-admin-v1
+ 2038  docker push $(minikube ip):5000/blue-admin-v1
+ 2039  minikube ssh docker image  ls
+ 2040  docker image ls
+ 2041  minikube ssh "docker build -t blue-rabbit-v2 -f rabbit.Dockerfile ."
+ 2042  minikube ssh docker image  ls
+ 2043  docker image ls
+ 2044  minikube load blue-rabbit-v2
+ 2045  minikube image load blue-rabbit-v2
+ 2046  eval $(minikube docker-env)
+ 2047  minikube ssh docker image  ls
+ 2048  kubectl --version
+ 2049  kubectl --help
+ 2050  kubectl version
+ 2051  kubectl apply -f k8
+ 2052  kubectl delete all --all
+ 2053  kubectl apply -f k8
+ 2054  minikube ip
+ 2055  kubectl get services
+ 2056* kubectl get de
+ 2057  kubectl get pod
+ 2058  kubectl --help
+ 2059  kubectl delete all --all
+
+
+eval $(minikube docker-env)
+eval $(minikube -p minikube docker-env)
+
+
+
+kubectl exec -it blue-back-fiber-5dd5f44958-bhxxv  -- /bin/bash
+
+go test -v ./tests

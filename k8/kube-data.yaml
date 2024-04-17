@@ -28,6 +28,30 @@ spec:
     requests:
       storage: 1Gi
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-config
+data:
+  postgresql.conf: |
+    # Put your PostgreSQL configuration here
+    listen_addresses = '*'
+    max_connections = 100
+    shared_buffers = 1GB
+    work_mem = 4MB
+    maintenance_work_mem = 256MB
+    effective_cache_size = 2GB
+    wal_buffers = 16MB
+    checkpoint_completion_target = 0.9
+    wal_level = replica
+    archive_mode = off
+    max_wal_size = 2GB
+    min_wal_size = 1GB
+    effective_io_concurrency = 200
+    random_page_cost = 1.1
+    log_destination = 'stderr'
+    logging_collector = off
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -46,7 +70,7 @@ spec:
     spec:
       containers:
       - name: blueapp-db
-        image: bluegres
+        image: bule-data-v2
         imagePullPolicy: Never
         ports:
         - containerPort: 5432
@@ -57,11 +81,14 @@ spec:
       - name: postgredb
         persistentVolumeClaim:
           claimName: postgres-pv-claim
+      - name: config-volume
+        configMap:
+            name: postgresql-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: blueapp-database
+  name: blueapp-db
   labels:
     app: blueapp
 spec:

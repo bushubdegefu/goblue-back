@@ -8,6 +8,7 @@ import (
 	// "gorm.io/driver/sqlite"
 
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"semay.com/config"
@@ -47,34 +48,42 @@ func ReturnSession() *gorm.DB {
 	)
 
 	var DBSession *gorm.DB
-	//  this is for postgresql connection
-	// conn := "host=localhost user=blueuser password=default dbname=bluev5 port=5432 sslmode=disable"
-	// conn := config.Config("RSQL_URI")
-	conn := config.Config("RISQL_URI")
-	// conn := config.Config("PSQL_URI")
-	// conn := config.Config("SUPA_SQL_URI")
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  conn,
-		PreferSimpleProtocol: true, // disables implicit prepared statement usage,
 
-	}), &gorm.Config{
-		Logger:                 newLogger,
-		SkipDefaultTransaction: true,
-	})
-	if err != nil {
-		panic(err)
+	if config.Config("TEST") == "True" {
+		//  this is sqlite connection
+		db, _ := gorm.Open(sqlite.Open(config.Config("SQLITE_URI")), &gorm.Config{
+			Logger:                 newLogger,
+			SkipDefaultTransaction: true,
+		})
+
+		DBSession = db
+	} else {
+		//  this is for postgresql connection
+		conn := "host=localhost user=blueuser password=default dbname=bluev5 port=5432 sslmode=disable"
+		// conn := "host=192.168.49.2  user=blueuser password=default@123 dbname=bluev5 port=30432 sslmode=disable"
+		// conn := "host=blueapp-db  user=blueuser password=default@123 dbname=bluev5 port=5432 sslmode=disable"
+		// conn := config.Config("RSQL_URI")
+		// conn := config.Config("RISQL_URI")
+		// conn := config.Config("PSQL_URI")
+		// conn := config.Config("SUPA_SQL_URI")
+		db, err := gorm.Open(postgres.New(postgres.Config{
+			DSN:                  conn,
+			PreferSimpleProtocol: true, // disables implicit prepared statement usage,
+
+		}), &gorm.Config{
+			Logger:                 newLogger,
+			SkipDefaultTransaction: true,
+		})
+		if err != nil {
+			panic(err)
+		}
+
+		sqlDB, _ := db.DB()
+		sqlDB.SetMaxOpenConns(4)
+		sqlDB.SetConnMaxLifetime(2 * time.Second)
+
+		DBSession = db
 	}
-
-	//  this is sqlite connection
-	// db, _ := gorm.Open(sqlite.Open(config.Config("SQLITE_URI")), &gorm.Config{
-	// 	Logger:                 newLogger,
-	// 	SkipDefaultTransaction: true,
-	// })
-	sqlDB, _ := db.DB()
-	sqlDB.SetMaxOpenConns(4)
-	sqlDB.SetConnMaxLifetime(2 * time.Second)
-
-	DBSession = db
 
 	return DBSession
 

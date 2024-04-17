@@ -1,4 +1,4 @@
-FROM gpac/ubuntu:latest
+FROM golang:latest
 
 RUN apt install -y libc6 libc-bin
 

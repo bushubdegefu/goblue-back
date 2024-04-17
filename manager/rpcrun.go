@@ -17,8 +17,8 @@ import (
 var (
 	startrpc = &cobra.Command{
 		Use:   "rpcserve",
-		Short: "Create availble data models to  Database",
-		Long:  `Create data models Models to the Database. The database URI is to be provided within the migrate function or as .env variable`,
+		Short: "Start RPC server from the app at the provied Port",
+		Long:  `Start RPC server from the app at the provied Port`,
 		Run: func(cmd *cobra.Command, args []string) {
 			RpcServe()
 		},
@@ -26,8 +26,8 @@ var (
 
 	rpcclient = &cobra.Command{
 		Use:   "rpcclient",
-		Short: "Create availble data models to  Database",
-		Long:  `Create data models Models to the Database. The database URI is to be provided within the migrate function or as .env variable`,
+		Short: "Make  RPC call server from the app at the provied Port. For testing",
+		Long:  `Make RPC call to server from the app at the provied Port through .env variable`,
 		Run: func(cmd *cobra.Command, args []string) {
 			RpcClient()
 		},

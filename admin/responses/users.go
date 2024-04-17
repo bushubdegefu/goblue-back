@@ -54,7 +54,6 @@ type UserPassword struct {
 // @Router /users [get]
 func GetUsers(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
-
 	var users []UserGet
 	Page, _ := strconv.Atoi(contx.Query("page"))
 	Limit, _ := strconv.Atoi(contx.Query("size"))
@@ -430,7 +429,7 @@ func ChangePassword(contx *fiber.Ctx) error {
 // @Security ApiKeyAuth
 // @Accept json
 // @Produce json
-// @Param id path int true "User ID"
+// @Param id path string true "User ID"
 // @Success 200 {object} common.ResponseHTTP{}
 // @Failure 404 {object} common.ResponseHTTP{}
 // @Router /users/{id} [delete]

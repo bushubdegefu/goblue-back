@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-rabbit-kube
+  labels:
+    app: blue-rabbit-kube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blue-rabbit-kube
+  template:
+    metadata:
+      labels:
+        app: blue-rabbit-kube
+    spec:
+      containers:
+      - name: blue-rabbit-kube
+        image: blue-rabbit-v2
+        imagePullPolicy: Never
+        ports:
+        - name: rabbitmq-port
+          containerPort: 5671
+        - name: management-port
+          containerPort: 15672
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blue-rabbit-kube
+spec:
+  type: NodePort
+  selector:
+    app: blue-rabbit-kube
+  ports:
+  - name: rabbitmq-port
+    port: 5671
+    targetPort: 5671
+    nodePort: 30671
+  - name: management-port
+    port: 15672
+    targetPort: 15672
+    nodePort: 30672

@@ -71,9 +71,6 @@ func GetDashBoardGrouped(contx *fiber.Ctx) error {
 		Message: "Success got.",
 		Data:    &app_get,
 	})
-
-	// #######################
-
 }
 
 // Get App Endpoints
@@ -118,7 +115,6 @@ func GetAppEndpoitnsGroupedBy(contx *fiber.Ctx) error {
 		Message: "Success got.",
 		Data:    &app_get,
 	})
-
 }
 
 // Get App Features Grouped by Role
@@ -159,7 +155,6 @@ func GetAppFeaturesGroupedBy(contx *fiber.Ctx) error {
 		Message: "Success got.",
 		Data:    &app_get,
 	})
-
 }
 
 // Get App Pages
@@ -275,5 +270,4 @@ func GetAppPagesInRoles(contx *fiber.Ctx) error {
 		Message: "Success got.",
 		Data:    &role_pages,
 	})
-
 }

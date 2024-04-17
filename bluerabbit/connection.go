@@ -14,6 +14,7 @@ import (
 func BrokerConnect() (*amqp.Connection, *amqp.Channel) {
 
 	connection, err := amqp.Dial(config.Config("RABBIT_BROKER_URL"))
+	// connection, err := amqp.Dial(config.Config("RABBIT_BROKER_URL_KUBE"))
 	if err != nil {
 		fmt.Printf("connectin to %v failed due to : %v\n", config.Config("RABBIT_BROKER_URL"), err)
 	}

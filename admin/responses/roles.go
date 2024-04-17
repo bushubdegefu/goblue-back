@@ -80,7 +80,6 @@ func GetRoles(contx *fiber.Ctx) error {
 
 	// result.Items = role_get
 	return contx.Status(http.StatusOK).JSON(result)
-
 }
 
 // GetRoleByID is a function to get a Roles by ID
