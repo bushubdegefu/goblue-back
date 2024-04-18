@@ -65,8 +65,11 @@ func GetPages(contx *fiber.Ctx) error {
 		})
 	}
 
+	// var list_of_pages []models.Page
 	result, err := common.Pagination(db, models.Page{}, []models.Page{}, uint(Page), uint(Limit))
-
+	// db.Order("id asc").Limit(20).Offset(0).Preload(clause.Associations).Find(&list_of_pages)
+	// result.Items = list_of_pages
+	// fmt.Println(result)
 	if err != nil {
 		return contx.Status(http.StatusOK).JSON(common.ResponseHTTP{
 			Success: true,

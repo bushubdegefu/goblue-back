@@ -107,3 +107,16 @@ eval $(minikube -p minikube docker-env)
 kubectl exec -it blue-back-fiber-5dd5f44958-bhxxv  -- /bin/bash
 
 go test -v ./tests
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/haproxy.pem -out /etc/ssl/certs/haproxy.pem
+
+sudo service haproxy restart
+
+sudo cat /etc/ssl/certs/haproxy.crt /etc/ssl/private/haproxy.key > /etc/ssl/certs/haproxy.pem
+
+sudo apt-get clean
+sudo apt-get autoremove --purge
+sudo apt-get remove python3.9
+sudo apt-get autoremove
+
+haproxy -c -f /etc/haproxy/haproxy.cfg

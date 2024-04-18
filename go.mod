@@ -1,8 +1,8 @@
 module semay.com
 
-go 1.21
+go 1.22
 
-toolchain go1.21.6
+toolchain go1.22.1
 
 require (
 	github.com/ansrivas/fiberprometheus/v2 v2.6.0

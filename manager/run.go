@@ -74,7 +74,7 @@ func testMiddleware(c *fiber.Ctx, key string) (bool, error) {
 }
 
 func NextFunc(contx *fiber.Ctx) error {
-	contx.Next()
+
 	return nil
 }
 

@@ -1,6 +1,7 @@
 package responses
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -53,7 +54,7 @@ type AppEndpointsMeta map[Role]EndPoints
 func GetDashBoardGrouped(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	//  getting the uuid from query string
-	app_uuid := contx.Query("app_id")
+	app_uuid, _ := uuid.Parse(contx.Query("app_id"))
 
 	var app models.App
 	var app_get AppMeta
@@ -89,7 +90,7 @@ func GetAppEndpoitnsGroupedBy(contx *fiber.Ctx) error {
 
 	var app models.App
 	var app_get = make(map[string][]string)
-	app_uuid := contx.Query("app_id")
+	app_uuid, _ := uuid.Parse(contx.Query("app_id"))
 
 	if res := db.Model(&models.App{}).Preload(clause.Associations).Preload("Roles.Features").Preload("Roles.Features.Endpoints").Where("uuid = ?", app_uuid).First(&app); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
@@ -132,7 +133,7 @@ func GetAppFeaturesGroupedBy(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var app models.App
 	var app_get = make(map[string][]string)
-	app_uuid := contx.Query("app_id")
+	app_uuid, _ := uuid.Parse(contx.Query("app_id"))
 
 	if res := db.Model(&models.App{}).Preload(clause.Associations).Preload("Roles.Features").Preload("Roles.Features.Endpoints").Where("uuid = ?", app_uuid).First(&app); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
@@ -172,9 +173,10 @@ func GetAppPages(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var app models.App
 	var app_pages = make(map[string][]string)
-	app_uuid := contx.Query("app_id")
+	app_uuid, _ := uuid.Parse(contx.Query("app_id"))
 
 	if res := db.Model(&models.App{}).Preload(clause.Associations).Preload("Roles.Pages").Where("uuid = ?", app_uuid).First(&app); res.Error != nil {
+		fmt.Println(res.Error.Error())
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
 			Success: false,
 			Message: res.Error.Error(),
@@ -214,7 +216,7 @@ func GetAppRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
 	var app models.App
 	var app_roles = make(map[string][]string)
-	app_uuid := contx.Query("app_id")
+	app_uuid, _ := uuid.Parse(contx.Query("app_id"))
 
 	if res := db.Model(&models.App{}).Preload(clause.Associations).Preload("Roles").Where("uuid = ?", app_uuid).First(&app); res.Error != nil {
 		return contx.Status(http.StatusServiceUnavailable).JSON(common.ResponseHTTP{
@@ -249,7 +251,7 @@ func GetAppRoles(contx *fiber.Ctx) error {
 // @Router /dashboardrolespage [get]
 func GetAppPagesInRoles(contx *fiber.Ctx) error {
 	db := database.ReturnSession()
-	app_uuid := contx.Query("app_id")
+	app_uuid, _ := uuid.Parse(contx.Query("app_id"))
 	var role_pages = make(map[string][]string)
 	var app models.App
 	if res := db.Model(&models.App{}).Preload(clause.Associations).Preload("Roles.Pages").Where("uuid = ?", app_uuid).First(&app); res.Error != nil {

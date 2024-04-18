@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"log"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm/clause"
 	"semay.com/admin/database"
 	"semay.com/config"
@@ -41,8 +42,8 @@ func GetAppFeatures(app_uuid string) {
 	db := database.ReturnSession()
 	var app App
 	// var app_get = make(map[string]string)
-
-	if res := db.Model(&App{}).Preload(clause.Associations).Preload("Roles.Features").Preload("Roles.Features.Endpoints").Where("uuid = ?", app_uuid).First(&app); res.Error != nil {
+	app_id, _ := uuid.Parse(app_uuid)
+	if res := db.Model(&App{}).Preload(clause.Associations).Preload("Roles.Features").Preload("Roles.Features.Endpoints").Where("uuid = ?", app_id).First(&app); res.Error != nil {
 		log.Fatal(res.Error.Error())
 	}
 
