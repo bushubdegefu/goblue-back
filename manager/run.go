@@ -29,6 +29,7 @@ import (
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/admin/responses"
+	"semay.com/bluerabbit"
 	"semay.com/common"
 	"semay.com/config"
 	_ "semay.com/docs"
@@ -132,9 +133,9 @@ func run() {
 	}
 
 	// // running background consumer
-	// go func() {
-	// 	bluerabbit.BlueConsumer()
-	// }()
+	go func() {
+		bluerabbit.BlueConsumer()
+	}()
 
 	// recording available route name ends here
 	port_1 := config.Config("PORT")

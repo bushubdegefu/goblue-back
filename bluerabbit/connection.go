@@ -13,9 +13,9 @@ import (
 // returns connection and channel struct
 func BrokerConnect() (*amqp.Connection, *amqp.Channel,error) {
 
-	con_str := config.Config("RABBIT_BROKER_URL_KUBE")
+	// con_str := config.Config("RABBIT_BROKER_URL_KUBE")
 	// con_str := config.Config("RABBIT_BROKER_URL_KUBE_NODE")
-	// con_str := config.Config("RABBIT_BROKER_URL")
+	con_str := config.Config("RABBIT_BROKER_URL")
 	
 	// connection, err := amqp.Dial(config.Config("RABBIT_BROKER_URL"))
 	connection, err := amqp.Dial(con_str)
