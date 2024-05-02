@@ -156,7 +156,7 @@ func TestAppsCheckLogin(t *testing.T) {
 	}{
 		// First test case
 		{
-			name:         "invalid credential login check",
+			name:         "credential login check",
 			description:  "get HTTP status 200",
 			route:        "/api/v1/login",
 			expectedCode: 202,
@@ -182,7 +182,7 @@ func TestAppsCheckLogin(t *testing.T) {
 			resp, _ := TestApp.Test(req)
 
 			if resp.StatusCode == 202 {
-				var responseMap map[string]map[string]string
+				var responseMap map[string]interface{}
 				body, _ := io.ReadAll(resp.Body)
 				uerr := json.Unmarshal(body, &responseMap)
 				if uerr != nil {
@@ -191,11 +191,11 @@ func TestAppsCheckLogin(t *testing.T) {
 				}
 
 				t.Run("Checking Login Status", func(t *testing.T) {
-
+					token := responseMap["data"].(map[string]interface{})["access_token"]
 					//  checking token decode options
 					req := httptest.NewRequest("GET", "/api/v1/checklogin", nil)
 					req.Header.Set("Content-Type", "application/json")
-					req.Header.Set("X-APP-TOKEN", responseMap["data"]["access_token"])
+					req.Header.Set("X-APP-TOKEN", token.(string))
 					// checking refresh_token options
 					resp, _ := TestApp.Test(req)
 					assert.Equalf(t, test.expectedCode, resp.StatusCode, test.description)

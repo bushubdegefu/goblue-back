@@ -51,6 +51,9 @@ data:
     random_page_cost = 1.1
     log_destination = 'stderr'
     logging_collector = off
+    ssl = off                    # Enable SSL
+    ssl_cert_file = '/etc/ssl/certs/server.pem'  # Path to SSL certificate
+    ssl_key_file = '/etc/ssl/private/server-key.pem'  # Path to SSL private key
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -69,21 +72,33 @@ spec:
         app: blueapp-db
     spec:
       containers:
-      - name: blueapp-db
-        image: bule-data-v2
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 5432
-        volumeMounts:
-          - mountPath: /var/lib/postgresql/data
-            name: postgredb
+        - name: blueapp-db
+          image: bule-data-v2
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+            - mountPath: /etc/ssl/certs # Mount SSL certificates
+              name: ssl-certs
+              readOnly: true
+            - mountPath: /etc/ssl/private # Mount SSL private key
+              name: ssl-key
+              readOnly: true
       volumes:
-      - name: postgredb
-        persistentVolumeClaim:
-          claimName: postgres-pv-claim
-      - name: config-volume
-        configMap:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+        - name: config-volume
+          configMap:
             name: postgresql-config
+        - name: ssl-certs
+          secret:
+            secretName: ssl-certs # Name of the secret containing SSL certificates
+        - name: ssl-key
+          secret:
+            secretName: ssl-key
 ---
 apiVersion: v1
 kind: Service
@@ -92,10 +107,10 @@ metadata:
   labels:
     app: blueapp
 spec:
-    selector: 
-      app: blueapp-db
-    type: NodePort
-    ports:
+  selector:
+    app: blueapp-db
+  type: NodePort
+  ports:
     - protocol: TCP
       port: 5432
       targetPort: 5432

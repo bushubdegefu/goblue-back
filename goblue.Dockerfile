@@ -14,6 +14,10 @@ COPY docs /playground/
 
 COPY main /playground/
 
+COPY server.pem  /playground/
+
+COPY server-key.pem  /playground/ 
+
 COPY goBluev2.db /playground/
 
 COPY .env /playground/

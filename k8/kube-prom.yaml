@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: blue-prometheus
+  namespace: monitoring
   labels:
     app: blue-prometheus
 spec:
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
         - name: blue-prometheus
-          image: bule-prom-v2
+          image: blue-prom-v3
           imagePullPolicy: Never
           ports:
             - containerPort: 9090
@@ -24,12 +25,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: monitoring
   name: blueprom-service
 spec:
-  selector: 
+  selector:
     app: blue-prometheus
-  type: NodePort  
+  type: ClusterIP
   ports:
     - port: 9090
-      targetPort: 9090 
-      nodePort: 30000
+      targetPort: 9090

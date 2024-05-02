@@ -29,7 +29,6 @@ import (
 	"semay.com/admin/database"
 	"semay.com/admin/models"
 	"semay.com/admin/responses"
-	"semay.com/bluerabbit"
 	"semay.com/common"
 	"semay.com/config"
 	_ "semay.com/docs"
@@ -69,7 +68,8 @@ func authFilter(c *fiber.Ctx) bool {
 	return false
 }
 
-func testMiddleware(c *fiber.Ctx, key string) (bool, error) {
+func testMiddleware(contx *fiber.Ctx, key string) (bool, error) {
+	contx.Next()
 	return true, nil
 }
 
@@ -84,20 +84,21 @@ func NextRoute(contx *fiber.Ctx, key string) (bool, error) {
 
 	if key == "anonymous" && models.Endpoints_JSON[route_name] == "Anonymous" {
 		return true, nil
+	} else {
+	
+		//  first validating the token
+		claims, err := utils.ParseJWTToken(key)
+		if err != nil {
+			fmt.Println(err)
+		}
+		
+		// check if the token have the desired role for the route
+		role_test := utils.CheckValueExistsInSlice(claims.Roles, models.Endpoints_JSON[route_name])
+		if role_test {
+			return true, nil
+		}
+		return false, nil
 	}
-
-	//  first validating the token
-	claims, err := utils.ParseJWTToken(key)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// check if the token have the desired role for the route
-	role_test := utils.CheckValueExistsInSlice(claims.Roles, models.Endpoints_JSON[route_name])
-	if role_test {
-		return true, nil
-	}
-	return false, nil
 }
 
 func run() {
@@ -120,18 +121,20 @@ func run() {
 				response_meta := models.EndPoint{Name: route.Name + "_" + strings.ToLower(route.Method), RoutePaths: route.Path, Description: route.Name + "-" + route.Method, Method: route.Method}
 				tx := db.Begin()
 				if err := tx.Model(&models.EndPoint{}).Clauses(clause.OnConflict{DoNothing: true}).Create(&response_meta).Error; err != nil {
+					fmt.Println(err)
 					tx.Rollback()
 				}
+				
 				tx.Commit()
 
 			}
 		}
 	}
 
-	// running background consumer
-	go func() {
-		bluerabbit.BlueConsumer()
-	}()
+	// // running background consumer
+	// go func() {
+	// 	bluerabbit.BlueConsumer()
+	// }()
 
 	// recording available route name ends here
 	port_1 := config.Config("PORT")
@@ -140,6 +143,7 @@ func run() {
 	// starting on provided port
 	go func(app *fiber.App) {
 		log.Fatal(app.Listen(":" + port_1))
+		// log.Fatal(app.ListenTLS(":" + port_1, "server.pem", "server-key.pem"))
 	}(app)
 
 	// // Add a task to move to Logs Directory Every Interval, Interval to Be Provided From Configuration File
@@ -377,12 +381,12 @@ func setupRoutes(app *fiber.Group) {
 	app.Get("/stream/:file_name", responses.StreamingVideo)
 	app.Get("/pics", responses.StreamingPicture)
 
-	app.Get("/dashboard", NextFunc).Name("dashboard").Get("/dashboard", responses.GetDashBoardGrouped)
-	app.Get("/dashboardends", NextFunc).Name("dashboard").Get("/dashboardends", responses.GetAppEndpoitnsGroupedBy)
-	app.Get("/dashboardfeat", NextFunc).Name("dashboard").Get("/dashboardfeat", responses.GetAppFeaturesGroupedBy)
-	app.Get("/dashboardpages", NextFunc).Name("dashboard").Get("/dashboardpages", responses.GetAppPages)
-	app.Get("/dashboardroles", NextFunc).Name("dashboard").Get("/dashboardroles", responses.GetAppRoles)
-	app.Get("/dashboardrolespage", NextFunc).Name("dashboard").Get("/dashboardrolespage", responses.GetAppPagesInRoles)
+	app.Get("/dashboard", NextFunc).Name("dashboard_one").Get("/dashboard", responses.GetDashBoardGrouped)
+	app.Get("/dashboardends", NextFunc).Name("dashboard_two").Get("/dashboardends", responses.GetAppEndpoitnsGroupedBy)
+	app.Get("/dashboardfeat", NextFunc).Name("dashboard_three").Get("/dashboardfeat", responses.GetAppFeaturesGroupedBy)
+	app.Get("/dashboardpages", NextFunc).Name("dashboard_four").Get("/dashboardpages", responses.GetAppPages)
+	app.Get("/dashboardroles", NextFunc).Name("dashboard_five").Get("/dashboardroles", responses.GetAppRoles)
+	app.Get("/dashboardrolespage", NextFunc).Name("dashboard_six").Get("/dashboardrolespage", responses.GetAppPagesInRoles)
 
 }
 

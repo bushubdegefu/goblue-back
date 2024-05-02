@@ -2,9 +2,9 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    monitor: "gobluefiber"
+    monitor: "promethues"
 rule_files:
 scrape_configs:
-  - job_name: "gobluefiber"
+  - job_name: "*"
     static_configs:
-    - targets: ['blue-admin:5500']
+      - targets: ["haproxy-ingress-metrics.ingress-controller:9101"]

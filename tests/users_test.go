@@ -150,6 +150,7 @@ func TestAppUserOperations(t *testing.T) {
 				// fmt.Printf("Error marshaling response : %v", uerr)
 				fmt.Println()
 			}
+
 			t.Run("Checkinng Unique Constraint", func(t *testing.T) {
 				//  checking token decode options
 				req := httptest.NewRequest("POST", test.route, bytes.NewReader(post_data))
@@ -171,7 +172,9 @@ func TestAppUserOperations(t *testing.T) {
 				patch_data_string, _ := json.Marshal(patch_data_token)
 
 				// creating path
-				test_route := fmt.Sprintf("%v/%v", test.route, responseMap["data"].(map[string]interface{})["id"])
+
+				patch_id := responseMap["data"].(map[string]interface{})
+				test_route := fmt.Sprintf("%v/%v", test.route, patch_id["id"])
 
 				//  checking token decode options
 				req := httptest.NewRequest("PATCH", test_route, bytes.NewReader(patch_data_string))

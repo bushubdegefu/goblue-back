@@ -1,0 +1,27 @@
+controller:
+  ingressClassResource:
+    enabled: true
+  stats:
+    enabled: true
+  metrics:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: prometheus
+    metrics:
+      relabelings:
+        - replacement: cl1
+          targetLabel: cluster
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          targetLabel: hostname
+        - sourceLabels: [frontend]
+          targetLabel: proxy
+        - sourceLabels: [backend]
+          targetLabel: proxy
+    ctrlMetrics:
+      relabelings:
+        - replacement: cl1
+          targetLabel: cluster
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          targetLabel: hostname

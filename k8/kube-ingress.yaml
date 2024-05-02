@@ -1,14 +1,21 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: blue-admin-ingress
+  name: blueadmin-ingress
+  namespace: default
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9101"
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy.org/rate-limit-requests: "1000/1s"
+    haproxy.org/ssl-certificate: blue-certs
+    haproxy.org/ssl-passthrough: "true" # Enable SSL passthrough
+    haproxy.org/stats: "enabled"
+    haproxy.org/stats-credentials: "admin:admin"
 spec:
-  tls:
-    - hosts:
-        - blue-admin
-      secretName: blue-admin-com-tls
+  ingressClassName: haproxy
   rules:
-    - host: blue-admin
+    - host: blue-proxy
       http:
         paths:
           - path: /
@@ -17,4 +24,91 @@ spec:
               service:
                 name: blue-admin
                 port:
-                  number: 80
+                  number: 3500
+    - host: blue-admin
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: blue-front
+                port:
+                  number: 4173
+  tls:
+    - hosts:
+        - blue-proxy
+        - blue-admin
+      secretName: blue-certs
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bluestat-ingress
+  namespace: monitoring
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy.org/rate-limit-requests: "1000/1s"
+    haproxy.org/ssl-certificate: blue-certs-m,
+    haproxy.org/ssl-passthrough: "true" # Enable SSL passthrough
+    haproxy.org/stats: "enabled"
+    haproxy.org/stats-credentials: "admin:admin"
+
+spec:
+  ingressClassName: haproxy
+  rules:
+    - host: blue-stats # Change to your desired host
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-grafana # Change to the service exposing HAProxy stats
+                port:
+                  number: 3000
+    - host: blue-monitor # Change to your desired host
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-kube-prometheus-prometheus # Change to the service exposing HAProxy stats
+                port:
+                  number: 9090
+  tls:
+    - hosts:
+        - blue-stats
+        - blue-monitor
+      secretName: blue-certs-m
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bluemet-ingress
+  namespace: ingress-controller
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy.org/rate-limit-requests: "1000/1s"
+    haproxy.org/ssl-certificate: blue-certs-i
+    haproxy.org/ssl-passthrough: "true" # Enable SSL passthrough
+    haproxy.org/stats: "enabled"
+    haproxy.org/stats-credentials: "admin:admin"
+spec:
+  ingressClassName: haproxy
+  rules:
+    - host: blue-mon # Change to your desired host
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: haproxy-ingress-metrics # Change to the service exposing HAProxy stats
+                port:
+                  number: 9101 #
+  tls:
+    - hosts:
+        - blue-mon
+      secretName: blue-certs-i

@@ -31,7 +31,7 @@ type EmailMessage struct {
 func SendEmail(contx *fiber.Ctx) error {
 	validate := validator.New()
 	//   connection and channels from rabbitmq
-	connection, channel := bluerabbit.BrokerConnect()
+	connection, channel,_ := bluerabbit.BrokerConnect()
 	defer connection.Close()
 	defer channel.Close()
 	//validating post data
