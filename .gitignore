@@ -12,3 +12,13 @@ logs/
 Stream/*.mp4
 toying.go
 temp/
+./.vscode/*
+./.air.toml
+server-key.pem
+server.pem
+result.html
+result.xml
+app
+main
+tmp
+.vscode
